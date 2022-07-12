@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">banplus</string>
+    <string name="unknown_host_exception_error">unknown host exception error</string>
+    <string name="your_credentials_are_incorrect">Your credentials are incorrect</string>
+    <string name="unknown_error">unknown error</string>
+    <string name="error_sign_up">error sign up</string>
+    <string name="error_sign_in">error sign in</string>
+    <string name="user_already_exists">user already exists</string>
+    <string name="title_activity_vuelto">VueltoActivity</string>
+    <string name="dog_index_format">#%d</string>
 </resources>

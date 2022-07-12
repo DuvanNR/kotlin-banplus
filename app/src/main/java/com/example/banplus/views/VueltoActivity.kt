@@ -1,4 +1,4 @@
-package com.example.banplus
+package com.example.banplus.views
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,10 +10,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.banplus.component.reportes.ItemComponent
 import com.example.banplus.ui.theme.BanplusTheme
 
-class MainActivity : ComponentActivity() {
+class VueltoActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -23,7 +22,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting("huy quieto")
+                    Greeting2("Android")
                 }
             }
         }
@@ -31,15 +30,14 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
+fun Greeting2(name: String) {
     Text(text = "Hello $name!")
 }
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
+fun DefaultPreview2() {
     BanplusTheme {
-        ItemComponent()
-        Greeting("Android")
+        Greeting2("Android")
     }
 }
