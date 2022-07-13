@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.example.banplus.R
 
 @Composable
-fun BtnIni(ico: Painter, background: Color = Color.White, colorText: Color = Color.Black, onClick: () -> Unit?) {
+fun BtnIni(ico: Painter, text: String, background: Color = Color.White, colorText: Color = Color.Black, onClick: () -> Unit?) {
     Button(
         modifier = Modifier
             .padding(6.dp)
@@ -34,6 +34,7 @@ fun BtnIni(ico: Painter, background: Color = Color.White, colorText: Color = Col
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(modifier= Modifier.fillMaxSize(0.75F), painter = ico, contentDescription = "Localized description")
+            Text(text = text)
         }
 
 
@@ -44,5 +45,5 @@ fun BtnIni(ico: Painter, background: Color = Color.White, colorText: Color = Col
 @Composable
 fun previewBtn() {
     val ico = painterResource(id = R.drawable.ic_time)
-    BtnIni(onClick = {/* TODO: */}, ico = ico)
+    BtnIni(text="hola Mundo",onClick = {/* TODO: */}, ico = ico)
 }
