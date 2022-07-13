@@ -6,9 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 
 @Composable
-fun ViewReportes() {
+fun ViewReportes(navController: NavController) {
     Scaffold() {
         ReportesBody()
     }
@@ -23,7 +24,7 @@ fun ReportesBody( ) {
         horizontalAlignment = Alignment.CenterHorizontally
 
     ) {
-        Text(text = "Hola Navegacion")
+        Text(text = "Hola Estatus")
         Button(onClick = { /*TODO*/ }) {
             Text(text = "Navergar")
 
@@ -32,8 +33,3 @@ fun ReportesBody( ) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreviewp() {
-    ViewReportes()
-}

@@ -11,9 +11,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 
 @Composable
-fun ViewVuelto() {
+fun ViewVuelto(navController: NavController) {
     Scaffold() {
       BodyContent()  
     }
@@ -28,17 +29,11 @@ fun BodyContent() {
         horizontalAlignment = Alignment.CenterHorizontally
 
     ) {
-        Text(text = "Hola Navegacion")
+        Text(text = "Hola Vuelto")
         Button(onClick = { /*TODO*/ }) {
             Text(text = "Navergar")
             
         }
         
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    ViewVuelto()
 }
