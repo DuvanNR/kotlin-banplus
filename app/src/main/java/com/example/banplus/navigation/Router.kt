@@ -7,6 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.banplus.views.ViewInit
 import com.example.banplus.views.ViewReportes
 import com.example.banplus.views.ViewVuelto
+import com.example.banplus.views.vueltoNextForm
 
 @Composable
 fun Router() {
@@ -14,6 +15,9 @@ fun Router() {
     NavHost(navController = navController, startDestination =PathRouter.HomeRoute.route) {
         composable(route = PathRouter.ReporteRoute.route) {
            ViewReportes(navController)
+        }
+        composable(route = PathRouter.VueltoNextRoute.route) {
+            vueltoNextForm(navController)
         }
         composable(route = PathRouter.VueltoRoute.route) {
             ViewVuelto(navController)

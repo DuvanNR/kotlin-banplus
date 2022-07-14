@@ -13,7 +13,7 @@ import com.example.banplus.R
 @Composable
 fun Logo() {
     Image(
-        painterResource(id = R.drawable.descarga ),
+        painterResource(id = R.drawable.ic_next ),
         contentDescription = "",
         modifier = Modifier.size(
             width = 300.dp,
