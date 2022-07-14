@@ -37,7 +37,7 @@ class Dog(
 fun ItemComponent() {
     Box(
         modifier = Modifier
-            .background(colorResource(id = R.color.teal_200))
+            .background(colorResource(id = R.color.secundary))
             .padding(start = 8.dp, end = 8.dp, bottom = 16.dp),
         contentAlignment = Alignment.TopCenter
     ) {

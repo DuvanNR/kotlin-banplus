@@ -1,4 +1,4 @@
-package com.example.banplus.api.dto
+package com.example.banplus.api.vuelto.dto
 
 class BodyDTO(
     val tipoDocumentoReceptor: String,

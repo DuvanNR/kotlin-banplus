@@ -2,7 +2,10 @@ package com.example.banplus.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
+val primary = Color(0xFF00B1FF)
+val primary1 = Color(0xFF007CB6)
+val success = Color(0xFF78A337)
+val danger = Color(0xFFc23734)
+val teal_700 = Color(0xFF018786)
+val black = Color(0XFF091935)
+val white = Color(0XFFFFFFFF)

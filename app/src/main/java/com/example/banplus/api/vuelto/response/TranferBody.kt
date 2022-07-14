@@ -1,10 +1,10 @@
-package com.example.banplus.api.response
+package com.example.banplus.api.vuelto.response
 
-class TranferBody(
-    val pago: Pago
+class TranferBodyDTO(
+    val pago: PagoDTO
 )
 
-class Pago(
+class PagoDTO(
     val fechaRespuesta: String,
     val referenciaRespuesta: String,
     val codigoRespuesta: String,

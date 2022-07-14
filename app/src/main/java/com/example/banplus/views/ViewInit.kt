@@ -1,5 +1,6 @@
 package com.example.banplus.views
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -10,6 +11,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.banplus.R
 import com.example.banplus.component.BtnIni
@@ -26,7 +28,8 @@ fun ViewInit(navController: NavController) {
             HeaderInit()
             Text(
                 modifier = Modifier.padding(bottom = 117.dp),
-                text = "Bienvenido Sistema Pago Móvil")
+                fontSize = 24.sp,
+                text = "Bienvenido")
             ViewInitBody(navController)
         }
 
@@ -41,10 +44,10 @@ fun ViewInitBody(navController: NavController) {
         ) {
             BtnIni(
                 text="Vuelto",
-                ico = painterResource(id = R.drawable.ic_time)  , onClick = {navController.navigate(PathRouter.VueltoRoute.route)})
+                ico = painterResource(id = R.drawable.ic_vuelto)  , onClick = {navController.navigate(PathRouter.VueltoRoute.route)})
             BtnIni(
                 text="Reportes",
-                ico = painterResource(id = R.drawable.ic_lists)  , onClick = {navController.navigate(PathRouter.ReporteRoute.route)})
+                ico = painterResource(id = R.drawable.ic_reportes)  , onClick = {navController.navigate(PathRouter.ReporteRoute.route)})
         }
     }
 

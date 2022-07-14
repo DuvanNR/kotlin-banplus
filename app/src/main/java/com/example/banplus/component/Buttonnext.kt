@@ -19,26 +19,26 @@ import com.example.banplus.ui.theme.black
 import com.example.banplus.ui.theme.white
 
 @Composable
-fun BtnIni(ico: Painter, text: String, background: Color = black, colorText: Color = white, onClick: () -> Unit?) {
+fun BtnNext(ico: Painter, text: String, background: Color = black, colorText: Color = white, onClick: () -> Unit?) {
     Button(
         modifier = Modifier
-            .padding(6.dp)
-            .height(140.dp)
-            .width(140.dp),
-        shape = RoundedCornerShape(25),
+            .padding(4.dp)
+            .height(49.dp)
+            .width(240.dp),
+        shape = RoundedCornerShape(55),
         colors = ButtonDefaults.buttonColors(
             backgroundColor = background,
             contentColor =colorText
         ),
         onClick = { onClick()},
     ) {
-        Column(
+        Row(
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(modifier= Modifier.fillMaxSize(0.85F), painter = ico, contentDescription = "Localized description")
             Text(text = text)
+            Icon(painter = ico, contentDescription = "Localized description")
         }
 
 
@@ -47,7 +47,7 @@ fun BtnIni(ico: Painter, text: String, background: Color = black, colorText: Col
 
 @Preview(showBackground = true)
 @Composable
-fun previewBtn() {
-    val ico = painterResource(id = R.drawable.ic_time)
-    BtnIni(text="hola Mundo",onClick = {/* TODO: */}, ico = ico)
+fun previewBtna() {
+    val ico = painterResource(id = R.drawable.ic_next)
+    BtnNext(text="hola Mundo",onClick = {/* TODO: */}, ico = ico)
 }
