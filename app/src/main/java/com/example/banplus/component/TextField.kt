@@ -9,15 +9,14 @@ import androidx.compose.ui.Modifier
 import com.example.banplus.utils.isNumber
 
 @Composable
-fun PostField (text: String, onValueChange:(String) -> Unit, label: String) {
+fun PostField (text: String, onValueChange:(String) -> Unit, label: String, modifier:Modifier = Modifier) {
     OutlinedTextField(
         value = text,
         onValueChange = { onValueChange(it)  },
         label = {
             Text(label)
         },
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = modifier,
         singleLine = true,
 
     )

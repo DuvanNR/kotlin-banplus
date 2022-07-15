@@ -11,13 +11,14 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun DropdownDemo(selectedOptionText: String, onValueChange: (String) -> Unit, label:String, height:Dp = 70.dp, width:Dp = 120.dp) {
+fun DropdownDemo(
+    modifier: Modifier = Modifier,
+    selectedOptionText: String, onValueChange: (String) -> Unit, label:String) {
     val options = listOf("v", "c")
     var expanded by remember { mutableStateOf(false) }
     ExposedDropdownMenuBox(
         expanded = expanded,
-        modifier= Modifier.size(height = height, width = width)
-            .padding(end = 30.dp)
+        modifier= modifier
         ,onExpandedChange = {
             expanded = !expanded
         }

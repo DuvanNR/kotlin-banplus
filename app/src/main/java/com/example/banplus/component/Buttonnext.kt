@@ -19,12 +19,9 @@ import com.example.banplus.ui.theme.black
 import com.example.banplus.ui.theme.white
 
 @Composable
-fun BtnNext(ico: Painter, text: String, background: Color = black, colorText: Color = white, onClick: () -> Unit?) {
+fun BtnNext(ico: Painter, text: String, background: Color = black, colorText: Color = white, onClick: () -> Unit?, modifier: Modifier = Modifier) {
     Button(
-        modifier = Modifier
-            .padding(4.dp)
-            .height(49.dp)
-            .width(240.dp),
+        modifier = modifier,
         shape = RoundedCornerShape(55),
         colors = ButtonDefaults.buttonColors(
             backgroundColor = background,

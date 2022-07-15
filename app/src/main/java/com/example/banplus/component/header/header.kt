@@ -38,9 +38,6 @@ fun HeaderInit() {
         ) {
             Logo()
         }
-        Divider(
-            startIndent = 332.dp
-        )
 
         Row(
             modifier = Modifier.fillMaxWidth(),

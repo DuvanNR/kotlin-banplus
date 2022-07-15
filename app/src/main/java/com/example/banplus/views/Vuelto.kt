@@ -17,33 +17,30 @@ import com.example.banplus.component.BtnNext
 import com.example.banplus.component.DropdownDemo
 import com.example.banplus.component.PostField
 import com.example.banplus.component.header.HeaderInit
+import com.example.banplus.navigation.PathRouter
 import com.example.banplus.utils.isNumber
 
 @Composable
 fun ViewVuelto(navController: NavController) {
     val context = LocalContext.current
 
-    Scaffold(
-        topBar = { },
-        floatingActionButtonPosition = FabPosition.End,
-        floatingActionButton = { },
-        bottomBar = { },
-    ) {
+    Scaffold() {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(it)
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             HeaderInit()
             BodyContent { tipo, celular, cell ->
-                if(tipo != "" && celular != "" && cell != "") {
-                    Toast.makeText(
-                        context,
-                        "Showing toast....",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                if (tipo != "" && celular != "" && cell != "") {
+
+                    navController.navigate(PathRouter.VueltoNextRoute.withArgs(tipo, cell, celular))
                 }
+                Toast.makeText(
+                    context,
+                    "Debes llenar todos los campos",
+                    Toast.LENGTH_SHORT
+                ).show()
 
             }
         }
@@ -51,45 +48,50 @@ fun ViewVuelto(navController: NavController) {
 }
 
 @Composable
-fun BodyContent(onClick: (tipo: String, celular: String, cell:String) -> Unit) {
+fun BodyContent(onClick: (tipo: String, celular: String, cell: String) -> Unit) {
     var tipo by remember { mutableStateOf("v") }
     var cedula by remember { mutableStateOf("") }
     var cell by remember { mutableStateOf("") }
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 64.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 44.dp)
-        ) {
-
-            // Declaring a boolean value to store
-            // the expanded state of the Text Field
-            DropdownDemo(selectedOptionText = tipo, onValueChange = {tipo = it} , label = "Tipo" )
-            PostField(text = cedula, onValueChange = {cedula = it}, label="Cedula")
-        }
-        Row(
-            modifier = Modifier.padding(horizontal = 44.dp)
-        ) {
-            PostField(text = cell, onValueChange = {cell = it}, label="Telefono")
-        }
-
-
-    }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .height(180.dp)
-            .fillMaxHeight(),
-        verticalArrangement = Arrangement.Bottom,
-        horizontalAlignment = Alignment.CenterHorizontally
-
+            .padding(horizontal = 44.dp),
+        contentAlignment = Alignment.TopCenter
     ) {
+        Column() {
+            Row() {
+                DropdownDemo(
+                    Modifier
+                        .size(height = 70.dp, width = 120.dp)
+                        .padding(end = 30.dp),
+                    selectedOptionText = tipo, onValueChange = { tipo = it },
+                    label = "Tipo",
+                )
+                PostField(
+                    text = cedula,
+                    onValueChange = { cedula = it },
+                    label = "Cedula",
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            PostField(
+                text = cell,
+                onValueChange = { cell = it },
+                label = "Telefono",
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
 
-        BtnNext(text="Siguiente",onClick = {onClick(tipo, cedula, cell)}, ico = painterResource(id =  R.drawable.ic_next))
+        BtnNext(
+            text = "Siguiente",
+            onClick = { onClick(tipo, cedula, cell) },
+            ico = painterResource(id = R.drawable.ic_next),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(4.dp)
+                .height(49.dp)
+                .width(240.dp)
+        )
 
     }
 }

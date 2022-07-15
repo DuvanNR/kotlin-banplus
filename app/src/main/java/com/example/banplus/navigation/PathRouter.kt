@@ -5,4 +5,12 @@ sealed class PathRouter (val route: String) {
     object VueltoNextRoute: PathRouter("vueltoNext")
     object ReporteRoute: PathRouter("reports")
     object HomeRoute: PathRouter("home")
+    fun withArgs(vararg args: String): String {
+        return buildString {
+            append(route)
+            args.forEach { arg ->
+                append("/$arg")
+            }
+        }
+    }
 }

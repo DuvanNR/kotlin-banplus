@@ -16,7 +16,7 @@ fun Logo() {
         painterResource(id = R.drawable.ic_next ),
         contentDescription = "",
         modifier = Modifier.size(
-            width = 300.dp,
+            width = 200.dp,
             height = 150.dp
         )
     )
