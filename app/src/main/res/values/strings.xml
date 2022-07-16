@@ -8,4 +8,5 @@
     <string name="user_already_exists">user already exists</string>
     <string name="title_activity_vuelto">VueltoActivity</string>
     <string name="dog_index_format">#%d</string>
+    <string name="error_dialog_title">Ups un error</string>
 </resources>

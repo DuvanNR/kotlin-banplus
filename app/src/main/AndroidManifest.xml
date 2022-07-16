@@ -4,6 +4,7 @@
     package="com.example.banplus">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-sdk
         android:minSdkVersion="17"
         tools:overrideLibrary="com.example.widget, androidx.compose.ui.platform, androidx.compose.material.icons, androidx.activity.compose, androidx.compose.ui.tooling, androidx.compose.ui.tooling.data, androidx.compose.material.ripple, androidx.compose.foundation, androidx.compose.animation, androidx.compose.foundation.layout, androidx.compose.ui.text, androidx.compose.ui.graphics, androidx.compose.ui.unit, androidx.compose.ui.util, androidx.compose.ui.geometry, androidx.compose.runtime.saveable, androidx.compose.animation.core" />
@@ -11,9 +12,10 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/descarga"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:icon="@drawable/ic_banplus_vector"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/descarga"
+        android:roundIcon="@drawable/ic_banplus_vector"
         android:supportsRtl="true"
         android:theme="@style/Theme.Banplus"
         tools:targetApi="31">

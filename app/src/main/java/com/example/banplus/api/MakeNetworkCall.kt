@@ -16,12 +16,15 @@ suspend fun <T> makeNetworkCall(
         } catch (e: UnknownHostException) {
             ApiResponseStatus.Error(R.string.unknown_host_exception_error)
         } catch (e: HttpException) {
+            println("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn $e")
             val errorMessage = when (e.code()) {
                 UNAUTHORIZED -> R.string.your_credentials_are_incorrect
                 else -> R.string.unknown_error
             }
             ApiResponseStatus.Error(errorMessage)
         } catch (e: Exception) {
+
+            println("cccccccccccccccccccccccccccccccccccc $e")
             val errorMessage = when (e.message) {
                 "Unauthorized" -> R.string.your_credentials_are_incorrect
                 "sign_up_error" -> R.string.error_sign_up
