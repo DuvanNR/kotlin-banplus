@@ -1,5 +1,7 @@
 package com.example.banplus.views
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -15,6 +17,7 @@ import com.example.banplus.component.header.HeaderInit
 import com.example.banplus.navigation.PathRouter
 import com.example.banplus.ui.theme.*
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ViewReportes(navController: NavController) {
     Scaffold() {
@@ -32,6 +35,7 @@ fun ViewReportes(navController: NavController) {
 
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ReportesBody(onClickListRe:()-> Unit) {
     Box(modifier = Modifier

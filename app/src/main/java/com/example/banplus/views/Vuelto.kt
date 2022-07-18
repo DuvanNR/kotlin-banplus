@@ -52,7 +52,7 @@ fun ViewVuelto(navController: NavController) {
 }
 
 @Composable
-fun BodyContent(onClick: (tipo: String, celular: String, cell: String) -> Unit) {
+private fun BodyContent(onClick: (tipo: String, celular: String, cell: String) -> Unit) {
     var tipo by remember { mutableStateOf("v") }
     var cedula by remember { mutableStateOf("17142863") }
     var cell by remember { mutableStateOf("584241340112") }

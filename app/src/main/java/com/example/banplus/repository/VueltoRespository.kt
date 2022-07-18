@@ -9,14 +9,11 @@ import com.example.banplus.api.vuelto.dto.MapperBodyVuelto
 import com.example.banplus.api.vuelto.response.Tranferp2pResponse
 
 class VueltoRespository {
-    suspend fun emitTransaction(tipo: String, cedula: String, telefono: String, banco: String, monto: String): ApiResponseStatus<Tranferp2pResponse.Pago> = makeNetworkCall {
+    suspend fun emitTransaction(tipo: String, cedula: String, telefono: String, banco: String, monto: String): ApiResponseStatus<Tranferp2pResponse> = makeNetworkCall {
         val mapperBody = MapperBodyVuelto()
         val body = mapperBody.converToResBodyaTransctionApi(tipo=tipo, cedula=cedula,telefono=telefono, banco=banco,monto=monto)
         val resp = retrofitService.emitTransaction(body)
-        println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvrepositorio")
-        println(resp.msRsH)
-        println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvrepositorio")
-        val pagoDTO = resp.msRsB.pago
+        val pagoDTO = resp
         val vueltoMapper =VueltoDtoMapper()
         vueltoMapper.converterPagoDTOaPago(pagoDTO)
     }

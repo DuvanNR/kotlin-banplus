@@ -1,9 +1,11 @@
 package com.example.banplus
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -16,6 +18,7 @@ import com.example.banplus.viewmodel.VueltoViewModel
 
 class MainActivity : ComponentActivity() {
     private val viewModel: VueltoViewModel by viewModels()
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -26,26 +29,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
 
-                    val status = viewModel.status
-                    Router(status.value, onClick = { cedula,
-                                                     cell,
-                                                     banco,
-                                                     tipo,
-                                                     monto ->
-                        println("....................cedula,\n" +
-                                "                                                     cell,\n" +
-                                "                                                     banco,\n" +
-                                "                                                     tipo,\n" +
-                                "                                                     monto .")
-                        viewModel.EmitPago(
-                            tipo = tipo,
-                            cedula, cell,
-                            banco = banco,
-                            monto = monto
-                        )
 
-
-                    })
+                    Router(viewModelVuelto = viewModel )
                 }
             }
         }

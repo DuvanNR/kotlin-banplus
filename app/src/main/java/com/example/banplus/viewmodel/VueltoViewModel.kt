@@ -11,17 +11,14 @@ import com.example.banplus.repository.VueltoRespository
 import kotlinx.coroutines.launch
 
 class VueltoViewModel : ViewModel() {
-    var vueltoR = mutableStateOf<Tranferp2pResponse.Pago?>(null)
+    var vueltoR = mutableStateOf<Tranferp2pResponse?>(null)
         private set
-    var status = mutableStateOf<ApiResponseStatus<Tranferp2pResponse.Pago>?>(null)
+    var status = mutableStateOf<ApiResponseStatus<Tranferp2pResponse>?>(null)
         private set
-
     private val authRepository = VueltoRespository()
-
     fun EmitPago(tipo: String, cedula: String, telefono: String, banco: String, monto: String) {
         viewModelScope.launch {
             status.value = ApiResponseStatus.Loading()
-
             handleResponseStatus(
                 authRepository.emitTransaction(
                     tipo = tipo,
@@ -33,8 +30,11 @@ class VueltoViewModel : ViewModel() {
             )
         }
     }
-
-    private fun handleResponseStatus(apiResponseStatus: ApiResponseStatus<Tranferp2pResponse.Pago>) {
+    fun onResetApiResponse() {
+        vueltoR.value = null
+        status.value = null
+    }
+    private fun handleResponseStatus(apiResponseStatus: ApiResponseStatus<Tranferp2pResponse>) {
         if (apiResponseStatus is ApiResponseStatus.Success) {
             vueltoR.value = apiResponseStatus.data
         }

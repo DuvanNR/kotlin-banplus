@@ -1,5 +1,7 @@
 package com.example.banplus.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
@@ -12,19 +14,14 @@ import com.example.banplus._interface.iReportes
 import com.example.banplus._interface.iTransaction
 import com.example.banplus.api.ApiResponseStatus
 import com.example.banplus.api.vuelto.response.Tranferp2pResponse
+import com.example.banplus.viewmodel.VueltoViewModel
 import com.example.banplus.views.*
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Router(
-    status: ApiResponseStatus<Tranferp2pResponse.Pago>? = null, onClick: (
-        cedula: String,
-        cell: String,
-        banco: String,
-        tipo: String,
-        monto: String
-    ) -> Unit
-) {
+fun Router(viewModelVuelto: VueltoViewModel) {
     val navController = rememberNavController()
+    val status = viewModelVuelto.status
     NavHost(navController = navController, startDestination = PathRouter.HomeRoute.route) {
         composable(route = PathRouter.ReporteRoute.route) {
             ViewReportes(navController)
@@ -47,6 +44,15 @@ fun Router(
         composable(route = PathRouter.ListReport.route) {
             listReportView(navController, ResListA)
         }
+        composable(route = PathRouter.PageResposmonse.route + "/{tipo}/{cedula}/{cell}/{banco}/{monto}", arguments = getList()) {
+            val cell = it.arguments?.getString("cell")
+            val tipo = it.arguments?.getString("tipo")
+            val cedula = it.arguments?.getString("cedula")
+            val monto = it.arguments?.getString("monto")
+            val banco = it.arguments?.getString("banco")
+            RespTransaction(navController, iData = iTransaction("$tipo", "$cedula", "$cell", "$banco", "$monto"),
+            )
+        }
         composable(route = getPath(), arguments = getList() ) {
             val cell = it.arguments?.getString("cell")
             val tipo = it.arguments?.getString("tipo")
@@ -54,10 +60,15 @@ fun Router(
             val monto = it.arguments?.getString("monto")
             val banco = it.arguments?.getString("banco")
             ConfirmarteTransaction(
-                navController,
-                iTransaction("$tipo", "$cedula", "$cell", "$banco", "$monto"),
-                status,
-                onClickViewModel = onClick
+                navController = navController,
+                resp = iTransaction("$tipo", "$cedula", "$cell", "$banco", "$monto"),
+                viewModelVuelto =viewModelVuelto,
+                status = status.value,
+                onErrorDialog = {
+                    viewModelVuelto.onResetApiResponse()
+                    navController.navigate(PathRouter.HomeRoute.route)
+                }
+
             )
         }
     }

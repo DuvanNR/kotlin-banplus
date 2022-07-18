@@ -1,5 +1,7 @@
 package com.example.banplus.component
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -19,14 +21,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.banplus.R
 import com.example.banplus._interface.iTransaction
+import com.example.banplus.api.vuelto.response.Tranferp2pResponse
 import com.example.banplus.ui.theme.*
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun cardsAlert(
     rif: Boolean = true,
     title: String = "Consolidado Diario",
     status: Boolean = true,
-    iData: iTransaction = iTransaction("", "", "","","")
+    iData: iTransaction = iTransaction("", "", "","",""),
 ) {
 
     Card(
@@ -60,7 +66,7 @@ fun cardsAlert(
                 when (title) {
                     "Consolidado Diario" -> CardA()
                     "Confirmar Operación" -> CardC(iData)
-                    else -> CardB(status = status)
+                    else -> CardB(status = status, dataTransfer =  iData)
                 }
 
 
@@ -133,7 +139,7 @@ fun CardA() {
             .padding(top = 128.dp, start = 58.dp)
     ) {
         Text(text = "Fecha:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-        Text(text = "22/06/2022 Hora: 8:30 a.m.", color = color_fontbtn)
+        Text(text = "22/06/2022", color = color_fontbtn)
     }
     Row(
         modifier = Modifier
@@ -170,8 +176,9 @@ fun CardA() {
 
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CardB(status: Boolean) {
+fun CardB(status: Boolean, dataTransfer: iTransaction) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -184,7 +191,7 @@ fun CardB(status: Boolean) {
                 .padding(top = 128.dp)
         ) {
             Text(text = "Fecha:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-            Text(text = "22/06/2022 Hora: 8:30 a.m.", color = color_fontbtn)
+            Text(text = "", color = color_fontbtn)
         }
 
         Row(
@@ -193,28 +200,28 @@ fun CardB(status: Boolean) {
                 .fillMaxWidth()
         ) {
             Text(text = "Hora:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-            Text(text = "Hora: 8:30 a.m.", color = color_fontbtn)
+            Text(text = "", color = color_fontbtn)
         }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
             Text(text = "Cedula:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-            Text(text = "V-12345678", color = color_fontbtn)
+            Text(text = "${dataTransfer.tipo}-${dataTransfer.cedula}", color = color_fontbtn)
         }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
             Text(text = "Teléfono:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-            Text(text = "04240000000", color = color_fontbtn)
+            Text(text = "${dataTransfer.telefono}", color = color_fontbtn)
         }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
             Text(text = "Banco:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-            Text(text = "Bancrecer", color = color_fontbtn)
+            Text(text = "${dataTransfer.banco}", color = color_fontbtn)
         }
         Row(
             modifier = Modifier
@@ -236,7 +243,7 @@ fun CardB(status: Boolean) {
                 color = color_fontbtn,
                 fontWeight = FontWeight.Bold
             )
-            Text(text = "Bs. 10000", fontSize = 18.sp, color = color_fontbtn)
+            Text(text = "Bs. ${dataTransfer.monto}", fontSize = 18.sp, color = color_fontbtn)
         }
 
 
@@ -248,7 +255,7 @@ fun CardB(status: Boolean) {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Aprobada",
+                    text = "Exito",
                     fontSize = 18.sp,
                     color = color_success,
                     fontWeight = FontWeight.Bold
@@ -300,10 +307,4 @@ fun CardB(status: Boolean) {
 
     }
 
-}
-
-@Preview(showBackground = true, widthDp = 33, heightDp = 100)
-@Composable
-fun PreviewCardConfirmate() {
-    cardsAlert(rif = true, title = "Confirmar Operación", status = false)
 }

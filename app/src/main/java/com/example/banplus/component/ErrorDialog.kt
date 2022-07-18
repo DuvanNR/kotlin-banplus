@@ -10,14 +10,12 @@ import com.example.banplus.api.vuelto.response.Tranferp2pResponse
 
 @Composable
 fun errorDialog(
-    status: ApiResponseStatus.Error<Tranferp2pResponse.Pago>
+   description: String
 , onDialogDismiss: () -> Unit
 ) {
-    AlertDialog(onDismissRequest = {},
+    AlertDialog(onDismissRequest = {onDialogDismiss()},
         title ={ Text(text = stringResource(id = R.string.error_dialog_title)) },
-        text = { Text(text = stringResource(id = status.messageId))},
-        confirmButton = {
-            onDialogDismiss()
-        }
+        text = { Text(text = description)},
+        confirmButton = {}
     )
 }
