@@ -62,7 +62,7 @@ private fun BodyContent(onClick: (tipo: String, celular: String, cell: String) -
             .padding(horizontal = 44.dp),
         contentAlignment = Alignment.TopCenter
     ) {
-        Column() {
+        Column(modifier = Modifier.padding(top=33.dp)) {
             Row() {
                 DropdownDemo(
                     Modifier
@@ -73,7 +73,7 @@ private fun BodyContent(onClick: (tipo: String, celular: String, cell: String) -
                 )
                 PostField(
                     text = cedula,
-                    onValueChange = {cedula = if (it.length > 3 || it.any { !it.isDigit() }) cedula else it},
+                    onValueChange = {cedula = if (it.length > 111 || it.any { !it.isDigit() }) cedula else it},
                     label = "Cedula",
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(
@@ -83,9 +83,9 @@ private fun BodyContent(onClick: (tipo: String, celular: String, cell: String) -
             }
             PostField(
                 text = cell,
-                onValueChange = {cell = if (it.length > 3 || it.any { !it.isDigit() }) cell else it},
+                onValueChange = {cell = if (it.length > 111 || it.any { !it.isDigit() }) cell else it},
                 label = "Telefono",
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(top=10.dp),
                 keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Next),

@@ -26,7 +26,6 @@ import com.example.banplus.ui.theme.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun cardsAlert(
     rif: Boolean = true,

@@ -7,8 +7,7 @@ fun isString(chars: String): String? {
     return null
 }
 fun isNumber(chars: String): String? {
-    if(chars.matches("^[0-9]*$".toRegex())) {
-
+    if(chars.matches("^.[0-9]*$".toRegex())) {
         return chars
     }
     return null

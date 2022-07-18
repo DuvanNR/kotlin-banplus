@@ -62,7 +62,7 @@ fun nextVueltoBody(
     tipo: String?, cedula: String?, cell: String?, onClick: (String,String,String,String,String) -> Unit
 ) {
     var banco by remember { mutableStateOf("0174") }
-    var monto by remember { mutableStateOf("1.15") }
+    var monto by remember { mutableStateOf("11") }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -70,11 +70,12 @@ fun nextVueltoBody(
         contentAlignment = Alignment.TopCenter
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().padding(top=33.dp),
+
         ) {
             PostField(
                 text = banco,
-                onValueChange = {  banco = if (it.length > 30 || it.any { !it.isDigit() }) banco else it },
+                onValueChange = {  banco = it },
                 label = "Banco",
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(
@@ -83,10 +84,9 @@ fun nextVueltoBody(
             )
             PostField(
                 text = monto,
-                onValueChange = {monto = if (it.length > 30 || it.any { !it.isDigit() }) monto else it},
+                onValueChange = {monto = it},
                 label = "Monto",
-                modifier = Modifier.fillMaxWidth(),
-
+                modifier = Modifier.fillMaxWidth().padding(top=10.dp),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next)
@@ -95,7 +95,7 @@ fun nextVueltoBody(
         BtnNext(
             text = "Guardar",
             onClick = {
-                onClick("$tipo", "$cedula", "$cell", banco, monto)
+                onClick("$tipo", "$cedula", "$cell", banco, "$monto.00")
             },
             ico = painterResource(id = R.drawable.ic_next),
             modifier = Modifier

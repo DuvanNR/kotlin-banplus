@@ -19,11 +19,9 @@ import com.example.banplus.component.BtnNext
 import com.example.banplus.component.cardsAlert
 import com.example.banplus.component.header.HeaderInit
 import com.example.banplus.ui.theme.color_fontbtn
-import com.example.banplus.viewmodel.VueltoViewModel
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RespTransaction(navController:NavController, iData: iTransaction) {
+fun RespTransaction(iData: iTransaction, onClickMainActivity: () -> Unit) {
     Scaffold() {
         val context = LocalContext.current
         Column(
@@ -32,16 +30,16 @@ fun RespTransaction(navController:NavController, iData: iTransaction) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             HeaderInit(icon = R.drawable.ic_recurso_4 )
-            BodyContentA(onClick = {}, iData =iData )
+            BodyContentA(onClick = {onClickMainActivity()}, iData =iData )
         }
     }
 }
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 private fun BodyContentA(onClick: () -> Unit, iData: iTransaction) {
     Box(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(top =44.dp),
         contentAlignment = Alignment.TopCenter
     ) {
         cardsAlert(rif = true, title = "Recibo Operación", status = true, iData = iData )
@@ -50,7 +48,6 @@ private fun BodyContentA(onClick: () -> Unit, iData: iTransaction) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-
             BtnNext(
                 text = "Imprimir",
                 onClick = {  },
@@ -62,7 +59,7 @@ private fun BodyContentA(onClick: () -> Unit, iData: iTransaction) {
             )
             BtnNext(
                 text = "Finalizar",
-                onClick =  {},
+                onClick =  {onClick()},
                 ico = painterResource(id = R.drawable.ic_next),
                 background= color_fontbtn,
                 modifier = Modifier

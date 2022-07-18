@@ -1,5 +1,3 @@
-package com.example.banplus.navigation
-
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
@@ -10,16 +8,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.banplus.ResListA
-import com.example.banplus._interface.iReportes
 import com.example.banplus._interface.iTransaction
-import com.example.banplus.api.ApiResponseStatus
-import com.example.banplus.api.vuelto.response.Tranferp2pResponse
+import com.example.banplus.navigation.PathRouter
 import com.example.banplus.viewmodel.VueltoViewModel
 import com.example.banplus.views.*
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Router(viewModelVuelto: VueltoViewModel) {
+fun Router(viewModelVuelto: VueltoViewModel, onEventTransction: (iData: iTransaction) -> Unit) {
     val navController = rememberNavController()
     val status = viewModelVuelto.status
     NavHost(navController = navController, startDestination = PathRouter.HomeRoute.route) {
@@ -44,15 +39,7 @@ fun Router(viewModelVuelto: VueltoViewModel) {
         composable(route = PathRouter.ListReport.route) {
             listReportView(navController, ResListA)
         }
-        composable(route = PathRouter.PageResposmonse.route + "/{tipo}/{cedula}/{cell}/{banco}/{monto}", arguments = getList()) {
-            val cell = it.arguments?.getString("cell")
-            val tipo = it.arguments?.getString("tipo")
-            val cedula = it.arguments?.getString("cedula")
-            val monto = it.arguments?.getString("monto")
-            val banco = it.arguments?.getString("banco")
-            RespTransaction(navController, iData = iTransaction("$tipo", "$cedula", "$cell", "$banco", "$monto"),
-            )
-        }
+
         composable(route = getPath(), arguments = getList() ) {
             val cell = it.arguments?.getString("cell")
             val tipo = it.arguments?.getString("tipo")
@@ -67,10 +54,15 @@ fun Router(viewModelVuelto: VueltoViewModel) {
                 onErrorDialog = {
                     viewModelVuelto.onResetApiResponse()
                     navController.navigate(PathRouter.HomeRoute.route)
+                },
+                onEventExito = {
+                    tipo ,cedula ,telefono,banco, monto ->
+                    onEventTransction(iTransaction(tipo = tipo, cedula = cedula, telefono= telefono,banco= banco, monto=monto))
                 }
 
             )
         }
+
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.banplus.component.header
 
+import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
@@ -17,6 +18,8 @@ import com.example.banplus.R
 import com.example.banplus.ui.theme.color_primary
 import com.example.banplus.ui.theme.color_primary1
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 @Composable
@@ -45,10 +48,14 @@ fun HeaderInit(icon: Int = R.drawable.ic_banplus_vector) {
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.Top
         ) {
-            val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale("es", "ES"))
-            val currentdate = sdf.format(Date())
-            val fechaactual = sdf.parse(currentdate)
-            Text(text = fechaactual.toString(), fontStyle = FontStyle.Italic)
+            val current = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                LocalDateTime.now()
+            } else {
+                TODO("VERSION.SDK_INT < O")
+            }
+            val formatter = DateTimeFormatter.ofPattern("EEEE dd LLLL yyyy HH:mm:ss a")
+            val formatted = current.format(formatter)
+            Text(text = formatted.toString(), fontStyle = FontStyle.Italic)
         }
 
     }
