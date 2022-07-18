@@ -15,11 +15,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.banplus.R
-import com.example.banplus.ui.theme.black
-import com.example.banplus.ui.theme.white
+import com.example.banplus.ui.theme.color_black
+import com.example.banplus.ui.theme.color_white
 
 @Composable
-fun BtnIni(ico: Painter, text: String, background: Color = black, colorText: Color = white, onClick: () -> Unit?) {
+fun BtnIni(ico: Painter, text: String, background: Color = color_black, colorText: Color = color_white, onClick: () -> Unit?) {
     Button(
         modifier = Modifier
             .padding(6.dp)

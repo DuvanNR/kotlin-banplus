@@ -13,13 +13,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.banplus.ui.theme.primary
-import com.example.banplus.ui.theme.primary1
+import com.example.banplus.R
+import com.example.banplus.ui.theme.color_primary
+import com.example.banplus.ui.theme.color_primary1
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
-fun HeaderInit() {
+fun HeaderInit(icon: Int = R.drawable.ic_banplus_vector) {
     Column {
         Row(
             modifier = Modifier
@@ -28,15 +29,15 @@ fun HeaderInit() {
 
                     brush = Brush.horizontalGradient(
                         colors = listOf(
-                            primary1,
-                            primary
+                            color_primary1,
+                            color_primary
                         )
                     )
                 ),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.Top
         ) {
-            Logo()
+            Logo(icon = icon)
         }
 
         Row(

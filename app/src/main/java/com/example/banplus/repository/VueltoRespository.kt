@@ -11,7 +11,7 @@ import com.example.banplus.api.vuelto.response.Tranferp2pResponse
 class VueltoRespository {
     suspend fun emitTransaction(tipo: String, cedula: String, telefono: String, banco: String, monto: String): ApiResponseStatus<Tranferp2pResponse.Pago> = makeNetworkCall {
         val mapperBody = MapperBodyVuelto()
-        val body = mapperBody.converToResBodyaTransctionApi(tipo, cedula,telefono=telefono, banco=banco,monto=monto)
+        val body = mapperBody.converToResBodyaTransctionApi(tipo=tipo, cedula=cedula,telefono=telefono, banco=banco,monto=monto)
         val resp = retrofitService.emitTransaction(body)
         println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvrepositorio")
         println(resp.msRsH)

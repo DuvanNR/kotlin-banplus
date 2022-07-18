@@ -21,8 +21,6 @@ import com.example.banplus.component.DropdownDemo
 import com.example.banplus.component.PostField
 import com.example.banplus.component.header.HeaderInit
 import com.example.banplus.navigation.PathRouter
-import com.example.banplus.utils.isNumber
-import com.example.banplus.utils.mobileNumberFilter
 
 @Composable
 fun ViewVuelto(navController: NavController) {
@@ -34,10 +32,10 @@ fun ViewVuelto(navController: NavController) {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            HeaderInit()
-            BodyContent { tipo, celular, cell ->
-                if (tipo != "" && celular != "" && cell != "") {
-                    navController.navigate(PathRouter.VueltoNextRoute.withArgs(tipo, cell, celular))
+            HeaderInit(icon = R.drawable.ic_recurso_4 )
+            BodyContent { tipo, cedula, cell ->
+                if (tipo != "" && cedula != "" && cell != "") {
+                    navController.navigate(PathRouter.VueltoNextRoute.withArgs(tipo,cedula, cell))
 
                 }else {
                     Toast.makeText(
@@ -56,8 +54,8 @@ fun ViewVuelto(navController: NavController) {
 @Composable
 fun BodyContent(onClick: (tipo: String, celular: String, cell: String) -> Unit) {
     var tipo by remember { mutableStateOf("v") }
-    var cedula by remember { mutableStateOf("7950354") }
-    var cell by remember { mutableStateOf("584241127426") }
+    var cedula by remember { mutableStateOf("17142863") }
+    var cell by remember { mutableStateOf("584241340112") }
     Box(
         modifier = Modifier
             .fillMaxSize()

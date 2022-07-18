@@ -1,11 +1,13 @@
 package com.example.banplus.views
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -19,49 +21,45 @@ import com.example.banplus.component.LoadingWheel
 import com.example.banplus.component.PostField
 import com.example.banplus.component.errorDialog
 import com.example.banplus.component.header.HeaderInit
+import com.example.banplus.navigation.PathRouter
 
 @Composable
 fun vueltoNextForm(
     navigate: NavController,
-    cell: String?,
-    cedula: String?,
     tipo: String?,
-    status: ApiResponseStatus<Tranferp2pResponse.Pago>? = null,
-    onClick: (
-        cedula: String,
-        cell: String,
-        banco: String,
-        tipo: String,
-        monto: String
-    ) -> Unit,
+    cedula: String?,
+    cell: String?,
+
 ) {
     Scaffold() {
+        val context = LocalContext.current
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            HeaderInit()
-            nextVueltoBody(cell, cedula, tipo, onClick = onClick)
+            HeaderInit(icon = R.drawable.ic_recurso_4)
+            nextVueltoBody(cell, cedula, tipo,  onClick = { tipo, cedula,cell, banco, monto ->
+                if(monto!="" || banco != "") {
+                    navigate.navigate(PathRouter.ConfirTrancation.withArgs(tipo , cedula , cell, banco, monto))
+                }else{
+                    Toast.makeText(
+                        context,
+                        "Debes llenar todos los campos",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                }
+            })
         }
     }
-    if (status is ApiResponseStatus.Loading) {
-        LoadingWheel()
-    }else if( status is ApiResponseStatus.Error ) {
-        errorDialog(status = status, onDialogDismiss = {})
-    }
+
 }
 
 
 @Composable
 fun nextVueltoBody(
-    tipo: String?, cedula: String?, cell: String?, onClick: (
-        cedula: String,
-        cell: String,
-        banco: String,
-        tipo: String,
-        monto: String
-    ) -> Unit
+    tipo: String?, cedula: String?, cell: String?, onClick: (String,String,String,String,String) -> Unit
 ) {
     var banco by remember { mutableStateOf("0174") }
     var monto by remember { mutableStateOf("1.15") }
@@ -76,7 +74,7 @@ fun nextVueltoBody(
         ) {
             PostField(
                 text = banco,
-                onValueChange = {  banco = if (it.length > 3 || it.any { !it.isDigit() }) banco else it },
+                onValueChange = {  banco = if (it.length > 30 || it.any { !it.isDigit() }) banco else it },
                 label = "Banco",
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(
@@ -85,7 +83,7 @@ fun nextVueltoBody(
             )
             PostField(
                 text = monto,
-                onValueChange = {monto = if (it.length > 3 || it.any { !it.isDigit() }) monto else it},
+                onValueChange = {monto = if (it.length > 30 || it.any { !it.isDigit() }) monto else it},
                 label = "Monto",
                 modifier = Modifier.fillMaxWidth(),
 
@@ -97,14 +95,7 @@ fun nextVueltoBody(
         BtnNext(
             text = "Guardar",
             onClick = {
-                onSubmint(
-                    _tipo = tipo,
-                    _cedula = cedula,
-                    _cell = cell,
-                    _banco = banco,
-                    _monto = monto,
-                    onClick = onClick
-                )
+                onClick("$tipo", "$cedula", "$cell", banco, monto)
             },
             ico = painterResource(id = R.drawable.ic_next),
             modifier = Modifier
@@ -113,24 +104,6 @@ fun nextVueltoBody(
                 .height(49.dp)
                 .width(240.dp)
         )
-
-    }
-}
-
-fun onSubmint(
-_tipo: String?, _cedula: String?, _cell: String?, _banco: String, _monto: String, onClick: (
-         String,
-         String,
-         String,
-         String,
-         String
-    ) -> Unit
-) {
-    print(" $_cedula $_cell , $_banco , $_tipo , $_monto " )
-    if(_monto!="" || _banco != "") {
-        onClick("$_cedula", "$_cell", "$_banco", "$_tipo" ,_monto  )
-
-    }else {
 
     }
 }

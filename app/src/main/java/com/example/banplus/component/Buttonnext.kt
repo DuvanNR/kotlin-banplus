@@ -13,13 +13,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.banplus.R
-import com.example.banplus.ui.theme.black
-import com.example.banplus.ui.theme.white
+import com.example.banplus.ui.theme.color_black
+import com.example.banplus.ui.theme.color_white
 
 @Composable
-fun BtnNext(ico: Painter, text: String, background: Color = black, colorText: Color = white, onClick: () -> Unit?, modifier: Modifier = Modifier) {
+fun BtnNext(ico: Painter, text: String, background: Color = color_black, colorText: Color = color_white, onClick: () -> Unit?, modifier: Modifier = Modifier) {
     Button(
         modifier = modifier,
         shape = RoundedCornerShape(55),
@@ -42,7 +41,7 @@ fun BtnNext(ico: Painter, text: String, background: Color = black, colorText: Co
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, widthDp = 250, heightDp = 100)
 @Composable
 fun previewBtna() {
     val ico = painterResource(id = R.drawable.ic_next)
