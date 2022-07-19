@@ -22,18 +22,20 @@
         android:theme="@style/Theme.Banplus"
         tools:targetApi="31">
         <activity
+            android:name=".ListReportesActivity"
+            android:exported="false"
+            android:label="@string/title_activity_list_reportes"
+            android:theme="@style/Theme.Banplus" />
+        <activity
             android:name=".RespTransactionActivity"
             android:exported="false"
             android:label="@string/title_activity_resp_transaction"
             android:theme="@style/Theme.Banplus" />
         <activity
             android:name=".MainActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true"
-            android:hardwareAccelerated="true"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.Banplus"
-            android:windowSoftInputMode="stateVisible|adjustResize">
+            android:theme="@style/Theme.Banplus">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

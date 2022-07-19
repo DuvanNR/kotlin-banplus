@@ -18,16 +18,14 @@ import com.example.banplus.navigation.PathRouter
 import com.example.banplus.ui.theme.*
 
 @Composable
-fun ViewReportes(navController: NavController) {
+fun ViewReportes( onGoToReportes:() -> Unit) {
     Scaffold() {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally) {
             HeaderInit(icon = R.drawable.ic_recurso_4)
-            ReportesBody(onClickListRe = {
-                navController.navigate(PathRouter.ListReport.route)
-            })
+            ReportesBody(onClickListRe = { onGoToReportes() })
         }
 
     }

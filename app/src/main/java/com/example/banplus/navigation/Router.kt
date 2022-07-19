@@ -14,12 +14,12 @@ import com.example.banplus.viewmodel.VueltoViewModel
 import com.example.banplus.views.*
 
 @Composable
-fun Router(viewModelVuelto: VueltoViewModel, onEventTransction: (iData: iTransaction) -> Unit) {
+fun Router(viewModelVuelto: VueltoViewModel, onEventTransction: (iData: iTransaction) -> Unit,onGoToReportes: ()-> Unit) {
     val navController = rememberNavController()
     val status = viewModelVuelto.status
     NavHost(navController = navController, startDestination = PathRouter.HomeRoute.route) {
         composable(route = PathRouter.ReporteRoute.route) {
-            ViewReportes(navController)
+            ViewReportes(onGoToReportes= {onGoToReportes()})
         }
         composable(
             route = PathRouter.VueltoNextRoute.route + "/{tipo}/{cedula}/{cell}",
@@ -36,9 +36,7 @@ fun Router(viewModelVuelto: VueltoViewModel, onEventTransction: (iData: iTransac
         composable(route = PathRouter.HomeRoute.route) {
             ViewInit(navController)
         }
-        composable(route = PathRouter.ListReport.route) {
-            listReportView(navController, ResListA)
-        }
+
 
         composable(route = getPath(), arguments = getList() ) {
             val cell = it.arguments?.getString("cell")

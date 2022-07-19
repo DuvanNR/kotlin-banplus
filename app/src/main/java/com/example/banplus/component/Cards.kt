@@ -1,7 +1,5 @@
 package com.example.banplus.component
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -12,7 +10,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -21,10 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.banplus.R
 import com.example.banplus._interface.iTransaction
-import com.example.banplus.api.vuelto.response.Tranferp2pResponse
 import com.example.banplus.ui.theme.*
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun cardsAlert(
@@ -35,7 +29,7 @@ fun cardsAlert(
 ) {
 
     Card(
-        modifier = Modifier.padding(horizontal = 33.dp),
+        modifier = Modifier.padding(horizontal = 24.dp),
         border = BorderStroke(1.dp, color_black),
         shape = RoundedCornerShape(0.dp),
     ) {
@@ -48,7 +42,7 @@ fun cardsAlert(
                 text = title, color = color_white, modifier = Modifier
                     .background(color_black)
                     .fillMaxWidth()
-                    .padding(vertical = 17.dp), textAlign = TextAlign.Center
+                    .padding(vertical = 9.dp), textAlign = TextAlign.Center
             )
 
             if (rif) {
@@ -57,7 +51,7 @@ fun cardsAlert(
                     color = color_black,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 64.dp),
+                        .padding(top = 41.dp),
                     textAlign = TextAlign.Center
                 )
 
@@ -86,7 +80,7 @@ fun CardC(iData: iTransaction) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 44.dp)
+            .padding(horizontal = 34.dp)
 
     ) {
         Row(
@@ -132,56 +126,58 @@ fun CardC(iData: iTransaction) {
 
 @Composable
 fun CardA() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top=84.dp,start=12.dp)
+
+    ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 128.dp, start = 58.dp)
     ) {
         Text(text = "Fecha:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
         Text(text = "22/06/2022", color = color_fontbtn)
-    }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 144.dp, start = 58.dp)
-    ) {
-        Text(text = "Hora:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-        Text(text = "Hora: 8:30 a.m.", color = color_fontbtn)
+        Text(text = "Hora:  ", modifier = Modifier.padding(start=5.dp),color = color_fontbtn, fontWeight = FontWeight.Bold)
+        Text(text = "8:30 a.m.", color = color_fontbtn)
     }
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 178.dp, start = 58.dp)
+            .padding(top = 15.dp),
+
     ) {
         Text(text = "Pago Plus  ", fontWeight = FontWeight.Bold)
     }
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 198.dp, start = 58.dp)
     ) {
         Text(text = "Cantidad:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
         Text(text = "20", color = color_fontbtn)
     }
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 220.dp, bottom = 33.dp, start = 58.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = "Monto:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
+        Text(text = "Monto:  ",
+            modifier = Modifier,
+            color = color_fontbtn, fontWeight = FontWeight.Bold)
         Text(text = "10000", color = color_fontbtn)
+    }
     }
 
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CardB(status: Boolean, dataTransfer: iTransaction) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 44.dp)
+            .padding(top=44.dp, start = 44.dp)
 
     ) {
         Row(
@@ -305,5 +301,12 @@ fun CardB(status: Boolean, dataTransfer: iTransaction) {
         }
 
     }
+
+}
+
+@Preview
+@Composable
+fun getPreview() {
+    cardsAlert(title = "Confirmar Operación")
 
 }

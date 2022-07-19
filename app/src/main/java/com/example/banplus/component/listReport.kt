@@ -12,10 +12,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.banplus._interface.iReportes
+import com.example.banplus.api.reportes.response.ReportesResponse
 import com.example.banplus.ui.theme.*
 
 @Composable
-fun listReport(item: iReportes) {
+fun listReport(item: ReportesResponse.Movimiento) {
 
     Column(
         modifier = Modifier
@@ -30,19 +31,19 @@ fun listReport(item: iReportes) {
             modifier = Modifier
         ) {
             Text(text = "Ref:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-            Text(text = item.rif, color = color_fontbtn)
+            Text(text = "${item.refeOper}", color = color_fontbtn)
         }
         Row(
             modifier = Modifier
         ) {
             Text(text = "Teléfono:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-            Text(text = item.telefono, color = color_fontbtn)
+            Text(text = "${item.numeroCuenta}", color = color_fontbtn)
         }
         Row(
             modifier = Modifier
         ) {
             Text(text = "Cédula:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-            Text(text = item.cedula, color = color_fontbtn)
+            Text(text = "${item.tipoMovimiento}", color = color_fontbtn)
         }
         Row(
             modifier = Modifier
@@ -53,21 +54,21 @@ fun listReport(item: iReportes) {
             modifier = Modifier
         ) {
             Text(text = "Fecha:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-            Text(text = item.fecha, color = color_fontbtn)
+            Text(text = "${item.fechaProceso}", color = color_fontbtn)
         }
         Row(
             modifier = Modifier
         ) {
             Text(text = "Hora:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-            Text(text = item.hora, color = color_fontbtn)
+            Text(text = "${item.horaProceso}", color = color_fontbtn)
         }
         Row(
             modifier = Modifier
         ) {
-            Text(text = item.monto, color = color_fontbtn, fontWeight = FontWeight.Bold)
+            Text(text = "${item.monto}", color = color_fontbtn, fontWeight = FontWeight.Bold)
             Text(
-                text = item.status,
-                color = getIcon(item.status),
+                text = "${item.conceptoMotivo}",
+                color = getIcon("${item.conceptoMotivo}"),
                 modifier = Modifier.padding(start = 8.dp),
                 fontWeight = FontWeight.Bold
             )
@@ -84,18 +85,3 @@ fun getIcon(text: String): Color {
     }
 }
 
-
-@Preview(showBackground = true, widthDp = 289, heightDp = 170)
-@Composable
-fun preViewList() {
-    val item = iReportes(
-        rif = "0000000111222",
-        telefono = "04240000000",
-        cedula = "V-12345678",
-        fecha = "22/06/2022",
-        hora = "8:30 a.m.",
-        monto = "Bs. 10.000",
-        status = "Aprobada"
-    )
-    listReport(item)
-}

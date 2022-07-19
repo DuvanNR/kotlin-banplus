@@ -7,6 +7,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.banplus.R
@@ -14,9 +15,14 @@ import com.example.banplus._interface.iReportes
 import com.example.banplus.component.header.HeaderInit
 import com.example.banplus.component.listReport
 import androidx.navigation.NavController
+import com.example.banplus.api.ApiResponseStatus
+import com.example.banplus.api.reportes.response.ReportesResponse
+import com.example.banplus.component.LoadingWheel
+import com.example.banplus.component.errorDialog
 
 @Composable
-fun listReportView(navController:NavController, itemRepost: List<iReportes>) {
+fun listReportView(status: ApiResponseStatus<Any>? , itemRepost: List<ReportesResponse.Movimiento>) {
+
     Scaffold() {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -33,6 +39,11 @@ fun listReportView(navController:NavController, itemRepost: List<iReportes>) {
                 }
 
             }
+        }
+        if (status is ApiResponseStatus.Loading) {
+            LoadingWheel()
+        }else if(status is ApiResponseStatus.Error) {
+            errorDialog(description = stringResource(id = status.messageId), onDialogDismiss = {})
         }
     }
 }

@@ -39,7 +39,7 @@ private fun BodyContentA(onClick: () -> Unit, iData: iTransaction) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top =44.dp),
+            .padding(top =9.dp),
         contentAlignment = Alignment.TopCenter
     ) {
         cardsAlert(rif = true, title = "Recibo Operación", status = true, iData = iData )
