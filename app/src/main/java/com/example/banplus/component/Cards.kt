@@ -129,7 +129,7 @@ fun CardA() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top=84.dp,start=12.dp)
+            .padding(top=100.dp,start=12.dp)
 
     ) {
     Row(
@@ -145,8 +145,6 @@ fun CardA() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 15.dp),
-
     ) {
         Text(text = "Pago Plus  ", fontWeight = FontWeight.Bold)
     }
@@ -159,14 +157,13 @@ fun CardA() {
     }
     Row(
         modifier = Modifier
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+            .fillMaxWidth()
+            .padding(bottom = 24.dp),
     ) {
         Text(text = "Monto:  ",
             modifier = Modifier,
             color = color_fontbtn, fontWeight = FontWeight.Bold)
-        Text(text = "10000", color = color_fontbtn)
+        Text(text = "Bs. 10000" ,color = color_fontbtn)
     }
     }
 
@@ -177,26 +174,20 @@ fun CardB(status: Boolean, dataTransfer: iTransaction) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top=44.dp, start = 44.dp)
+            .padding(top=84.dp, start = 30.dp,end=30.dp)
 
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 128.dp)
         ) {
             Text(text = "Fecha:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
             Text(text = "", color = color_fontbtn)
-        }
-
-        Row(
-
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Text(text = "Hora:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
+            Text(text = "Hora:  ", modifier = Modifier.padding(start=9.dp),color = color_fontbtn, fontWeight = FontWeight.Bold)
             Text(text = "", color = color_fontbtn)
         }
+
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -263,7 +254,7 @@ fun CardB(status: Boolean, dataTransfer: iTransaction) {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Icon(
-                    modifier = Modifier.fillMaxSize(0.15F),
+                    modifier = Modifier.fillMaxSize(0.3F),
                     tint= color_success,
                     painter =painterResource(id = R.drawable.ic_chech_ok),
                     contentDescription = "Localized description"
@@ -291,7 +282,7 @@ fun CardB(status: Boolean, dataTransfer: iTransaction) {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Icon(
-                    modifier = Modifier.fillMaxSize(0.15F),
+                    modifier = Modifier.fillMaxSize(0.5F),
                     tint= color_danger,
                     painter = painterResource(id = R.drawable.ic_circle_error),
                     contentDescription = "Localized description"
@@ -304,9 +295,9 @@ fun CardB(status: Boolean, dataTransfer: iTransaction) {
 
 }
 
-@Preview
+@Preview(showBackground = false, heightDp = 333, widthDp = 500 )
 @Composable
 fun getPreview() {
-    cardsAlert(title = "Confirmar Operación")
+    cardsAlert(title = "Recibo Confirmado")
 
 }

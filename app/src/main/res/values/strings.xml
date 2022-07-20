@@ -11,4 +11,9 @@
     <string name="error_dialog_title">Ups un error</string>
     <string name="title_activity_resp_transaction">RespTransactionActivity</string>
     <string name="title_activity_list_reportes">ListReportesActivity</string>
+    <string name="print_merchantno">imprimir mi test</string>
+    <string name="print_terminalno">terminal print</string>
+    <string name="print_operator">print operator</string>
+    <string name="print_issurebank">print is surebank</string>
+    <string name="print_shoudan">print shoudan</string>
 </resources>

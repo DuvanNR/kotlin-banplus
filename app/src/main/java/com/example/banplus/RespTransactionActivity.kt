@@ -1,6 +1,7 @@
 package com.example.banplus
 
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,18 +11,21 @@ import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import com.example.banplus._interface.iTransaction
 import com.example.banplus.ui.theme.BanplusTheme
-import com.example.banplus.utils.NexgoPrinter
 import com.example.banplus.views.RespTransaction
 import com.nexgo.oaf.apiv3.DeviceEngine
 import com.nexgo.oaf.apiv3.device.printer.Printer
 
 class RespTransactionActivity : ComponentActivity() {
-
+    private var deviceEngine: DeviceEngine? = null
+    private var printer: Printer? = null
     override fun onCreate(savedInstanceState: Bundle?) {
-        val printer = NexgoPrinter()
+//        deviceEngine = (application as NexgoApplication).deviceEngine
+//        printer = deviceEngine?.printer
+//         rinter?.setTypeface(Typeface.DEFAULT)
+
         super.onCreate(savedInstanceState)
         val ObjectIntent: Intent = intent
-        val mainactivityintent = Intent(this,MainActivity::class.java )
+        val mainactivityintent = Intent(this, MainActivity::class.java)
         setContent {
             BanplusTheme {
                 // A surface container using the 'background' color from the theme
@@ -37,10 +41,15 @@ class RespTransactionActivity : ComponentActivity() {
                         monto = "${ObjectIntent.getStringExtra("monto")}",
                     )
 
-                    RespTransaction(iData = transaction, onClickMainActivity= {
-                        startActivity(mainactivityintent)
-                        finish()
-                    })
+                    RespTransaction(iData = transaction,
+                        onclickimprimir = {
+                            println("hola holahoalahoa")
+
+                        },
+                        onClickMainActivity = {
+                            startActivity(mainactivityintent)
+                            finish()
+                        })
                 }
             }
         }

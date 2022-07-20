@@ -14,7 +14,7 @@ import com.example.banplus.viewmodel.VueltoViewModel
 import com.example.banplus.views.*
 
 @Composable
-fun Router(viewModelVuelto: VueltoViewModel, onEventTransction: (iData: iTransaction) -> Unit,onGoToReportes: ()-> Unit) {
+fun Router(viewModelVuelto: VueltoViewModel, onEventTransction: (iData: iTransaction) -> Unit,onGoToReportes: ()-> Unit, onClickPrint:()-> Unit) {
     val navController = rememberNavController()
     val status = viewModelVuelto.status
     NavHost(navController = navController, startDestination = PathRouter.HomeRoute.route) {
@@ -34,7 +34,7 @@ fun Router(viewModelVuelto: VueltoViewModel, onEventTransction: (iData: iTransac
             ViewVuelto(navController)
         }
         composable(route = PathRouter.HomeRoute.route) {
-            ViewInit(navController)
+            ViewInit(navController, onClickPrint ={onClickPrint()})
         }
 
 

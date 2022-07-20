@@ -21,7 +21,7 @@ import com.example.banplus.component.header.HeaderInit
 import com.example.banplus.ui.theme.color_fontbtn
 
 @Composable
-fun RespTransaction(iData: iTransaction, onClickMainActivity: () -> Unit) {
+fun RespTransaction(iData: iTransaction, onclickimprimir:() ->Unit, onClickMainActivity: () -> Unit) {
     Scaffold() {
         val context = LocalContext.current
         Column(
@@ -30,12 +30,12 @@ fun RespTransaction(iData: iTransaction, onClickMainActivity: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             HeaderInit(icon = R.drawable.ic_recurso_4 )
-            BodyContentA(onClick = {onClickMainActivity()}, iData =iData )
+            BodyContentA(onClick = {onClickMainActivity()}, iData =iData, onclickimprimir = {onclickimprimir()} )
         }
     }
 }
 @Composable
-private fun BodyContentA(onClick: () -> Unit, iData: iTransaction) {
+private fun BodyContentA(onClick: () -> Unit, iData: iTransaction, onclickimprimir: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -50,7 +50,7 @@ private fun BodyContentA(onClick: () -> Unit, iData: iTransaction) {
         ) {
             BtnNext(
                 text = "Imprimir",
-                onClick = {  },
+                onClick = { onclickimprimir() },
                 ico = painterResource(id = R.drawable.ic_next),
                 modifier = Modifier
                     .padding(4.dp)

@@ -16,14 +16,14 @@ import com.example.banplus.api.reportes.response.ReportesResponse
 import com.example.banplus.ui.theme.*
 
 @Composable
-fun listReport(item: ReportesResponse.Movimiento) {
+fun listReport(item: ReportesResponse.Movimiento = ReportesResponse.Movimiento()) {
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(color_white)
             .border(1.dp, color_black)
-            .padding(vertical = 13.dp, horizontal = 22.dp),
+            .padding(vertical = 10.dp, horizontal = 10.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
@@ -55,11 +55,10 @@ fun listReport(item: ReportesResponse.Movimiento) {
         ) {
             Text(text = "Fecha:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
             Text(text = "${item.fechaProceso}", color = color_fontbtn)
-        }
-        Row(
-            modifier = Modifier
-        ) {
-            Text(text = "Hora:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
+            Text(text = "Hora:  ",
+                color = color_fontbtn,
+                modifier = Modifier.padding(start=9.dp),
+                fontWeight = FontWeight.Bold)
             Text(text = "${item.horaProceso}", color = color_fontbtn)
         }
         Row(
@@ -85,3 +84,8 @@ fun getIcon(text: String): Color {
     }
 }
 
+@Preview(showBackground = true, widthDp = 400, heightDp = 200)
+@Composable
+fun getPreviewListItem() {
+    listReport()
+}

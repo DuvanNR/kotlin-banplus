@@ -9,14 +9,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import com.example.banplus.ui.theme.BanplusTheme
-import com.example.banplus.utils.NexgoPrinter
+import com.example.banplus.utils.NexgoApplication
 import com.example.banplus.viewmodel.ReportesViewModel
 import com.example.banplus.views.listReportView
-import com.nexgo.oaf.apiv3.*
 
 class ListReportesActivity : ComponentActivity() {
     private val viewModelReportes: ReportesViewModel by viewModels()
-    private val deviceEngine = NexgoPrinter()
+    private val deviceEngine = NexgoApplication()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -28,8 +27,6 @@ class ListReportesActivity : ComponentActivity() {
                 ) {
                     val status = viewModelReportes.status
                     listReportView(status = status.value, viewModelReportes.resp.value)
-
-
                 }
             }
         }

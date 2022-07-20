@@ -1,14 +1,11 @@
 package com.example.banplus.component
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.ExposedDropdownMenuDefaults
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.TransformedText
-import com.example.banplus.utils.isNumber
+import androidx.compose.ui.text.input.VisualTransformation
 
 @Composable
 fun PostField(
@@ -17,10 +14,14 @@ fun PostField(
     label: String,
     modifier: Modifier = Modifier,
     keyboardOptions: KeyboardOptions = KeyboardOptions(),
-) {
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+
+
+    ) {
     OutlinedTextField(
         value = text,
         onValueChange = { onValueChange(it) },
+        visualTransformation = visualTransformation ,
         label = {
             Text(label)
         },

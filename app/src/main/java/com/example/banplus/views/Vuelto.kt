@@ -15,7 +15,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.banplus.ListTypeDocument
 import com.example.banplus.R
+import com.example.banplus._interface.idropdown
 import com.example.banplus.component.BtnNext
 import com.example.banplus.component.DropdownDemo
 import com.example.banplus.component.PostField
@@ -53,7 +55,7 @@ fun ViewVuelto(navController: NavController) {
 
 @Composable
 private fun BodyContent(onClick: (tipo: String, celular: String, cell: String) -> Unit) {
-    var tipo by remember { mutableStateOf("v") }
+    var tipo by remember { mutableStateOf<idropdown>(idropdown(key="v", title = "v")) }
     var cedula by remember { mutableStateOf("17142863") }
     var cell by remember { mutableStateOf("584241340112") }
     Box(
@@ -66,10 +68,12 @@ private fun BodyContent(onClick: (tipo: String, celular: String, cell: String) -
             Row() {
                 DropdownDemo(
                     Modifier
-                        .size(height = 70.dp, width = 120.dp)
-                        .padding(end = 30.dp),
+                        .size(height = 65.dp, width = 120.dp)
+                        .padding(end = 3.dp),
                     selectedOptionText = tipo, onValueChange = { tipo = it },
                     label = "Tipo",
+                    options = ListTypeDocument
+
                 )
                 PostField(
                     text = cedula,
@@ -87,14 +91,15 @@ private fun BodyContent(onClick: (tipo: String, celular: String, cell: String) -
                 label = "Telefono",
                 modifier = Modifier.fillMaxWidth().padding(top=10.dp),
                 keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Next),
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Next
+                ),
             )
         }
 
         BtnNext(
             text = "Siguiente",
-            onClick = { onClick(tipo, cedula, cell) },
+            onClick = { onClick("${tipo.key}", cedula, cell) },
             ico = painterResource(id = R.drawable.ic_next),
             modifier = Modifier
                 .align(Alignment.BottomCenter)

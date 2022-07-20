@@ -1,20 +1,15 @@
 package com.example.banplus.component
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
+import com.example.banplus._interface.idropdown
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DropdownDemo(
     modifier: Modifier = Modifier,
-    selectedOptionText: String, onValueChange: (String) -> Unit, label:String) {
-    val options = listOf("v", "c")
+    selectedOptionText: idropdown, onValueChange: (idropdown) -> Unit, label:String, options:List<idropdown>) {
     var expanded by remember { mutableStateOf(false) }
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -25,8 +20,9 @@ fun DropdownDemo(
     ) {
         OutlinedTextField (
             readOnly = true,
-            value = selectedOptionText,
-            onValueChange = { onValueChange(it)},
+            modifier = modifier,
+            value = "${selectedOptionText.title}",
+            onValueChange = { onValueChange(idropdown(key="$it", title="${selectedOptionText.title}"))},
             label = { Text(label) },
             singleLine = true,
             trailingIcon = {
@@ -41,14 +37,15 @@ fun DropdownDemo(
                 expanded = false
             }
         ) {
-            options.forEach { selectionOption ->
+            options.forEach {
                 DropdownMenuItem(
+                    modifier = modifier,
                     onClick = {
-                        onValueChange(selectionOption)
+                        onValueChange(idropdown(key = it.key, title = it.title))
                         expanded = false
                     }
                 ) {
-                    Text(text = selectionOption)
+                    Text(text = "${it.title}")
                 }
             }
         }
