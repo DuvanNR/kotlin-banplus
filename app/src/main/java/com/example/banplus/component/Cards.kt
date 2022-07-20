@@ -25,7 +25,7 @@ fun cardsAlert(
     rif: Boolean = true,
     title: String = "Consolidado Diario",
     status: Boolean = true,
-    iData: iTransaction = iTransaction("", "", "","",""),
+    iData: iTransaction = iTransaction(),
 ) {
 
     Card(
@@ -103,7 +103,7 @@ fun CardC(iData: iTransaction) {
                 .fillMaxWidth()
         ) {
             Text(text = "Banco:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-            Text(text = "${iData.banco}", color = color_fontbtn)
+            Text(text = "${iData.nameBanco}", color = color_fontbtn)
         }
 
         Row(

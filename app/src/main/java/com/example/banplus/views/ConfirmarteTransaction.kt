@@ -29,7 +29,7 @@ fun ConfirmarteTransaction (
     viewModelVuelto: VueltoViewModel,
     status: ApiResponseStatus<Tranferp2pResponse>?,
     onErrorDialog: () -> Unit,
-    onEventExito:(String,String,String,String,String) -> Unit
+    onEventExito:(iTransaction) -> Unit
 ){
     var value = viewModelVuelto.vueltoR.value
     Scaffold() {
@@ -42,7 +42,6 @@ fun ConfirmarteTransaction (
             body(resp, onClickCancelar = {
                 navController.navigate(PathRouter.HomeRoute.route)
             }, onClickEmitTransaction = {
-
                 viewModelVuelto.EmitPago(tipo = resp.tipo, cedula = resp.cedula, telefono = resp.telefono, banco= resp.banco,monto=resp.monto)
             })
         }
@@ -55,7 +54,7 @@ fun ConfirmarteTransaction (
     if(value != null) {
         println(value.msRsH)
         when(value.msRsH?.codigo) {
-            "1" -> onEventExito(resp.tipo , resp.cedula , resp.telefono, resp.banco, resp.monto)
+            "1" -> onEventExito(iTransaction(resp.tipo , resp.cedula , resp.telefono, resp.banco, resp.monto, resp.nameBanco))
             else -> errorDialog(description = "${value.msRsH?.descripcionError}", onDialogDismiss = onErrorDialog)
         }
     }

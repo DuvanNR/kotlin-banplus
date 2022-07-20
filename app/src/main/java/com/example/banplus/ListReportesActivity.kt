@@ -15,7 +15,6 @@ import com.example.banplus.views.listReportView
 
 class ListReportesActivity : ComponentActivity() {
     private val viewModelReportes: ReportesViewModel by viewModels()
-    private val deviceEngine = NexgoApplication()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

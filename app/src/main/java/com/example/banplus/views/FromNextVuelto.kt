@@ -14,11 +14,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.banplus.BancosList
-import com.example.banplus.ListTypeDocument
 import com.example.banplus.R
+import com.example.banplus._interface.iTransaction
 import com.example.banplus._interface.idropdown
-import com.example.banplus.api.ApiResponseStatus
-import com.example.banplus.api.vuelto.response.Tranferp2pResponse
 import com.example.banplus.component.*
 import com.example.banplus.component.header.HeaderInit
 import com.example.banplus.navigation.PathRouter
@@ -26,11 +24,8 @@ import com.example.banplus.navigation.PathRouter
 @Composable
 fun vueltoNextForm(
     navigate: NavController,
-    tipo: String?,
-    cedula: String?,
-    cell: String?,
-
-) {
+    resp: iTransaction
+    ) {
     Scaffold() {
         val context = LocalContext.current
         Column(
@@ -39,10 +34,19 @@ fun vueltoNextForm(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             HeaderInit(icon = R.drawable.ic_recurso_4)
-            nextVueltoBody(cell, cedula, tipo,  onClick = { tipo, cedula,cell, banco, monto ->
-                if(monto!="" || banco != "") {
-                    navigate.navigate(PathRouter.ConfirTrancation.withArgs(tipo , cedula , cell, banco, monto))
-                }else{
+            nextVueltoBody(onClick = {
+                if (it.monto != "" || it.banco != "") {
+                    navigate.navigate(
+                        PathRouter.ConfirTrancation.withArgs(
+                            "${resp.tipo}",
+                            "${resp.cedula}",
+                            "${resp.telefono}",
+                            "${it.banco}",
+                            "${it.monto}",
+                            "${it.nameBanco}"
+                        )
+                    )
+                } else {
                     Toast.makeText(
                         context,
                         "Debes llenar todos los campos",
@@ -58,10 +62,15 @@ fun vueltoNextForm(
 
 
 @Composable
-fun nextVueltoBody(
-    tipo: String?, cedula: String?, cell: String?, onClick: (String,String,String,String,String) -> Unit
-) {
-    var banco by remember { mutableStateOf<idropdown>(idropdown(key="0102", title= "Banco de Venezuela S.A.C.A")) }
+fun nextVueltoBody(onClick: (iTransaction) -> Unit) {
+    var banco by remember {
+        mutableStateOf<idropdown>(
+            idropdown(
+                key = "0102",
+                title = "Banco de Venezuela S.A.C.A"
+            )
+        )
+    }
     var monto by remember { mutableStateOf("11") }
     Box(
         modifier = Modifier
@@ -70,9 +79,11 @@ fun nextVueltoBody(
         contentAlignment = Alignment.TopCenter
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(top=33.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 33.dp),
 
-        ) {
+            ) {
 
             DropdownDemo(
                 modifier = Modifier.fillMaxWidth(),
@@ -83,18 +94,30 @@ fun nextVueltoBody(
             )
             PostField(
                 text = monto,
-                onValueChange = {monto = it},
+                onValueChange = { monto = it },
                 label = "Monto",
-                modifier = Modifier.fillMaxWidth().padding(top=10.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next),
+                    imeAction = ImeAction.Next
+                ),
             )
         }
         BtnNext(
             text = "Guardar",
             onClick = {
-                onClick("$tipo", "$cedula", "$cell", "${banco.key}", "$monto.00")
+                onClick(
+                    iTransaction(
+                        banco = "${banco.key}",
+                        monto = "$monto.00",
+                        nameBanco = "${banco.title}",
+                        cedula = "",
+                        tipo = "",
+                        telefono = ""
+                    )
+                )
             },
             ico = painterResource(id = R.drawable.ic_next),
             modifier = Modifier

@@ -14,12 +14,16 @@ import com.example.banplus.viewmodel.VueltoViewModel
 import com.example.banplus.views.*
 
 @Composable
-fun Router(viewModelVuelto: VueltoViewModel, onEventTransction: (iData: iTransaction) -> Unit,onGoToReportes: ()-> Unit, onClickPrint:()-> Unit) {
+fun Router(
+    viewModelVuelto: VueltoViewModel,
+    onEventTransction: (iData: iTransaction) -> Unit,
+    onGoToReportes: () -> Unit
+) {
     val navController = rememberNavController()
     val status = viewModelVuelto.status
     NavHost(navController = navController, startDestination = PathRouter.HomeRoute.route) {
         composable(route = PathRouter.ReporteRoute.route) {
-            ViewReportes(onGoToReportes= {onGoToReportes()})
+            ViewReportes(onGoToReportes = { onGoToReportes() })
         }
         composable(
             route = PathRouter.VueltoNextRoute.route + "/{tipo}/{cedula}/{cell}",
@@ -28,34 +32,46 @@ fun Router(viewModelVuelto: VueltoViewModel, onEventTransction: (iData: iTransac
             val cell = it.arguments?.getString("cell")
             val tipo = it.arguments?.getString("tipo")
             val cedula = it.arguments?.getString("cedula")
-            vueltoNextForm(navController, cell, cedula, tipo)
+            vueltoNextForm(
+                navController,
+                iTransaction(tipo = "$tipo", cedula = "$cedula", "$cell", "", "", "")
+            )
         }
         composable(route = PathRouter.VueltoRoute.route) {
             ViewVuelto(navController)
         }
         composable(route = PathRouter.HomeRoute.route) {
-            ViewInit(navController, onClickPrint ={onClickPrint()})
+            ViewInit(navController)
         }
 
 
-        composable(route = getPath(), arguments = getList() ) {
+        composable(route = getPath(), arguments = getList()) {
             val cell = it.arguments?.getString("cell")
             val tipo = it.arguments?.getString("tipo")
             val cedula = it.arguments?.getString("cedula")
             val monto = it.arguments?.getString("monto")
             val banco = it.arguments?.getString("banco")
+            val nameBanco = it.arguments?.getString("nameBanco")
             ConfirmarteTransaction(
                 navController = navController,
-                resp = iTransaction("$tipo", "$cedula", "$cell", "$banco", "$monto"),
-                viewModelVuelto =viewModelVuelto,
+                resp = iTransaction("$tipo", "$cedula", "$cell", "$banco", "$monto", "$nameBanco"),
+                viewModelVuelto = viewModelVuelto,
                 status = status.value,
                 onErrorDialog = {
                     viewModelVuelto.onResetApiResponse()
                     navController.navigate(PathRouter.HomeRoute.route)
                 },
-                onEventExito = {
-                    tipo ,cedula ,telefono,banco, monto ->
-                    onEventTransction(iTransaction(tipo = tipo, cedula = cedula, telefono= telefono,banco= banco, monto=monto))
+                onEventExito = { it ->
+                    onEventTransction(
+                        iTransaction(
+                            tipo = it.tipo,
+                            cedula = it.cedula,
+                            telefono = it.telefono,
+                            banco = it.banco,
+                            monto = it.monto,
+                            nameBanco = it.nameBanco
+                        )
+                    )
                 }
 
             )
@@ -64,11 +80,13 @@ fun Router(viewModelVuelto: VueltoViewModel, onEventTransction: (iData: iTransac
     }
 
 }
-fun getPath():String {
-   return PathRouter.ConfirTrancation.route + "/{tipo}/{cedula}/{cell}/{banco}/{monto}"
+
+fun getPath(): String {
+    return PathRouter.ConfirTrancation.route + "/{tipo}/{cedula}/{cell}/{banco}/{monto}/{nameBanco}"
 }
+
 fun getList(): List<NamedNavArgument> {
-   return listOf(
+    return listOf(
         navArgument("cell") {
             type = NavType.StringType
             nullable = false
@@ -90,6 +108,11 @@ fun getList(): List<NamedNavArgument> {
             defaultValue = "11"
         },
         navArgument("monto") {
+            type = NavType.StringType
+            nullable = false
+            defaultValue = "11"
+        },
+        navArgument("nameBanco") {
             type = NavType.StringType
             nullable = false
             defaultValue = "11"

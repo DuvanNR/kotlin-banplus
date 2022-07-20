@@ -17,7 +17,7 @@ import com.example.banplus.component.header.HeaderInit
 import com.example.banplus.navigation.PathRouter
 
 @Composable
-fun ViewInit(navController: NavController,onClickPrint: () ->Unit ) {
+fun ViewInit(navController: NavController) {
     Scaffold {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -28,14 +28,14 @@ fun ViewInit(navController: NavController,onClickPrint: () ->Unit ) {
                 modifier = Modifier.padding(bottom = 117.dp),
                 fontSize = 24.sp,
                 text = "Bienvenido")
-            ViewInitBody(navController, onClickPrint = {onClickPrint()})
+            ViewInitBody(navController)
         }
 
     }
 }
 
 @Composable
-fun ViewInitBody(navController: NavController, onClickPrint:()-> Unit) {
+fun ViewInitBody(navController: NavController) {
     Box() {
         Row(
             verticalAlignment = Alignment.CenterVertically
@@ -47,9 +47,7 @@ fun ViewInitBody(navController: NavController, onClickPrint:()-> Unit) {
                 text="Reportes",
                 ico = painterResource(id = R.drawable.ic_reportes)  , onClick = {navController.navigate(PathRouter.ReporteRoute.route)})
         }
-        BtnIni(
-            text="test",
-            ico = painterResource(id = R.drawable.ic_reportes)  , onClick = {onClickPrint()})
+
     }
 
 }

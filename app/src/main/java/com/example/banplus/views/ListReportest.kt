@@ -23,7 +23,6 @@ import com.example.banplus.component.errorDialog
 
 @Composable
 fun listReportView(status: ApiResponseStatus<Any>? , itemRepost: List<ReportesResponse.Movimiento>) {
-
     Scaffold() {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -43,7 +42,6 @@ fun listReportView(status: ApiResponseStatus<Any>? , itemRepost: List<ReportesRe
 
             }
 
-            Text(text = "hols")
         }
         if (status is ApiResponseStatus.Loading) {
             LoadingWheel()
