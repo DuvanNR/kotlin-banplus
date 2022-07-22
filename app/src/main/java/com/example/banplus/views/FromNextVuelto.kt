@@ -66,8 +66,8 @@ fun nextVueltoBody(onClick: (iTransaction) -> Unit) {
     var banco by remember {
         mutableStateOf<idropdown>(
             idropdown(
-                key = "0102",
-                title = "Banco de Venezuela S.A.C.A"
+                key = "0174",
+                title = "Banplus, C.A."
             )
         )
     }

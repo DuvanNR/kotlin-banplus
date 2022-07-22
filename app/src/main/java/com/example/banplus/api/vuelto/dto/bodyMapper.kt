@@ -1,5 +1,7 @@
 package com.example.banplus.api.vuelto.dto
 
+import com.example.banplus._interface.iTransaction
+
 class MapperBodyVuelto {
     private fun MsRqB(tipo: String, cedula: String, telefono: String, banco: String, monto: String): Transactionp2pDTO.MsRqB {
        return Transactionp2pDTO.MsRqB(
@@ -30,10 +32,8 @@ class MapperBodyVuelto {
 
 
 
-    fun converToResBodyaTransctionApi(tipo: String, cedula: String, telefono: String, banco: String, monto: String):Transactionp2pDTO {
-        println("tipo = $tipo, cedula = $cedula, telefono = $telefono, banco= $banco, monto= $monto ")
-
-        val body = MsRqB(tipo = tipo, cedula = cedula, telefono = telefono, banco= banco, monto= monto )
+    fun converToResBodyaTransctionApi(e:iTransaction):Transactionp2pDTO {
+        val body = MsRqB(tipo = e.tipo, cedula = e.cedula, telefono = e.telefono, banco= e.banco, monto= e.monto )
         val header = MsRqH()
          return Transactionp2pDTO(msRqB = body , msRqH = header)
     }

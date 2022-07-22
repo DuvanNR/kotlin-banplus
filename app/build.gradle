@@ -1,6 +1,9 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+
 }
 
 android {
@@ -48,7 +51,9 @@ android {
     }
 
 }
-
+kapt {
+    correctErrorTypes true
+}
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.aar'])
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -57,6 +62,7 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
     implementation 'androidx.activity:activity-compose:1.3.1'
+    implementation 'androidx.room:room-common:2.4.2'
     testImplementation 'junit:junit:4.13.2'
     //*********************************/
     implementation files('libs/nexgo-smartpos-sdk-v2.2.1_20190527.aar')
@@ -70,17 +76,30 @@ dependencies {
     // Compose Coil
     implementation 'io.coil-kt:coil-compose:1.3.2'
 
-// Compose ViewModel
+    // Compose ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0"
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.7'
 
-// Compose LiveData
+    // Compose LiveData
     implementation "androidx.compose.runtime:runtime-livedata:1.1.1"
 
-// Compose Navigation
+    // Compose Navigation
     implementation "androidx.navigation:navigation-compose:2.5.0"
+    // room - injector de dependecias
+    def room_version = "2.2.6"
+    implementation "androidx.room:room-ktx:$room_version"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
+    // hilt - injector de dependecias
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
+
 
     //*********************************/
+
+    
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"

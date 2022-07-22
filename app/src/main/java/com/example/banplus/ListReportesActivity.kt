@@ -9,7 +9,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import com.example.banplus.ui.theme.BanplusTheme
-import com.example.banplus.utils.NexgoApplication
+//import com.example.banplus.utils.NexgoApplication
 import com.example.banplus.viewmodel.ReportesViewModel
 import com.example.banplus.views.listReportView
 

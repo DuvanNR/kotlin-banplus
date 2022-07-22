@@ -13,20 +13,9 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-private val retrofit = Retrofit.Builder()
-    .baseUrl(URL_BASE)
-    .addConverterFactory(GsonConverterFactory.create())
-    .build()
-
-
 interface ApiServer {
     @POST(ADD_TRANSACTIONS)
     suspend fun emitTransaction(@Body data: Transactionp2pDTO): Tranferp2pResponse
     @POST(LIST_TRANSACTIONS)
     suspend fun ListTransation(@Body data: ReportesDTO):ReportesResponse
-}
-object BanplusApi {
-    val retrofitService: ApiServer by lazy {
-        retrofit.create(ApiServer::class.java)
-    }
 }

@@ -6,14 +6,18 @@ import androidx.lifecycle.viewModelScope
 import com.example.banplus.api.ApiResponseStatus
 import com.example.banplus.api.reportes.response.ReportesResponse
 import com.example.banplus.repository.ReportesRespository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ReportesViewModel : ViewModel() {
+@HiltViewModel
+class ReportesViewModel @Inject constructor(
+    private val reportesRepositoryImp: ReportesRespository
+): ViewModel()  {
     var resp = mutableStateOf<List<ReportesResponse.Movimiento>>(listOf())
         private set
     var status = mutableStateOf<ApiResponseStatus<Any>?>(null)
         private set
-    private val authRepository = ReportesRespository()
     init {
         GetReportes()
     }
@@ -21,7 +25,7 @@ class ReportesViewModel : ViewModel() {
         viewModelScope.launch {
             status.value = ApiResponseStatus.Loading()
             handleResponseStatus(
-                authRepository.GetReportes()
+                reportesRepositoryImp.GetReportes()
             )
         }
     }
@@ -32,6 +36,7 @@ class ReportesViewModel : ViewModel() {
     @Suppress("UNCHE")
     private fun handleResponseStatus(apiResponseStatus: ApiResponseStatus<List<ReportesResponse.Movimiento>>) {
         if (apiResponseStatus is ApiResponseStatus.Success) {
+            println("______${apiResponseStatus.data[0]}_______")
             resp.value = apiResponseStatus.data
         }
         status.value = apiResponseStatus as ApiResponseStatus<Any>

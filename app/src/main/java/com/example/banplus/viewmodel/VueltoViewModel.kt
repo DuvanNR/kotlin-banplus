@@ -4,29 +4,32 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.banplus._interface.iTransaction
 import com.example.banplus.api.ApiResponseStatus
 import com.example.banplus.api.vuelto.dto.MapperBodyVuelto
 import com.example.banplus.api.vuelto.response.Tranferp2pResponse
 import com.example.banplus.repository.VueltoRespository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class VueltoViewModel : ViewModel() {
+@HiltViewModel
+class VueltoViewModel @Inject constructor(
+   private val VueltoRepo: VueltoRespository
+): ViewModel() {
     var vueltoR = mutableStateOf<Tranferp2pResponse?>(null)
         private set
     var status = mutableStateOf<ApiResponseStatus<Tranferp2pResponse>?>(null)
         private set
-    private val authRepository = VueltoRespository()
     fun EmitPago(tipo: String, cedula: String, telefono: String, banco: String, monto: String) {
         viewModelScope.launch {
             status.value = ApiResponseStatus.Loading()
             handleResponseStatus(
-                authRepository.emitTransaction(
-                    tipo = tipo,
+                VueltoRepo.emitTransaction(iTransaction(tipo = tipo,
                     cedula = cedula,
                     telefono = telefono,
                     banco = banco,
-                    monto = monto
-                )
+                    monto = monto))
             )
         }
     }

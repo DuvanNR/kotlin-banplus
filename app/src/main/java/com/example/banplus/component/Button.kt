@@ -49,5 +49,5 @@ fun BtnIni(ico: Painter, text: String, background: Color = color_black, colorTex
 @Composable
 fun previewBtn() {
     val ico = painterResource(id = R.drawable.ic_time)
-    BtnIni(text="hola Mundo",onClick = {/* TODO: */}, ico = ico)
+    BtnIni(text="hola Mundo",onClick = {/*  TODO: */}, ico = ico)
 }
