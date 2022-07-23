@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.banplus.R
 import com.example.banplus._interface.iTransaction
@@ -24,14 +25,14 @@ import com.example.banplus.viewmodel.VueltoViewModel
 
 @Composable
 fun ConfirmarteTransaction (
+    viewModel: VueltoViewModel = hiltViewModel(),
     navController: NavController,
     resp: iTransaction,
-    viewModelVuelto: VueltoViewModel,
-    status: ApiResponseStatus<Tranferp2pResponse>?,
-    onErrorDialog: () -> Unit,
     onEventExito:(iTransaction) -> Unit
 ){
-    var value = viewModelVuelto.vueltoR.value
+
+    var value = viewModel.vueltoR.value
+    val status: ApiResponseStatus<Tranferp2pResponse>? = viewModel.status.value
     Scaffold() {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -42,20 +43,36 @@ fun ConfirmarteTransaction (
             body(resp, onClickCancelar = {
                 navController.navigate(PathRouter.HomeRoute.route)
             }, onClickEmitTransaction = {
-                viewModelVuelto.EmitPago(tipo = resp.tipo, cedula = resp.cedula, telefono = resp.telefono, banco= resp.banco,monto=resp.monto)
+                viewModel.EmitPago(tipo = resp.tipo, cedula = resp.cedula, telefono = resp.telefono, banco= resp.banco,monto=resp.monto)
             })
         }
     }
     if (status is ApiResponseStatus.Loading) {
         LoadingWheel()
     }else if(status is ApiResponseStatus.Error) {
-        errorDialog(description = stringResource(id = status.messageId), onDialogDismiss = onErrorDialog)
+        errorDialog(description = stringResource(id = status.messageId), onDialogDismiss = {
+            viewModel.onResetApiResponse()
+            navController.navigate(PathRouter.HomeRoute.route)
+        })
     }
     if(value != null) {
+        val fecha = "${value?.msRsB?.pago?.fechaRespuesta}".substring(0,10)
+        val hora = "${value?.msRsB?.pago?.fechaRespuesta}".substring(11,19)
         println(value.msRsH)
         when(value.msRsH?.codigo) {
-            "1" -> onEventExito(iTransaction(resp.tipo , resp.cedula , resp.telefono, resp.banco, resp.monto, resp.nameBanco))
-            else -> errorDialog(description = "${value.msRsH?.descripcionError}", onDialogDismiss = onErrorDialog)
+            "1" -> onEventExito(iTransaction(
+                    tipo = resp.tipo,
+                    cedula = resp.cedula ,
+                    telefono = resp.telefono,
+                    banco = resp.banco, monto = resp.monto,
+                    nameBanco = resp.nameBanco,
+                    hora = hora.replace(".", ":") ,
+                    fecha = fecha
+                ))
+            else -> errorDialog(description = "${value.msRsH?.descripcionError}", onDialogDismiss = {
+                viewModel.onResetApiResponse()
+                navController.navigate(PathRouter.HomeRoute.route)
+            })
         }
     }
 

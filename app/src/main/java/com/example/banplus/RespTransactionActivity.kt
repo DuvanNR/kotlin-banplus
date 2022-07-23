@@ -21,19 +21,19 @@ import com.nexgo.oaf.apiv3.device.printer.GrayLevelEnum
 import com.nexgo.oaf.apiv3.device.printer.Printer
 
 class RespTransactionActivity : ComponentActivity() {
-//    private var deviceEngine: DeviceEngine? = null
-//    private var printer: Printer? = null
-//    private val FONT_SIZE_SMALL = 16
-//    private val FONT_SIZE_NORMAL = 24
-//    private val FONT_SIZE_BIG = 30
+    private var deviceEngine: DeviceEngine? = null
+    private var printer: Printer? = null
+    private val FONT_SIZE_SMALL = 16
+    private val FONT_SIZE_NORMAL = 24
+    private val FONT_SIZE_BIG = 30
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val ObjectIntent: Intent = intent
         val mainactivityintent = Intent(this, MainActivity::class.java)
         setContent {
-//            deviceEngine = (application as HiltInjectApp).deviceEngine
-//            printer = deviceEngine!!.printer
-//            printer?.setTypeface(Typeface.DEFAULT)
+            deviceEngine = (application as HiltInjectApp).deviceEngine
+            printer = deviceEngine!!.printer
+            printer?.setTypeface(Typeface.DEFAULT)
             BanplusTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -62,100 +62,100 @@ class RespTransactionActivity : ComponentActivity() {
         }
     }
     fun onClickimprimir(athis: Context, resp: iTransaction) {
-//        printer!!.initPrinter() //init printer
-//        printer!!.setTypeface(Typeface.DEFAULT) //change print type
-//        printer!!.setLetterSpacing(3) //change the line space between each line
-//        printer!!.setGray(GrayLevelEnum.LEVEL_2) //change print gray
-//        printer!!.appendPrnStr(
-//           "Distribuciones Globales",
-//            FONT_SIZE_NORMAL,
-//            AlignEnum.CENTER,
-//            false
-//        )
-//        printer!!.appendPrnStr(
-//            "RIF: J-123456789",
-//            FONT_SIZE_NORMAL,
-//            AlignEnum.CENTER,
-//            false
-//        )
-//        printer!!.appendPrnStr(
-//            "Fecha:",
-//            resp.fecha,
-//            FONT_SIZE_NORMAL,
-//            false
-//        )
-//        printer!!.appendPrnStr(
-//            "Hora:",
-//            resp.hora,
-//            FONT_SIZE_NORMAL,
-//            false
-//        )
-//        printer!!.appendPrnStr(
-//            "Cedula:",
-//            "${resp.cedula}",
-//            FONT_SIZE_NORMAL,
-//            false
-//        )
-//        printer!!.appendPrnStr(
-//            "Telefono:",
-//            "${resp.telefono}",
-//            FONT_SIZE_NORMAL,
-//            false
-//        )
-//        printer!!.appendPrnStr(
-//            "Banco:",
-//            "${resp.nameBanco}",
-//            FONT_SIZE_NORMAL,
-//            false
-//        )
-//        printer!!.appendPrnStr(
-//            "Ref:",
-//            "x-xxxxxxxxxxxxx",
-//            FONT_SIZE_NORMAL,
-//            false
-//        )
-//
-//        printer!!.appendPrnStr(
-//            "Monto: Bs. ${resp.monto}",
-//            FONT_SIZE_BIG,
-//            AlignEnum.CENTER,
-//            false
-//        )
-//        printer!!.appendPrnStr(
-//            "",
-//            "",
-//            FONT_SIZE_BIG,
-//            false
-//        )
-//        printer!!.appendPrnStr(
-//            "",
-//            "",
-//            FONT_SIZE_BIG,
-//            false
-//        )
-//        printer!!.appendPrnStr(
-//            "Firma: __________________",
-//            FONT_SIZE_NORMAL,
-//            AlignEnum.LEFT,
-//            false
-//        )
-//        printer!!.appendPrnStr(
-//            "",
-//            "",
-//            FONT_SIZE_BIG,
-//            false
-//        )
-//        printer!!.startPrint(true) { retCode ->
-//
-//            runOnUiThread {
-//                Toast.makeText(
-//                    athis,
-//                    retCode.toString() + "",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//            }
-//        }
-//
+        printer!!.initPrinter() //init printer
+        printer!!.setTypeface(Typeface.DEFAULT) //change print type
+        printer!!.setLetterSpacing(3) //change the line space between each line
+        printer!!.setGray(GrayLevelEnum.LEVEL_2) //change print gray
+        printer!!.appendPrnStr(
+           "Distribuciones Globales",
+            FONT_SIZE_NORMAL,
+            AlignEnum.CENTER,
+            false
+        )
+        printer!!.appendPrnStr(
+            "RIF: J-123456789",
+            FONT_SIZE_NORMAL,
+            AlignEnum.CENTER,
+            false
+        )
+        printer!!.appendPrnStr(
+            "Fecha:",
+            resp.fecha,
+            FONT_SIZE_NORMAL,
+            false
+        )
+        printer!!.appendPrnStr(
+            "Hora:",
+            resp.hora,
+            FONT_SIZE_NORMAL,
+            false
+        )
+        printer!!.appendPrnStr(
+            "Cedula:",
+            "${resp.cedula}",
+            FONT_SIZE_NORMAL,
+            false
+        )
+        printer!!.appendPrnStr(
+            "Telefono:",
+            "${resp.telefono}",
+            FONT_SIZE_NORMAL,
+            false
+        )
+        printer!!.appendPrnStr(
+            "Banco:",
+            "${resp.nameBanco}",
+            FONT_SIZE_NORMAL,
+            false
+        )
+        printer!!.appendPrnStr(
+            "Ref:",
+            "x-xxxxxxxxxxxxx",
+            FONT_SIZE_NORMAL,
+            false
+        )
+
+        printer!!.appendPrnStr(
+            "Monto: Bs. ${resp.monto}",
+            FONT_SIZE_BIG,
+            AlignEnum.CENTER,
+            false
+        )
+        printer!!.appendPrnStr(
+            "",
+            "",
+            FONT_SIZE_BIG,
+            false
+        )
+        printer!!.appendPrnStr(
+            "",
+            "",
+            FONT_SIZE_BIG,
+            false
+        )
+        printer!!.appendPrnStr(
+            "Firma: __________________",
+            FONT_SIZE_NORMAL,
+            AlignEnum.LEFT,
+            false
+        )
+        printer!!.appendPrnStr(
+            "",
+            "",
+            FONT_SIZE_BIG,
+            false
+        )
+        printer!!.startPrint(true) { retCode ->
+
+            runOnUiThread {
+                Toast.makeText(
+                    athis,
+                    retCode.toString() + "",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
     }
 }
 

@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.banplus.R
 import com.example.banplus._interface.iReportes
 import com.example.banplus.component.header.HeaderInit
@@ -20,9 +21,11 @@ import com.example.banplus.api.ApiResponseStatus
 import com.example.banplus.api.reportes.response.ReportesResponse
 import com.example.banplus.component.LoadingWheel
 import com.example.banplus.component.errorDialog
+import com.example.banplus.viewmodel.ReportesViewModel
 
 @Composable
-fun listReportView(status: ApiResponseStatus<Any>? , itemRepost: List<ReportesResponse.Movimiento>) {
+fun listReportView(viewModel: ReportesViewModel = hiltViewModel()) {
+    val status: ApiResponseStatus<Any>? = viewModel.status.value
     Scaffold() {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -30,23 +33,32 @@ fun listReportView(status: ApiResponseStatus<Any>? , itemRepost: List<ReportesRe
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             HeaderInit(icon = R.drawable.ic_recurso_4)
+
             LazyColumn(modifier = Modifier.padding(horizontal = 44.dp)) {
-                items(itemRepost) {
-                    Box(modifier = Modifier
-                        .fillMaxSize()
-                        .padding(vertical = 10.dp)) {
-                        listReport(item = it)
+                if (!viewModel?.resp?.value.isNullOrEmpty()) {
+                    val itemRepost: List<ReportesResponse.Movimiento> = viewModel.resp.value;
+                    println("ddddddddddddddddddd ${viewModel?.resp?.value[0]}")
+                    items(itemRepost) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(vertical = 10.dp)
+                        ) {
+                            listReport(item = it)
+                        }
+
                     }
 
                 }
 
             }
-
-        }
-        if (status is ApiResponseStatus.Loading) {
-            LoadingWheel()
-        }else if(status is ApiResponseStatus.Error) {
-            errorDialog(description = stringResource(id = status.messageId), onDialogDismiss = {})
+            if (status is ApiResponseStatus.Loading) {
+                LoadingWheel()
+            } else if (status is ApiResponseStatus.Error) {
+                errorDialog(
+                    description = stringResource(id = status.messageId),
+                    onDialogDismiss = {})
+            }
         }
     }
 }

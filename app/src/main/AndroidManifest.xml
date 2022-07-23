@@ -20,8 +20,20 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@drawable/ic_banplus_vector"
         android:supportsRtl="true"
+        android:windowSoftInputMode="adjustResize"
         android:theme="@style/Theme.Banplus"
         tools:targetApi="31">
+        <activity
+            android:name=".ConfigPostActivity"
+            android:exported="true"
+            android:label="@string/config_post"
+            android:theme="@style/Theme.Banplus" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
         <activity
             android:name=".ListReportesActivity"
             android:exported="false"
@@ -34,15 +46,10 @@
             android:theme="@style/Theme.Banplus" />
         <activity
             android:name=".MainActivity"
-            android:windowSoftInputMode="adjustResize"
             android:exported="true"
-            android:theme="@style/Theme.Banplus">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:theme="@style/Theme.Banplus"
+            />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>

@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.banplus.R
 import com.example.banplus.component.BtnIni
+import com.example.banplus.component.BtnNext
 import com.example.banplus.component.PostField
 import com.example.banplus.component.header.HeaderInit
 import com.example.banplus.navigation.PathRouter
@@ -27,10 +28,6 @@ fun SettingInitView () {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally) {
             HeaderInit()
-            Text(
-                modifier = Modifier.padding(bottom = 117.dp),
-                fontSize = 24.sp,
-                text = "Bienvenido")
             ViewInitBody()
         }
 
@@ -41,17 +38,22 @@ fun SettingInitView () {
 
 @Composable
 private fun ViewInitBody() {
-    var RazonSocial by remember { mutableStateOf("") }
-    var Rif by remember { mutableStateOf("") }
-
-    Box() {
+    var razonSocial by remember { mutableStateOf("") }
+    var telefono by remember { mutableStateOf("") }
+    var rif by remember { mutableStateOf("") }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 44.dp),
+        contentAlignment = Alignment.TopCenter
+    ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(modifier = Modifier.padding(top=33.dp)) {
+            Column(modifier = Modifier.padding(top=8.dp)) {
                 PostField(
-                    text = RazonSocial,
-                    onValueChange = {RazonSocial = if (it.length > 111 || it.any { !it.isDigit() }) RazonSocial else it},
+                    text = razonSocial,
+                    onValueChange = {razonSocial = if (it.length > 111 || it.any { !it.isDigit() }) razonSocial else it},
                     label = "Razón Social",
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(
@@ -60,12 +62,43 @@ private fun ViewInitBody() {
 
 
                 )
+                PostField(
+                    text = telefono,
+                    onValueChange = {telefono = if (it.length > 111 || it.any { !it.isDigit() }) telefono else it},
+                    label = "Telefono",
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Next),
 
+
+                    )
+                PostField(
+                    text = rif,
+                    onValueChange = {rif = if (it.length > 111 || it.any { !it.isDigit() }) rif else it},
+                    label = "Rif",
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Next),
+                    )
 
             }
 
-        }
 
+
+
+        }
+        BtnNext(
+            text = "Guardar",
+            onClick = {  },
+            ico = painterResource(id = R.drawable.ic_next),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(4.dp)
+                .height(49.dp)
+                .width(240.dp)
+        )
     }
 }
 

@@ -16,6 +16,7 @@ import com.example.banplus._interface.iTransaction
 import com.example.banplus.api.vuelto.response.Tranferp2pResponse
 import com.example.banplus.ui.theme.BanplusTheme
 import com.example.banplus.viewmodel.ReportesViewModel
+import com.example.banplus.viewmodel.VueltoViewModel
 import com.nexgo.common.LogUtils
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,13 +24,11 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-//        val viewModel: VueltoViewModel by viewModels()
+    override fun onCreate(savedInstanceState: Bundle?, ) {
         super.onCreate(savedInstanceState)
 
-
-//        val CardTransaction = Intent(this,RespTransactionActivity::class.java )
-//        val DetailReportes = Intent(this,ListReportesActivity::class.java )
+        val cardtransaction = Intent(this,RespTransactionActivity::class.java )
+        val detailReportes = Intent(this,ListReportesActivity::class.java )
         setContent {
             LogUtils.setDebugEnable(true)
             BanplusTheme {
@@ -37,17 +36,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    TestView()
-//                    Router(
-//                        viewModelVuelto = viewModel,
-//                        onEventTransction ={onEventTransation(it
-//
-//                            ,CardTransaction, viewModel.vueltoR.value)},
-//                        onGoToReportes = {
-//                            startActivity(DetailReportes)
-//                        },
+                    Router(
+                        onEventTransction ={onEventTransation(it,cardtransaction)},
+                        onGoToReportes = {
+                            startActivity(detailReportes)
+                        }
 
-//                    )
+                    )
                 }
 
             }
@@ -57,30 +52,33 @@ class MainActivity : ComponentActivity() {
 
     }
 
-//    fun onEventTransation(it: iTransaction, intent: Intent, event:Tranferp2pResponse?) {
+    fun onEventTransation(it: iTransaction, intent: Intent) {
 //        println("+++++++_______${event?.msRsB}")
 //        val fecha = "${event?.msRsB?.pago?.fechaRespuesta}".substring(0,10)
 //        val hora = "${event?.msRsB?.pago?.fechaRespuesta}".substring(11,19)
-//
+//        hora.replace(".", ":")
 //        println("+++++++_______$fecha")
 //        println("+++++++_______$hora")
-//        intent.putExtra("cedula", it.cedula )
-//        intent.putExtra("tipo", it.tipo )
-//        intent.putExtra("telefono", it.telefono )
-//        intent.putExtra("banco", it.banco )
-//        intent.putExtra("monto", it.monto )
-//        intent.putExtra("nameBanco", it.nameBanco )
-//        intent.putExtra("fecha", fecha )
-//        intent.putExtra("hora", hora.replace(".", ":") )
-//
-//        startActivity(intent)
-//        finish()
-//    }
+
+        intent.putExtra("cedula", it.cedula )
+        intent.putExtra("tipo", it.tipo )
+        intent.putExtra("telefono", it.telefono )
+        intent.putExtra("banco", it.banco )
+        intent.putExtra("monto", it.monto )
+        intent.putExtra("nameBanco", it.nameBanco )
+        intent.putExtra("fecha", it.fecha )
+        intent.putExtra("hora",  it.hora)
+
+        startActivity(intent)
+        finish()
+    }
 }
 
 @Composable
 fun TestView(viewModel: ReportesViewModel = hiltViewModel()) {
-    Button(onClick = {viewModel.GetReportes()}) {
+
+    Button(onClick = {
+    }) {
 
     }
 

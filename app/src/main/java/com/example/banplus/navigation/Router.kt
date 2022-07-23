@@ -1,6 +1,7 @@
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -15,12 +16,10 @@ import com.example.banplus.views.*
 
 @Composable
 fun Router(
-    viewModelVuelto: VueltoViewModel,
     onEventTransction: (iData: iTransaction) -> Unit,
     onGoToReportes: () -> Unit
 ) {
     val navController = rememberNavController()
-    val status = viewModelVuelto.status
     NavHost(navController = navController, startDestination = PathRouter.HomeRoute.route) {
         composable(route = PathRouter.ReporteRoute.route) {
             ViewReportes(onGoToReportes = { onGoToReportes() })
@@ -55,12 +54,6 @@ fun Router(
             ConfirmarteTransaction(
                 navController = navController,
                 resp = iTransaction("$tipo", "$cedula", "$cell", "$banco", "$monto", "$nameBanco"),
-                viewModelVuelto = viewModelVuelto,
-                status = status.value,
-                onErrorDialog = {
-                    viewModelVuelto.onResetApiResponse()
-                    navController.navigate(PathRouter.HomeRoute.route)
-                },
                 onEventExito = { it ->
                     onEventTransction(
                         iTransaction(
@@ -69,7 +62,9 @@ fun Router(
                             telefono = it.telefono,
                             banco = it.banco,
                             monto = it.monto,
-                            nameBanco = it.nameBanco
+                            nameBanco = it.nameBanco,
+                            fecha = it.fecha,
+                            hora = it.hora
                         )
                     )
                 }

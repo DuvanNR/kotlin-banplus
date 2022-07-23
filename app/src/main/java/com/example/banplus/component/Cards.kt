@@ -174,7 +174,7 @@ fun CardB(status: Boolean, dataTransfer: iTransaction) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top=84.dp, start = 30.dp,end=30.dp)
+            .padding(top=84.dp, start = 25.dp,end=25.dp)
 
     ) {
         Row(
@@ -182,9 +182,9 @@ fun CardB(status: Boolean, dataTransfer: iTransaction) {
                 .fillMaxWidth()
         ) {
             Text(text = "Fecha:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-            Text(text = "", color = color_fontbtn)
+            Text(text = dataTransfer.fecha, color = color_fontbtn)
             Text(text = "Hora:  ", modifier = Modifier.padding(start=9.dp),color = color_fontbtn, fontWeight = FontWeight.Bold)
-            Text(text = "", color = color_fontbtn)
+            Text(text = dataTransfer.hora, color = color_fontbtn)
         }
 
 

@@ -16,4 +16,6 @@
     <string name="print_operator">print operator</string>
     <string name="print_issurebank">print is surebank</string>
     <string name="print_shoudan">print shoudan</string>
+    <string name="title_activity_config_post">ConfigPostActivity</string>
+    <string name="config_post">Config Post</string>
 </resources>
