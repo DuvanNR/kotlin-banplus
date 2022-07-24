@@ -21,6 +21,7 @@ import com.example.banplus.component.errorDialog
 import com.example.banplus.component.header.HeaderInit
 import com.example.banplus.navigation.PathRouter
 import com.example.banplus.ui.theme.color_fontbtn
+import com.example.banplus.utils.getDatetime
 import com.example.banplus.viewmodel.VueltoViewModel
 
 @Composable
@@ -56,9 +57,8 @@ fun ConfirmarteTransaction (
         })
     }
     if(value != null) {
-        val fecha = "${value?.msRsB?.pago?.fechaRespuesta}".substring(0,10)
-        val hora = "${value?.msRsB?.pago?.fechaRespuesta}".substring(11,19)
-        println(value.msRsH)
+        val date = getDatetime()
+        println("${value.msRsB.pago}")
         when(value.msRsH?.codigo) {
             "1" -> onEventExito(iTransaction(
                     tipo = resp.tipo,
@@ -66,8 +66,9 @@ fun ConfirmarteTransaction (
                     telefono = resp.telefono,
                     banco = resp.banco, monto = resp.monto,
                     nameBanco = resp.nameBanco,
-                    hora = hora.replace(".", ":") ,
-                    fecha = fecha
+                    hora = date.hora ,
+                    fecha = date.fecha,
+                    ref = "${value.msRsB.pago?.referenciaRespuesta}"
                 ))
             else -> errorDialog(description = "${value.msRsH?.descripcionError}", onDialogDismiss = {
                 viewModel.onResetApiResponse()

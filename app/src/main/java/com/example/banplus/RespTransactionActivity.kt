@@ -10,16 +10,23 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.banplus._interface.iTransaction
+import com.example.banplus.db.schema.Commerce
 import com.example.banplus.inject_dependency.HiltInjectApp
 import com.example.banplus.ui.theme.BanplusTheme
+import com.example.banplus.viewmodel.CommerceViewModel
 import com.example.banplus.views.RespTransaction
 import com.nexgo.oaf.apiv3.DeviceEngine
 import com.nexgo.oaf.apiv3.device.printer.AlignEnum
 import com.nexgo.oaf.apiv3.device.printer.GrayLevelEnum
 import com.nexgo.oaf.apiv3.device.printer.Printer
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class RespTransactionActivity : ComponentActivity() {
     private var deviceEngine: DeviceEngine? = null
     private var printer: Printer? = null
@@ -38,7 +45,7 @@ class RespTransactionActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                    color = MaterialTheme.colors.background,
                 ) {
                     val transaction = iTransaction(
                         tipo = "${ObjectIntent.getStringExtra("tipo")}",
@@ -49,10 +56,11 @@ class RespTransactionActivity : ComponentActivity() {
                         nameBanco = "${ObjectIntent.getStringExtra("nameBanco")}",
                         hora = "${ObjectIntent.getStringExtra("hora")}",
                         fecha = "${ObjectIntent.getStringExtra("fecha")}",
+                        ref = "${ObjectIntent.getStringExtra("ref")}",
                     )
 
                     RespTransaction(iData = transaction,
-                        onclickimprimir = { onClickimprimir(this, transaction) },
+                        onclickimprimir = { onClickimprimir(this, transaction, commerce = it) },
                         onClickMainActivity = {
                             startActivity(mainactivityintent)
                             finish()
@@ -61,19 +69,19 @@ class RespTransactionActivity : ComponentActivity() {
             }
         }
     }
-    fun onClickimprimir(athis: Context, resp: iTransaction) {
+    fun onClickimprimir(athis: Context, resp: iTransaction, commerce: Commerce) {
         printer!!.initPrinter() //init printer
         printer!!.setTypeface(Typeface.DEFAULT) //change print type
         printer!!.setLetterSpacing(3) //change the line space between each line
         printer!!.setGray(GrayLevelEnum.LEVEL_2) //change print gray
         printer!!.appendPrnStr(
-           "Distribuciones Globales",
+           "${commerce.razonSocial}",
             FONT_SIZE_NORMAL,
             AlignEnum.CENTER,
             false
         )
         printer!!.appendPrnStr(
-            "RIF: J-123456789",
+            "RIF: ${commerce.rif}",
             FONT_SIZE_NORMAL,
             AlignEnum.CENTER,
             false
@@ -110,7 +118,7 @@ class RespTransactionActivity : ComponentActivity() {
         )
         printer!!.appendPrnStr(
             "Ref:",
-            "x-xxxxxxxxxxxxx",
+            "${resp.ref}",
             FONT_SIZE_NORMAL,
             false
         )

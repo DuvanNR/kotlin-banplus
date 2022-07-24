@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">banplus</string>
+    <string name="app_name">Banplus</string>
     <string name="unknown_host_exception_error">unknown host exception error</string>
     <string name="your_credentials_are_incorrect">Your credentials are incorrect</string>
     <string name="unknown_error">unknown error</string>
@@ -10,12 +10,12 @@
     <string name="dog_index_format">#%d</string>
     <string name="error_dialog_title">Ups un error</string>
     <string name="title_activity_resp_transaction">RespTransactionActivity</string>
-    <string name="title_activity_list_reportes">ListReportesActivity</string>
+    <string name="title_activity_list_reportes">Banplus</string>
     <string name="print_merchantno">imprimir mi test</string>
     <string name="print_terminalno">terminal print</string>
     <string name="print_operator">print operator</string>
     <string name="print_issurebank">print is surebank</string>
     <string name="print_shoudan">print shoudan</string>
     <string name="title_activity_config_post">ConfigPostActivity</string>
-    <string name="config_post">Config Post</string>
+    <string name="config_post">Banplus</string>
 </resources>

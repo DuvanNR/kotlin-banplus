@@ -1,27 +1,26 @@
 package com.example.banplus.views
 
-import android.os.Build
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.banplus.R
 import com.example.banplus._interface.iTransaction
-import com.example.banplus.api.vuelto.response.Tranferp2pResponse
 import com.example.banplus.component.BtnNext
 import com.example.banplus.component.cardsAlert
 import com.example.banplus.component.header.HeaderInit
+import com.example.banplus.db.schema.Commerce
 import com.example.banplus.ui.theme.color_fontbtn
+import com.example.banplus.viewmodel.CommerceViewModel
 
 @Composable
-fun RespTransaction(iData: iTransaction, onclickimprimir:() ->Unit, onClickMainActivity: () -> Unit) {
+fun RespTransaction(iData: iTransaction, onclickimprimir:(Commerce) ->Unit, onClickMainActivity: () -> Unit, ) {
     Scaffold() {
         val context = LocalContext.current
         Column(
@@ -30,16 +29,17 @@ fun RespTransaction(iData: iTransaction, onclickimprimir:() ->Unit, onClickMainA
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             HeaderInit(icon = R.drawable.ic_recurso_4 )
-            BodyContentA(onClick = {onClickMainActivity()}, iData =iData, onclickimprimir = {onclickimprimir()} )
+            BodyContentA(onClick = {onClickMainActivity()}, iData =iData, onclickimprimir = {onclickimprimir(it)} )
         }
     }
 }
 @Composable
-private fun BodyContentA(onClick: () -> Unit, iData: iTransaction, onclickimprimir: () -> Unit) {
+private fun BodyContentA(onClick: () -> Unit, iData: iTransaction, onclickimprimir: (Commerce) -> Unit, viewModel: CommerceViewModel = hiltViewModel()) {
+    val commerce = viewModel.commerce.observeAsState(Commerce("", "",""))
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top =9.dp),
+            .padding(top = 9.dp),
         contentAlignment = Alignment.TopCenter
     ) {
         cardsAlert(rif = true, title = "Recibo Operación", status = true, iData = iData )
@@ -50,7 +50,7 @@ private fun BodyContentA(onClick: () -> Unit, iData: iTransaction, onclickimprim
         ) {
             BtnNext(
                 text = "Imprimir",
-                onClick = { onclickimprimir() },
+                onClick = { onclickimprimir(commerce.value) },
                 ico = painterResource(id = R.drawable.ic_next),
                 modifier = Modifier
                     .padding(4.dp)

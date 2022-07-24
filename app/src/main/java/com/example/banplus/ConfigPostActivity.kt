@@ -1,5 +1,6 @@
 package com.example.banplus
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,11 +11,16 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.banplus.ui.theme.BanplusTheme
+import com.example.banplus.viewmodel.CommerceViewModel
 import com.example.banplus.views.SettingInitView
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ConfigPostActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        val mainActiviry = Intent(this,MainActivity::class.java )
         super.onCreate(savedInstanceState)
         setContent {
             BanplusTheme {
@@ -23,22 +29,12 @@ class ConfigPostActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    SettingInitView()
+                    SettingInitView(onRedirection = {
+                        startActivity(mainActiviry)
+                        finish()
+                    })
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    BanplusTheme {
-        Greeting("Android")
     }
 }

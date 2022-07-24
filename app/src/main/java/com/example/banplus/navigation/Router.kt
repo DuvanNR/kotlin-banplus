@@ -1,17 +1,12 @@
-import android.os.Build
-import androidx.annotation.RequiresApi
+package com.example.banplus.navigation
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.banplus.ResListA
 import com.example.banplus._interface.iTransaction
-import com.example.banplus.navigation.PathRouter
-import com.example.banplus.viewmodel.VueltoViewModel
 import com.example.banplus.views.*
 
 @Composable
@@ -33,7 +28,7 @@ fun Router(
             val cedula = it.arguments?.getString("cedula")
             vueltoNextForm(
                 navController,
-                iTransaction(tipo = "$tipo", cedula = "$cedula", "$cell", "", "", "")
+                iTransaction(tipo = "$tipo", cedula = "$cedula", "$cell")
             )
         }
         composable(route = PathRouter.VueltoRoute.route) {
@@ -64,7 +59,8 @@ fun Router(
                             monto = it.monto,
                             nameBanco = it.nameBanco,
                             fecha = it.fecha,
-                            hora = it.hora
+                            hora = it.hora,
+                            ref = it.ref
                         )
                     )
                 }

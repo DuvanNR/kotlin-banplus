@@ -17,4 +17,8 @@ abstract  class RepositoryModule {
     @Singleton
     @Binds
     abstract fun reporteRepository(repo: ReportesRespositoryImp): ReportesRespository
+    @Singleton
+    @Binds
+    abstract fun commerceRespository(repo: CommerceRespositoryImp):CommerceRespository
+
 }

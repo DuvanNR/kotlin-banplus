@@ -1,6 +1,5 @@
 package com.example.banplus
 
-import Router
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -19,6 +18,7 @@ import com.example.banplus.viewmodel.ReportesViewModel
 import com.example.banplus.viewmodel.VueltoViewModel
 import com.nexgo.common.LogUtils
 import dagger.hilt.android.AndroidEntryPoint
+import com.example.banplus.navigation.Router
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -68,6 +68,7 @@ class MainActivity : ComponentActivity() {
         intent.putExtra("nameBanco", it.nameBanco )
         intent.putExtra("fecha", it.fecha )
         intent.putExtra("hora",  it.hora)
+        intent.putExtra("ref",  it.ref)
 
         startActivity(intent)
         finish()

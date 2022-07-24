@@ -105,6 +105,10 @@ val ListTypeDocument: List<idropdown> = listOf(
     idropdown("c", "C"),
 )
 
+val ListTypeRif: List<idropdown> = listOf(
+    idropdown("j", "J"),
+)
+
 
 val BancosList: List<idropdown> = listOf(
     idropdown("0001", "Banco Central de Venezuela"),

@@ -8,6 +8,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -16,9 +17,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.banplus.R
 import com.example.banplus._interface.iTransaction
+import com.example.banplus.db.schema.Commerce
 import com.example.banplus.ui.theme.*
+import com.example.banplus.utils.getDatetime
+import com.example.banplus.viewmodel.CommerceViewModel
+import java.util.*
 
 @Composable
 fun cardsAlert(
@@ -26,8 +32,9 @@ fun cardsAlert(
     title: String = "Consolidado Diario",
     status: Boolean = true,
     iData: iTransaction = iTransaction(),
+    viewModel: CommerceViewModel = hiltViewModel()
 ) {
-
+    val commerce = viewModel.commerce.observeAsState(Commerce("", "", ""))
     Card(
         modifier = Modifier.padding(horizontal = 24.dp),
         border = BorderStroke(1.dp, color_black),
@@ -47,7 +54,7 @@ fun cardsAlert(
 
             if (rif) {
                 Text(
-                    text = "Distribuciones Globales \n RIF: J-123456789",
+                    text = "${commerce.value.razonSocial} \n RIF: ${commerce.value.rif}",
                     color = color_black,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -57,7 +64,7 @@ fun cardsAlert(
 
             }
                 when (title) {
-                    "Consolidado Diario" -> CardA()
+                    "Consolidado Diario" -> CardA(commerce = commerce.value)
                     "Confirmar Operación" -> CardC(iData)
                     else -> CardB(status = status, dataTransfer =  iData)
                 }
@@ -125,11 +132,13 @@ fun CardC(iData: iTransaction) {
 }
 
 @Composable
-fun CardA() {
+fun CardA(commerce: Commerce) {
+    val date = getDatetime()
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top=100.dp,start=12.dp)
+            .padding(top = 100.dp, start = 12.dp)
 
     ) {
     Row(
@@ -137,16 +146,16 @@ fun CardA() {
             .fillMaxWidth()
     ) {
         Text(text = "Fecha:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-        Text(text = "22/06/2022", color = color_fontbtn)
+        Text(text = "${date.hora}", color = color_fontbtn)
         Text(text = "Hora:  ", modifier = Modifier.padding(start=5.dp),color = color_fontbtn, fontWeight = FontWeight.Bold)
-        Text(text = "8:30 a.m.", color = color_fontbtn)
+        Text(text = "${date.fecha}", color = color_fontbtn)
     }
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        Text(text = "Pago Plus  ", fontWeight = FontWeight.Bold)
+        Text(text = "${commerce.razonSocial} ", fontWeight = FontWeight.Bold)
     }
     Row(
         modifier = Modifier
@@ -174,7 +183,7 @@ fun CardB(status: Boolean, dataTransfer: iTransaction) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top=84.dp, start = 25.dp,end=25.dp)
+            .padding(top = 84.dp, start = 25.dp, end = 25.dp)
 
     ) {
         Row(
@@ -209,13 +218,13 @@ fun CardB(status: Boolean, dataTransfer: iTransaction) {
             Text(text = "Banco:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
             Text(text = "${dataTransfer.banco}", color = color_fontbtn)
         }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Text(text = "Ref:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-            Text(text = "00000000011122233", color = color_fontbtn)
-        }
+//        Row(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//        ) {
+//            Text(text = "Ref:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
+//            Text(text = "00000000011122233", color = color_fontbtn)
+//        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()

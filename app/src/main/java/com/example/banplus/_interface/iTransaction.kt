@@ -7,6 +7,7 @@ class iTransaction(
     val banco: String = "",
     val monto: String = "",
     val nameBanco: String = "",
+    val ref: String = "",
     val hora: String = "",
     val fecha: String = "",
 )
