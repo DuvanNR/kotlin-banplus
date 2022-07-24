@@ -35,7 +35,8 @@ fun RespTransaction(iData: iTransaction, onclickimprimir:(Commerce) ->Unit, onCl
 }
 @Composable
 private fun BodyContentA(onClick: () -> Unit, iData: iTransaction, onclickimprimir: (Commerce) -> Unit, viewModel: CommerceViewModel = hiltViewModel()) {
-    val commerce = viewModel.commerce.observeAsState(Commerce("", "",""))
+    val commerce = viewModel.commerce.observeAsState(Commerce("", "","",""))
+
     Box(
         modifier = Modifier
             .fillMaxSize()

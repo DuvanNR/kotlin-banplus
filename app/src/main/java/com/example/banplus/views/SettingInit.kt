@@ -29,6 +29,8 @@ import com.example.banplus.viewmodel.CommerceViewModel
 fun SettingInitView(viewModel: CommerceViewModel = hiltViewModel(),onRedirection:()->Unit) {
     val commerces by viewModel.commerces.observeAsState(arrayListOf())
     val isLoaddig by viewModel.isLoading.observeAsState(false)
+    println("-___________${commerces}____________")
+    println("-___2333________${commerces.isNotEmpty()}____________")
     if(commerces.isNotEmpty()) {
         onRedirection()
     } else {
@@ -54,10 +56,10 @@ fun SettingInitView(viewModel: CommerceViewModel = hiltViewModel(),onRedirection
 
 @Composable
 private fun ViewInitBody(viewModel: CommerceViewModel) {
-    var razonSocial by remember { mutableStateOf("") }
-    var telefono by remember { mutableStateOf("") }
-    var rif by remember { mutableStateOf("") }
-    var tipo by remember { mutableStateOf(idropdown("j", "J")) }
+    var razonSocial by remember { mutableStateOf("Distribuciones Globales") }
+    var telefono by remember { mutableStateOf("584241127426") }
+    var rif by remember { mutableStateOf("7950354") }
+    var tipo by remember { mutableStateOf(idropdown("v", "V")) }
     var btnStatus by remember { mutableStateOf(true) }
     val context = LocalContext.current
     Box(
@@ -133,8 +135,9 @@ private fun ViewInitBody(viewModel: CommerceViewModel) {
                     viewModel.addCommerce(
                         Commerce(
                             razonSocial = razonSocial,
-                            rif = "${tipo.title}-${rif}",
+                            rif = rif,
                             telefono = telefono,
+                            tipo = "${tipo.key}"
                         )
                     )
                 }else {

@@ -8,6 +8,7 @@ data class Commerce (
     @ColumnInfo(name = "razonSocial") val razonSocial: String,
     @ColumnInfo(name = "rif") val rif: String,
     @ColumnInfo(name = "telefono") val telefono: String,
+    @ColumnInfo(name = "tipo") val tipo: String,
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 )
 

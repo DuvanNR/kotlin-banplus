@@ -24,6 +24,7 @@ import com.example.banplus.db.schema.Commerce
 import com.example.banplus.ui.theme.*
 import com.example.banplus.utils.getDatetime
 import com.example.banplus.viewmodel.CommerceViewModel
+import java.text.DecimalFormat
 import java.util.*
 
 @Composable
@@ -34,7 +35,7 @@ fun cardsAlert(
     iData: iTransaction = iTransaction(),
     viewModel: CommerceViewModel = hiltViewModel()
 ) {
-    val commerce = viewModel.commerce.observeAsState(Commerce("", "", ""))
+    val commerce = viewModel.commerce.observeAsState(Commerce("", "", "",""))
     Card(
         modifier = Modifier.padding(horizontal = 24.dp),
         border = BorderStroke(1.dp, color_black),
@@ -126,7 +127,8 @@ fun CardC(iData: iTransaction) {
                 color = color_fontbtn,
                 fontWeight = FontWeight.Bold
             )
-            Text(text = "Bs. ${iData.monto}", fontSize = 18.sp, color = color_fontbtn)
+            val forma = DecimalFormat("#,##0.00")
+            Text(text = "Bs. ${forma.format("${iData.monto}".toFloat())}", fontSize = 18.sp, color = color_fontbtn)
         }
     }
 }

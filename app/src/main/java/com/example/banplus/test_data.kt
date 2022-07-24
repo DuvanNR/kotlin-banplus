@@ -107,6 +107,7 @@ val ListTypeDocument: List<idropdown> = listOf(
 
 val ListTypeRif: List<idropdown> = listOf(
     idropdown("j", "J"),
+    idropdown("v", "V"),
 )
 
 

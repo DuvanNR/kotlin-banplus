@@ -81,7 +81,7 @@ class RespTransactionActivity : ComponentActivity() {
             false
         )
         printer!!.appendPrnStr(
-            "RIF: ${commerce.rif}",
+            "RIF: ${commerce.tipo}-${commerce.rif}",
             FONT_SIZE_NORMAL,
             AlignEnum.CENTER,
             false

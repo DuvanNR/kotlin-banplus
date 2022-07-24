@@ -13,7 +13,6 @@ abstract  class RepositoryModule {
     @Singleton
     @Binds
     abstract fun vueltoRepository(repo: VueltoRespositoryImp): VueltoRespository
-
     @Singleton
     @Binds
     abstract fun reporteRepository(repo: ReportesRespositoryImp): ReportesRespository

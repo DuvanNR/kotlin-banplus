@@ -31,8 +31,6 @@ object DataSourceModule {
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-
-
     }
 
     @Singleton

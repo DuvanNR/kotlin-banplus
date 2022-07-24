@@ -1,6 +1,5 @@
 package com.example.banplus.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.banplus.db.schema.Commerce
 import com.example.banplus.db.schema.CommerceDao

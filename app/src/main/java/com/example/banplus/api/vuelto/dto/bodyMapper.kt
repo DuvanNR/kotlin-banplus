@@ -1,18 +1,19 @@
 package com.example.banplus.api.vuelto.dto
 
 import com.example.banplus._interface.iTransaction
+import com.example.banplus.db.schema.Commerce
 
 class MapperBodyVuelto {
-    private fun MsRqB(tipo: String, cedula: String, telefono: String, banco: String, monto: String): Transactionp2pDTO.MsRqB {
+    private fun MsRqB(re:iTransaction, pag: Commerce): Transactionp2pDTO.MsRqB {
        return Transactionp2pDTO.MsRqB(
-           tipoDocumentoPagador = "v",
-           telefonoPagador = "584241127426",
-           cedulaPagador = "7950354",
-           monto = monto,
-           bancoReceptor = banco,
-           telefonoReceptor = telefono,
-           tipoDocumentoReceptor = tipo,
-           cedulaReceptor = cedula,
+           tipoDocumentoPagador = pag.tipo,
+           telefonoPagador = pag.telefono,
+           cedulaPagador = pag.rif,
+           monto = re.monto,
+           bancoReceptor = re.banco,
+           telefonoReceptor = re.telefono,
+           tipoDocumentoReceptor = re.tipo,
+           cedulaReceptor = re.cedula,
            checkSUM = "686375BA11F93A3D99376DD5B8F2C1F8B402 B0AA14278D03211ABA4A847925E928469DEE 7CFB8D5D634DC6F28F614D15A70D1B67C291 77450DE73958E42F0B1E"
        )
 
@@ -32,8 +33,8 @@ class MapperBodyVuelto {
 
 
 
-    fun converToResBodyaTransctionApi(e:iTransaction):Transactionp2pDTO {
-        val body = MsRqB(tipo = e.tipo, cedula = e.cedula, telefono = e.telefono, banco= e.banco, monto= e.monto )
+    fun converToResBodyaTransctionApi(e:iTransaction, commerce: Commerce):Transactionp2pDTO {
+        val body = MsRqB(re=e, pag=commerce)
         val header = MsRqH()
          return Transactionp2pDTO(msRqB = body , msRqH = header)
     }

@@ -8,6 +8,7 @@ import com.example.banplus._interface.iTransaction
 import com.example.banplus.api.ApiResponseStatus
 import com.example.banplus.api.vuelto.dto.MapperBodyVuelto
 import com.example.banplus.api.vuelto.response.Tranferp2pResponse
+import com.example.banplus.db.schema.Commerce
 import com.example.banplus.repository.VueltoRespository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -21,15 +22,11 @@ class VueltoViewModel @Inject constructor(
         private set
     var status = mutableStateOf<ApiResponseStatus<Tranferp2pResponse>?>(null)
         private set
-    fun EmitPago(tipo: String, cedula: String, telefono: String, banco: String, monto: String) {
+    fun EmitPago(e:iTransaction,commerce: Commerce) {
         viewModelScope.launch {
             status.value = ApiResponseStatus.Loading()
             handleResponseStatus(
-                VueltoRepo.emitTransaction(iTransaction(tipo = tipo,
-                    cedula = cedula,
-                    telefono = telefono,
-                    banco = banco,
-                    monto = monto))
+                VueltoRepo.emitTransaction(e,commerce)
             )
         }
     }

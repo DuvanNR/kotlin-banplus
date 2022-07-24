@@ -9,8 +9,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.banplus.BancosList
@@ -20,12 +23,15 @@ import com.example.banplus._interface.idropdown
 import com.example.banplus.component.*
 import com.example.banplus.component.header.HeaderInit
 import com.example.banplus.navigation.PathRouter
+import com.example.banplus.utils.addDecimals
+import com.example.banplus.utils.mobileNumberFilter
+import java.text.DecimalFormat
 
 @Composable
 fun vueltoNextForm(
     navigate: NavController,
     resp: iTransaction
-    ) {
+) {
     Scaffold() {
         val context = LocalContext.current
         Column(
@@ -73,6 +79,9 @@ fun nextVueltoBody(onClick: (iTransaction) -> Unit) {
         )
     }
     var monto by remember { mutableStateOf("11") }
+    val numberRegex = remember { "[-]?[\\d]*[.]?[\\d]*".toRegex() }
+
+//    val formatter = DecimalFormat("#,###.00")
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -93,18 +102,33 @@ fun nextVueltoBody(onClick: (iTransaction) -> Unit) {
                 options = BancosList
 
             )
-            PostField(
-                text = monto,
-                onValueChange = { monto = it },
-                label = "Monto",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 10.dp),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next
-                ),
-            )
+            inputNumber(value = monto, onNumberChange = {
+                monto = if (it.startsWith("0")) {
+                    ""
+                } else {
+                    it
+                }
+            })
+//            PostField(
+//                text = monto,
+//                onValueChange = {   if (it.isEmpty()){
+//                    monto = it
+//                } else {
+//                    monto = when (it.toDoubleOrNull()) {
+//                        null -> monto //old value
+//                        else -> it   //new value
+//                    }
+//                }},
+//                label = "Monto",
+//                visualTransformation = {mobileNumberFilter(it)},
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(top = 10.dp),
+//                keyboardOptions = KeyboardOptions(
+//                    keyboardType = KeyboardType.Number,
+//                    imeAction = ImeAction.Next
+//                ),
+//            )
         }
         BtnNext(
             text = "Guardar",
@@ -112,11 +136,8 @@ fun nextVueltoBody(onClick: (iTransaction) -> Unit) {
                 onClick(
                     iTransaction(
                         banco = "${banco.key}",
-                        monto = "$monto.00",
+                        monto = "${addDecimals(monto)}",
                         nameBanco = "${banco.title}",
-                        cedula = "",
-                        tipo = "",
-                        telefono = ""
                     )
                 )
             },
