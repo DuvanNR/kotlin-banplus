@@ -41,11 +41,11 @@ fun ViewInitBody(navController: NavController) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             BtnIni(
-                text="Pago Móvil",
-                ico = painterResource(id = R.drawable.ic_vuelto)  , onClick = {navController.navigate(PathRouter.VueltoRoute.route)})
+                text="Pago Plus",
+                ico = painterResource(id = R.drawable.ic_btn2)  , onClick = {navController.navigate(PathRouter.VueltoRoute.route)})
             BtnIni(
                 text="Reportes",
-                ico = painterResource(id = R.drawable.ic_reportes)  , onClick = {navController.navigate(PathRouter.ReporteRoute.route)})
+                ico = painterResource(id = R.drawable.ic_btn1)  , onClick = {navController.navigate(PathRouter.ReporteRoute.route)})
         }
 
     }

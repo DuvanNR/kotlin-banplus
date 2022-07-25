@@ -37,7 +37,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     Router(
-                        onEventTransction ={onEventTransation(it,cardtransaction)},
+                        onEventTransction ={it, status ->
+                            onEventTransation(it,cardtransaction, status)},
                         onGoToReportes = {
                             startActivity(detailReportes)
                         }
@@ -52,7 +53,8 @@ class MainActivity : ComponentActivity() {
 
     }
 
-    fun onEventTransation(it: iTransaction, intent: Intent) {
+    fun onEventTransation(it: iTransaction, intent: Intent, status: String) {
+        println("__________________${status}__________")
 //        println("+++++++_______${event?.msRsB}")
 //        val fecha = "${event?.msRsB?.pago?.fechaRespuesta}".substring(0,10)
 //        val hora = "${event?.msRsB?.pago?.fechaRespuesta}".substring(11,19)
@@ -69,6 +71,8 @@ class MainActivity : ComponentActivity() {
         intent.putExtra("fecha", it.fecha )
         intent.putExtra("hora",  it.hora)
         intent.putExtra("ref",  it.ref)
+        intent.putExtra("message",  it.message)
+        intent.putExtra("status",  status)
 
         startActivity(intent)
         finish()

@@ -6,6 +6,7 @@ import com.example.banplus.URL_BASE
 import com.example.banplus.api.ApiServer
 import com.example.banplus.db.datasource.DBdataSource
 import com.example.banplus.db.schema.CommerceDao
+import com.example.banplus.db.schema.TransactionDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,6 +32,7 @@ object DataSourceModule {
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+
     }
 
     @Singleton
@@ -49,5 +51,10 @@ object DataSourceModule {
     @Singleton
     @Provides
     fun commerceDao(db: DBdataSource): CommerceDao = db.commerceDao()
+
+    @Singleton
+    @Provides
+    fun transactionDao(db: DBdataSource): TransactionDao = db.transactionDao()
+
 
 }

@@ -55,7 +55,7 @@ fun ViewVuelto(navController: NavController) {
 
 @Composable
 private fun BodyContent(onClick: (tipo: String, celular: String, cell: String) -> Unit) {
-    var tipo by remember { mutableStateOf<idropdown>(idropdown(key="v", title = "v")) }
+    var tipo by remember { mutableStateOf<idropdown>(idropdown(key="V", title = "V")) }
     var cedula by remember { mutableStateOf("17142863") }
     var cell by remember { mutableStateOf("584241340112") }
     Box(
@@ -77,7 +77,7 @@ private fun BodyContent(onClick: (tipo: String, celular: String, cell: String) -
                 )
                 PostField(
                     text = cedula,
-                    onValueChange = {cedula = if (it.length > 111 || it.any { !it.isDigit() }) cedula else it},
+                    onValueChange = {cedula = if (it.length > 12 || it.any { !it.isDigit() }) cedula else it},
                     label = "Cedula",
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(
@@ -87,7 +87,7 @@ private fun BodyContent(onClick: (tipo: String, celular: String, cell: String) -
             }
             PostField(
                 text = cell,
-                onValueChange = {cell = if (it.length > 111 || it.any { !it.isDigit() }) cell else it},
+                onValueChange = {cell = if (it.length > 12 || it.any { !it.isDigit() }) cell else it},
                 label = "Telefono",
                 modifier = Modifier.fillMaxWidth().padding(top=10.dp),
                 keyboardOptions = KeyboardOptions(

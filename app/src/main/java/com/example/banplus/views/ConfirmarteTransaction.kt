@@ -34,7 +34,8 @@ fun ConfirmarteTransaction(
     viewModelCommerce: CommerceViewModel = hiltViewModel(),
     navController: NavController,
     resp: iTransaction,
-    onEventExito: (iTransaction) -> Unit
+    onEventExito: (iTransaction) -> Unit,
+    onEventError: (iTransaction) -> Unit,
 ) {
     val commerce = viewModelCommerce.commerce.observeAsState(Commerce("", "", "", ""))
     var value = viewModel.vueltoR.value
@@ -49,14 +50,14 @@ fun ConfirmarteTransaction(
             body(resp, onClickCancelar = {
                 navController.navigate(PathRouter.HomeRoute.route)
             }, onClickEmitTransaction = {
-                println(resp.monto)
                 viewModel.EmitPago(
                     iTransaction(
                         tipo = resp.tipo,
                         cedula = resp.cedula,
                         telefono = resp.telefono,
                         banco = resp.banco,
-                        monto = resp.monto
+                        monto = resp.monto,
+                        nameBanco = resp.nameBanco
                     ),
                     commerce = commerce.value
                 )
@@ -66,14 +67,24 @@ fun ConfirmarteTransaction(
     if (status is ApiResponseStatus.Loading) {
         LoadingWheel()
     } else if (status is ApiResponseStatus.Error) {
-        errorDialog(description = stringResource(id = status.messageId), onDialogDismiss = {
-            viewModel.onResetApiResponse()
-            navController.navigate(PathRouter.HomeRoute.route)
-        })
+        val date = getDatetime()
+        onEventError(
+            iTransaction(
+                tipo = resp.tipo,
+                cedula = resp.cedula,
+                telefono = resp.telefono,
+                banco = resp.banco,
+                monto = resp.monto,
+                nameBanco = resp.nameBanco,
+                hora = date.hora,
+                fecha = date.fecha,
+                ref = "xxxxx",
+                message = "${value?.msRsH?.descripcionError}"
+            )
+        )
     }
     if (value != null) {
         val date = getDatetime()
-        println("${value.msRsB.pago}")
         when (value.msRsH?.codigo) {
             "1" -> onEventExito(
                 iTransaction(
@@ -88,12 +99,20 @@ fun ConfirmarteTransaction(
                     ref = "${value.msRsB.pago?.referenciaRespuesta}"
                 )
             )
-            else -> errorDialog(
-                description = "${value.msRsH?.descripcionError}",
-                onDialogDismiss = {
-                    viewModel.onResetApiResponse()
-                    navController.navigate(PathRouter.HomeRoute.route)
-                })
+            else -> onEventError(
+                iTransaction(
+                    tipo = resp.tipo,
+                    cedula = resp.cedula,
+                    telefono = resp.telefono,
+                    banco = resp.banco,
+                    monto = resp.monto,
+                    nameBanco = resp.nameBanco,
+                    hora = date.hora,
+                    fecha = date.fecha,
+                    ref = "xxxxx",
+                    message = "${value.msRsH?.descripcionError}"
+                )
+            )
         }
     }
 
@@ -134,8 +153,8 @@ private fun body(
             )
             BtnNext(
                 text = "Cancelar",
-
                 onClick = { onClickCancelar() },
+                enabled = enabled,
                 ico = painterResource(id = R.drawable.ic_circle_error),
                 background = color_fontbtn,
                 modifier = Modifier

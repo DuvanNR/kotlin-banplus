@@ -59,7 +59,7 @@ private fun ViewInitBody(viewModel: CommerceViewModel) {
     var razonSocial by remember { mutableStateOf("Distribuciones Globales") }
     var telefono by remember { mutableStateOf("584241127426") }
     var rif by remember { mutableStateOf("7950354") }
-    var tipo by remember { mutableStateOf(idropdown("v", "V")) }
+    var tipo by remember { mutableStateOf(idropdown("V", "V")) }
     var btnStatus by remember { mutableStateOf(true) }
     val context = LocalContext.current
     Box(
@@ -74,7 +74,7 @@ private fun ViewInitBody(viewModel: CommerceViewModel) {
                     text = razonSocial,
                     onValueChange = {
                         razonSocial =
-                            if (it.length > 111 || it.any { !it.isLowerCase() }) razonSocial else it
+                            if (it.length > 30 || it.any { !it.isLowerCase() }) razonSocial else it
                     },
                     label = "Razón Social",
                     modifier = Modifier.fillMaxWidth(),
@@ -88,7 +88,7 @@ private fun ViewInitBody(viewModel: CommerceViewModel) {
                 PostField(
                     text = telefono,
                     onValueChange = {
-                        telefono = if (it.length > 111 || it.any { !it.isDigit() }) telefono else it
+                        telefono = if (it.length > 12 || it.any { !it.isDigit() }) telefono else it
                     },
                     label = "Telefono",
                     modifier = Modifier.fillMaxWidth(),

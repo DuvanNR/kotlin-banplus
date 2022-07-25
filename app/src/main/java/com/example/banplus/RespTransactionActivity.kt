@@ -12,6 +12,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.capitalize
+import androidx.compose.ui.text.toLowerCase
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.banplus._interface.iTransaction
 import com.example.banplus.db.schema.Commerce
@@ -24,6 +26,7 @@ import com.nexgo.oaf.apiv3.device.printer.AlignEnum
 import com.nexgo.oaf.apiv3.device.printer.GrayLevelEnum
 import com.nexgo.oaf.apiv3.device.printer.Printer
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.DecimalFormat
 
 
 @AndroidEntryPoint
@@ -39,14 +42,14 @@ class RespTransactionActivity : ComponentActivity() {
         val mainactivityintent = Intent(this, MainActivity::class.java)
         setContent {
             deviceEngine = (application as HiltInjectApp).deviceEngine
-            printer = deviceEngine!!.printer
+//            printer = deviceEngine!!.printer
             printer?.setTypeface(Typeface.DEFAULT)
             BanplusTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background,
                 ) {
+                    val status = "${ObjectIntent.getStringExtra("status")}"
                     val transaction = iTransaction(
                         tipo = "${ObjectIntent.getStringExtra("tipo")}",
                         cedula = "${ObjectIntent.getStringExtra("cedula")}",
@@ -57,19 +60,23 @@ class RespTransactionActivity : ComponentActivity() {
                         hora = "${ObjectIntent.getStringExtra("hora")}",
                         fecha = "${ObjectIntent.getStringExtra("fecha")}",
                         ref = "${ObjectIntent.getStringExtra("ref")}",
+                        message = "${ObjectIntent.getStringExtra("message")}",
                     )
 
                     RespTransaction(iData = transaction,
-                        onclickimprimir = { onClickimprimir(this, transaction, commerce = it) },
+                        onclickimprimir = { onClickimprimir(this, transaction, commerce = it, status = status.toBoolean()) },
                         onClickMainActivity = {
                             startActivity(mainactivityintent)
                             finish()
-                        })
+                        },
+                        status = status.toBoolean()
+                    )
                 }
             }
         }
     }
-    fun onClickimprimir(athis: Context, resp: iTransaction, commerce: Commerce) {
+    fun onClickimprimir(athis: Context, resp: iTransaction, commerce: Commerce, status: Boolean) {
+        val forma = DecimalFormat("#,##0.00")
         printer!!.initPrinter() //init printer
         printer!!.setTypeface(Typeface.DEFAULT) //change print type
         printer!!.setLetterSpacing(3) //change the line space between each line
@@ -81,7 +88,7 @@ class RespTransactionActivity : ComponentActivity() {
             false
         )
         printer!!.appendPrnStr(
-            "RIF: ${commerce.tipo}-${commerce.rif}",
+            "RIF: ${commerce.tipo.capitalize()}-${commerce.rif}",
             FONT_SIZE_NORMAL,
             AlignEnum.CENTER,
             false
@@ -100,7 +107,7 @@ class RespTransactionActivity : ComponentActivity() {
         )
         printer!!.appendPrnStr(
             "Cedula:",
-            "${resp.cedula}",
+            "${resp.tipo.capitalize()}-${resp.cedula}",
             FONT_SIZE_NORMAL,
             false
         )
@@ -116,15 +123,23 @@ class RespTransactionActivity : ComponentActivity() {
             FONT_SIZE_NORMAL,
             false
         )
+      if(status) {
+          printer!!.appendPrnStr(
+              "Ref:",
+              "${resp.ref}",
+              FONT_SIZE_NORMAL,
+              false
+          )
+      } else {
+          printer!!.appendPrnStr(
+              "Message:",
+              "${resp.message}",
+              FONT_SIZE_NORMAL,
+              false
+          )
+      }
         printer!!.appendPrnStr(
-            "Ref:",
-            "${resp.ref}",
-            FONT_SIZE_NORMAL,
-            false
-        )
-
-        printer!!.appendPrnStr(
-            "Monto: Bs. ${resp.monto}",
+            "Monto: Bs. ${forma.format("${resp.monto}".toFloat())}",
             FONT_SIZE_BIG,
             AlignEnum.CENTER,
             false

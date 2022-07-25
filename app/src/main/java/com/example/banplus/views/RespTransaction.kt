@@ -20,7 +20,7 @@ import com.example.banplus.ui.theme.color_fontbtn
 import com.example.banplus.viewmodel.CommerceViewModel
 
 @Composable
-fun RespTransaction(iData: iTransaction, onclickimprimir:(Commerce) ->Unit, onClickMainActivity: () -> Unit, ) {
+fun RespTransaction(iData: iTransaction, onclickimprimir:(Commerce) ->Unit, onClickMainActivity: () -> Unit, status: Boolean ) {
     Scaffold() {
         val context = LocalContext.current
         Column(
@@ -29,12 +29,12 @@ fun RespTransaction(iData: iTransaction, onclickimprimir:(Commerce) ->Unit, onCl
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             HeaderInit(icon = R.drawable.ic_recurso_4 )
-            BodyContentA(onClick = {onClickMainActivity()}, iData =iData, onclickimprimir = {onclickimprimir(it)} )
+            BodyContentA(onClick = {onClickMainActivity()}, iData =iData, onclickimprimir = {onclickimprimir(it)}, status = status )
         }
     }
 }
 @Composable
-private fun BodyContentA(onClick: () -> Unit, iData: iTransaction, onclickimprimir: (Commerce) -> Unit, viewModel: CommerceViewModel = hiltViewModel()) {
+private fun BodyContentA(onClick: () -> Unit, iData: iTransaction, onclickimprimir: (Commerce) -> Unit, status: Boolean, viewModel: CommerceViewModel = hiltViewModel(), ) {
     val commerce = viewModel.commerce.observeAsState(Commerce("", "","",""))
 
     Box(
@@ -43,7 +43,7 @@ private fun BodyContentA(onClick: () -> Unit, iData: iTransaction, onclickimprim
             .padding(top = 9.dp),
         contentAlignment = Alignment.TopCenter
     ) {
-        cardsAlert(rif = true, title = "Recibo Operación", status = true, iData = iData )
+        cardsAlert(rif = true, title = "Recibo Operación", status = status, iData = iData )
         Column(
             modifier = Modifier.align(Alignment.BottomCenter),
             horizontalAlignment = Alignment.CenterHorizontally,

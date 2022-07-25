@@ -1,6 +1,6 @@
 package com.example.banplus._interface
 
-class iTransaction(
+data class iTransaction(
     val tipo: String = "",
     val cedula: String = "",
     val telefono: String = "",
@@ -10,4 +10,5 @@ class iTransaction(
     val ref: String = "",
     val hora: String = "",
     val fecha: String = "",
+    val message: String = "",
 )

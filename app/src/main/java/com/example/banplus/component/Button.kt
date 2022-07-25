@@ -20,29 +20,29 @@ import com.example.banplus.ui.theme.color_white
 
 @Composable
 fun BtnIni(ico: Painter, text: String, background: Color = color_black, colorText: Color = color_white, onClick: () -> Unit?) {
-    Button(
-        modifier = Modifier
-            .padding(6.dp)
-            .height(140.dp)
-            .width(140.dp),
-        shape = RoundedCornerShape(25),
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = background,
-            contentColor =colorText
-        ),
-        onClick = { onClick()},
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+    Box() {
+        Button(
+            modifier = Modifier
+                .padding(bottom = 25.dp, start = 3.dp, end = 3.dp)
+                .height(150.dp)
+                .width(150.dp),
+            shape = RoundedCornerShape(15),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = background,
+                contentColor =colorText
+            ),
+            onClick = { onClick()},
         ) {
-            Icon(modifier= Modifier.fillMaxSize(0.85F), painter = ico, contentDescription = "Localized description")
-            Text(text = text)
+            Box(
+                modifier = Modifier.fillMaxSize().padding(0.dp),
+            ) {
+                Icon(modifier= Modifier.fillMaxSize(5F).padding(0.dp), painter = ico, contentDescription = "Localized description")
+            }
         }
 
-
+        Text(text = text, modifier = Modifier.align(Alignment.BottomCenter).padding(top = 104.dp), color = background)
     }
+
 }
 
 @Preview(showBackground = true)

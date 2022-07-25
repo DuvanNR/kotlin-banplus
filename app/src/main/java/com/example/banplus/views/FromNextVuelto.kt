@@ -15,6 +15,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.unit.dp
+import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavController
 import com.example.banplus.BancosList
 import com.example.banplus.R
@@ -41,21 +42,22 @@ fun vueltoNextForm(
         ) {
             HeaderInit(icon = R.drawable.ic_recurso_4)
             nextVueltoBody(onClick = {
-                if (it.monto != "" || it.banco != "") {
+                println(it.monto)
+                if (it.monto != "" && it.banco != "" && it.monto != "0") {
                     navigate.navigate(
                         PathRouter.ConfirTrancation.withArgs(
                             "${resp.tipo}",
                             "${resp.cedula}",
                             "${resp.telefono}",
                             "${it.banco}",
-                            "${it.monto}",
+                            "${addDecimals(it.monto)}",
                             "${it.nameBanco}"
                         )
                     )
                 } else {
                     Toast.makeText(
                         context,
-                        "Debes llenar todos los campos",
+                        "El monto tiene que se mayor a 0.01",
                         Toast.LENGTH_SHORT
                     ).show()
 
@@ -79,7 +81,6 @@ fun nextVueltoBody(onClick: (iTransaction) -> Unit) {
         )
     }
     var monto by remember { mutableStateOf("11") }
-    val numberRegex = remember { "[-]?[\\d]*[.]?[\\d]*".toRegex() }
 
 //    val formatter = DecimalFormat("#,###.00")
     Box(
@@ -104,31 +105,11 @@ fun nextVueltoBody(onClick: (iTransaction) -> Unit) {
             )
             inputNumber(value = monto, onNumberChange = {
                 monto = if (it.startsWith("0")) {
-                    ""
+                    "0"
                 } else {
                     it
                 }
             })
-//            PostField(
-//                text = monto,
-//                onValueChange = {   if (it.isEmpty()){
-//                    monto = it
-//                } else {
-//                    monto = when (it.toDoubleOrNull()) {
-//                        null -> monto //old value
-//                        else -> it   //new value
-//                    }
-//                }},
-//                label = "Monto",
-//                visualTransformation = {mobileNumberFilter(it)},
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(top = 10.dp),
-//                keyboardOptions = KeyboardOptions(
-//                    keyboardType = KeyboardType.Number,
-//                    imeAction = ImeAction.Next
-//                ),
-//            )
         }
         BtnNext(
             text = "Guardar",
@@ -136,7 +117,7 @@ fun nextVueltoBody(onClick: (iTransaction) -> Unit) {
                 onClick(
                     iTransaction(
                         banco = "${banco.key}",
-                        monto = "${addDecimals(monto)}",
+                        monto = "${monto}",
                         nameBanco = "${banco.title}",
                     )
                 )

@@ -3,15 +3,20 @@ package com.example.banplus.views
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.banplus.R
 import com.example.banplus.component.BtnNext
 import com.example.banplus.component.cardsAlert
 import com.example.banplus.component.header.HeaderInit
+import com.example.banplus.db.schema.TransCount
 import com.example.banplus.ui.theme.*
+import com.example.banplus.viewmodel.VueltoViewModel
 
 @Composable
 fun ViewReportes( onGoToReportes:() -> Unit) {
@@ -29,7 +34,10 @@ fun ViewReportes( onGoToReportes:() -> Unit) {
 }
 
 @Composable
-fun ReportesBody(onClickListRe:()-> Unit) {
+fun ReportesBody(onClickListRe:()-> Unit, viewModel: VueltoViewModel= hiltViewModel()) {
+    val totalTransCount by viewModel.TotalTrans.observeAsState(TransCount(0.0,1))
+    val allTransaction by viewModel.allTransaction.observeAsState(arrayListOf())
+
     Box(modifier = Modifier
         .fillMaxSize(),
         ) {
@@ -71,4 +79,7 @@ fun ReportesBody(onClickListRe:()-> Unit) {
 
         }
     }
+
+    println("_______________________${totalTransCount}______________________________")
+    println("_______________________${allTransaction}______________________________")
 }

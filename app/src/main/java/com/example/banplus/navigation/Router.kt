@@ -11,7 +11,7 @@ import com.example.banplus.views.*
 
 @Composable
 fun Router(
-    onEventTransction: (iData: iTransaction) -> Unit,
+    onEventTransction: (iData: iTransaction, String) -> Unit,
     onGoToReportes: () -> Unit
 ) {
     val navController = rememberNavController()
@@ -50,19 +50,10 @@ fun Router(
                 navController = navController,
                 resp = iTransaction("$tipo", "$cedula", "$cell", "$banco", "$monto", "$nameBanco"),
                 onEventExito = { it ->
-                    onEventTransction(
-                        iTransaction(
-                            tipo = it.tipo,
-                            cedula = it.cedula,
-                            telefono = it.telefono,
-                            banco = it.banco,
-                            monto = it.monto,
-                            nameBanco = it.nameBanco,
-                            fecha = it.fecha,
-                            hora = it.hora,
-                            ref = it.ref
-                        )
-                    )
+                    onEventTransction(it, "true")
+                },
+                onEventError = {
+                    onEventTransction(it, "false")
                 }
 
             )
