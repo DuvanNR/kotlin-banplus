@@ -26,7 +26,7 @@ class HiltInjectApp() : Application(), Parcelable {
 
     override fun onCreate() {
         super.onCreate()
-//        deviceEngine = APIProxy.getDeviceEngine(this)  //TODO: Al hacer las pruebas en el N3 descomentar esta linea
+        deviceEngine = APIProxy.getDeviceEngine(this)  //TODO: Al hacer las pruebas en el N3 descomentar esta linea
         deviceEngine?.getEmvHandler("app1")
     }
 }

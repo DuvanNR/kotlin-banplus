@@ -8,15 +8,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.VerticalAlignmentLine
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.banplus._interface.iReportes
 import com.example.banplus.api.reportes.response.ReportesResponse
+import com.example.banplus.db.schema.Transaction
 import com.example.banplus.ui.theme.*
+import java.text.DecimalFormat
 
 @Composable
-fun listReport(item: ReportesResponse.Movimiento = ReportesResponse.Movimiento()) {
+fun listReport(item: Transaction = Transaction("","","","",0.00,"","","","","",)) {
 
     Column(
         modifier = Modifier
@@ -31,43 +35,48 @@ fun listReport(item: ReportesResponse.Movimiento = ReportesResponse.Movimiento()
             modifier = Modifier
         ) {
             Text(text = "Ref:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-            Text(text = "${item.refeOper}", color = color_fontbtn)
+            Text(text = "${item.ref}", color = color_fontbtn)
         }
         Row(
             modifier = Modifier
         ) {
             Text(text = "Teléfono:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-            Text(text = "${item.numeroCuenta}", color = color_fontbtn)
+            Text(text = "${item.telefono}", color = color_fontbtn)
         }
         Row(
             modifier = Modifier
         ) {
             Text(text = "Cédula:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-            Text(text = "${item.tipoMovimiento}", color = color_fontbtn)
+            Text(text = "${item.tipo.capitalize()}-${item.cedula}", color = color_fontbtn)
         }
         Row(
             modifier = Modifier
         ) {
-            Text(text = "Banplus", color = color_fontbtn, fontWeight = FontWeight.Bold)
+            Text(text = "${item.nameBanco}", color = color_fontbtn, fontWeight = FontWeight.Bold)
         }
         Row(
             modifier = Modifier
         ) {
             Text(text = "Fecha:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-            Text(text = "${item.fechaProceso}", color = color_fontbtn)
+            Text(text = "${item.fecha}", color = color_fontbtn)
+
+        }
+        Row() {
             Text(text = "Hora:  ",
                 color = color_fontbtn,
-                modifier = Modifier.padding(start=9.dp),
+                modifier = Modifier,
                 fontWeight = FontWeight.Bold)
-            Text(text = "${item.horaProceso}", color = color_fontbtn)
+            Text(text = "${item.hora}", color = color_fontbtn)
         }
         Row(
-            modifier = Modifier
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "${item.monto}", color = color_fontbtn, fontWeight = FontWeight.Bold)
+            val forma = DecimalFormat("#,##0.00")
+            Text(text = "Bs. ${forma.format(item.monto)}", color = color_fontbtn, fontWeight = FontWeight.Bold)
             Text(
-                text = "${item.conceptoMotivo}",
-                color = getIcon("${item.conceptoMotivo}"),
+                text = "${item.message}",
+                color = getIcon("${item.message}"),
                 modifier = Modifier.padding(start = 8.dp),
                 fontWeight = FontWeight.Bold
             )
@@ -79,7 +88,7 @@ fun listReport(item: ReportesResponse.Movimiento = ReportesResponse.Movimiento()
 
 fun getIcon(text: String): Color {
     when (text) {
-        "Aprobada" -> return color_success
+        "Operacion Exitosa" -> return color_success
         else -> return color_danger
     }
 }

@@ -42,7 +42,7 @@ class RespTransactionActivity : ComponentActivity() {
         val mainactivityintent = Intent(this, MainActivity::class.java)
         setContent {
             deviceEngine = (application as HiltInjectApp).deviceEngine
-//            printer = deviceEngine!!.printer
+            printer = deviceEngine!!.printer
             printer?.setTypeface(Typeface.DEFAULT)
             BanplusTheme {
                 Surface(
@@ -123,17 +123,16 @@ class RespTransactionActivity : ComponentActivity() {
             FONT_SIZE_NORMAL,
             false
         )
+        printer!!.appendPrnStr(
+            "Estado:",
+            if(status) "Aprobado" else "NEGADA",
+            FONT_SIZE_NORMAL,
+            false
+        )
       if(status) {
           printer!!.appendPrnStr(
               "Ref:",
               "${resp.ref}",
-              FONT_SIZE_NORMAL,
-              false
-          )
-      } else {
-          printer!!.appendPrnStr(
-              "Message:",
-              "${resp.message}",
               FONT_SIZE_NORMAL,
               false
           )
@@ -156,12 +155,27 @@ class RespTransactionActivity : ComponentActivity() {
             FONT_SIZE_BIG,
             false
         )
-        printer!!.appendPrnStr(
-            "Firma: __________________",
-            FONT_SIZE_NORMAL,
-            AlignEnum.LEFT,
-            false
-        )
+
+        if(status) {
+            printer!!.appendPrnStr(
+                "Firma: __________________________",
+                FONT_SIZE_NORMAL,
+                AlignEnum.LEFT,
+                false
+            )
+            printer!!.appendPrnStr(
+                "",
+                "",
+                FONT_SIZE_BIG,
+                false
+            )
+            printer!!.appendPrnStr(
+                "Cedula: __________________________",
+                FONT_SIZE_NORMAL,
+                AlignEnum.LEFT,
+                false
+            )
+        }
         printer!!.appendPrnStr(
             "",
             "",

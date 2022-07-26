@@ -104,15 +104,15 @@ fun nextVueltoBody(onClick: (iTransaction) -> Unit) {
 
             )
             inputNumber(value = monto, onNumberChange = {
-                monto = if (it.startsWith("0")) {
-                    "0"
+                if (it.startsWith("0")) {
+                  monto =  ""
                 } else {
-                    it
+                   monto = if (it.length > 11) monto else it
                 }
             })
         }
         BtnNext(
-            text = "Guardar",
+            text = "Siguiente",
             onClick = {
                 onClick(
                     iTransaction(

@@ -1,7 +1,10 @@
 package com.example.banplus
 
+import android.content.Context
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,16 +16,29 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.banplus._interface.iTransaction
 import com.example.banplus.api.vuelto.response.Tranferp2pResponse
+import com.example.banplus.db.schema.Commerce
+import com.example.banplus.db.schema.TransCount
+import com.example.banplus.inject_dependency.HiltInjectApp
 import com.example.banplus.ui.theme.BanplusTheme
 import com.example.banplus.viewmodel.ReportesViewModel
 import com.example.banplus.viewmodel.VueltoViewModel
 import com.nexgo.common.LogUtils
 import dagger.hilt.android.AndroidEntryPoint
 import com.example.banplus.navigation.Router
+import com.example.banplus.utils.getDatetime
+import com.nexgo.oaf.apiv3.DeviceEngine
+import com.nexgo.oaf.apiv3.device.printer.AlignEnum
+import com.nexgo.oaf.apiv3.device.printer.GrayLevelEnum
+import com.nexgo.oaf.apiv3.device.printer.Printer
+import java.text.DecimalFormat
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
+    private var deviceEngine: DeviceEngine? = null
+    private var printer: Printer? = null
+    private val FONT_SIZE_SMALL = 16
+    private val FONT_SIZE_NORMAL = 24
+    private val FONT_SIZE_BIG = 30
 
     override fun onCreate(savedInstanceState: Bundle?, ) {
         super.onCreate(savedInstanceState)
@@ -30,6 +46,9 @@ class MainActivity : ComponentActivity() {
         val cardtransaction = Intent(this,RespTransactionActivity::class.java )
         val detailReportes = Intent(this,ListReportesActivity::class.java )
         setContent {
+            deviceEngine = (application as HiltInjectApp).deviceEngine
+            printer = deviceEngine!!.printer
+            printer?.setTypeface(Typeface.DEFAULT)
             LogUtils.setDebugEnable(true)
             BanplusTheme {
                 Surface(
@@ -41,7 +60,9 @@ class MainActivity : ComponentActivity() {
                             onEventTransation(it,cardtransaction, status)},
                         onGoToReportes = {
                             startActivity(detailReportes)
-                        }
+                        },
+                        onPrintDetails = {a,b ->
+                            onClickimprimir(this,a,b)}
 
                     )
                 }
@@ -76,6 +97,85 @@ class MainActivity : ComponentActivity() {
 
         startActivity(intent)
         finish()
+    }
+
+
+    fun onClickimprimir(athis: Context, resp: TransCount, commerce: Commerce) {
+        val forma = DecimalFormat("#,##0.00")
+        val data = getDatetime()
+        printer!!.initPrinter() //init printer
+        printer!!.setTypeface(Typeface.DEFAULT) //change print type
+        printer!!.setLetterSpacing(3) //change the line space between each line
+        printer!!.setGray(GrayLevelEnum.LEVEL_2) //change print gray
+        printer!!.appendPrnStr(
+            "${commerce.razonSocial}",
+            FONT_SIZE_NORMAL,
+            AlignEnum.CENTER,
+            false
+        )
+        printer!!.appendPrnStr(
+            "RIF: ${commerce.tipo.capitalize()}-${commerce.rif}",
+            FONT_SIZE_NORMAL,
+            AlignEnum.CENTER,
+            false
+        )
+        printer!!.appendPrnStr(
+            "Fecha:",
+            data.fecha,
+            FONT_SIZE_NORMAL,
+            false
+        )
+        printer!!.appendPrnStr(
+            "Hora:",
+            data.hora,
+            FONT_SIZE_NORMAL,
+            false
+        )
+        printer!!.appendPrnStr(
+            "",
+            "",
+            FONT_SIZE_NORMAL,
+            false
+        )
+
+        printer!!.appendPrnStr(
+            "Pago Plus",
+            "",
+            FONT_SIZE_NORMAL,
+            false
+        )
+        printer!!.appendPrnStr(
+            "Cantidad:",
+            "${resp.total}",
+            FONT_SIZE_NORMAL,
+            false
+        )
+        printer!!.appendPrnStr(
+            "Monto:",
+            "Bs. ${forma.format(resp.amount)}",
+            FONT_SIZE_NORMAL,
+            false
+        )
+
+        printer!!.appendPrnStr(
+            "",
+            "",
+            FONT_SIZE_BIG,
+            false
+        )
+
+
+        printer!!.startPrint(true) { retCode ->
+
+            runOnUiThread {
+                Toast.makeText(
+                    athis,
+                    retCode.toString() + "",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
     }
 }
 

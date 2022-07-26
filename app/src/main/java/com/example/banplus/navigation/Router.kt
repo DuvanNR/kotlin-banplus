@@ -7,17 +7,22 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.banplus._interface.iTransaction
+import com.example.banplus.db.schema.Commerce
+import com.example.banplus.db.schema.TransCount
+import com.example.banplus.db.schema.Transaction
 import com.example.banplus.views.*
 
 @Composable
 fun Router(
     onEventTransction: (iData: iTransaction, String) -> Unit,
-    onGoToReportes: () -> Unit
-) {
+    onGoToReportes: () -> Unit,
+    onPrintDetails: (TransCount, Commerce) -> Unit,
+
+    ) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = PathRouter.HomeRoute.route) {
         composable(route = PathRouter.ReporteRoute.route) {
-            ViewReportes(onGoToReportes = { onGoToReportes() })
+            ViewReportes(onGoToReportes = { onGoToReportes() }, onPrintDetails = onPrintDetails)
         }
         composable(
             route = PathRouter.VueltoNextRoute.route + "/{tipo}/{cedula}/{cell}",

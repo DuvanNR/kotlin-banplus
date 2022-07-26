@@ -14,19 +14,22 @@ import com.example.banplus.R
 import com.example.banplus.component.BtnNext
 import com.example.banplus.component.cardsAlert
 import com.example.banplus.component.header.HeaderInit
+import com.example.banplus.db.schema.Commerce
 import com.example.banplus.db.schema.TransCount
+import com.example.banplus.db.schema.Transaction
 import com.example.banplus.ui.theme.*
+import com.example.banplus.viewmodel.CommerceViewModel
 import com.example.banplus.viewmodel.VueltoViewModel
 
 @Composable
-fun ViewReportes( onGoToReportes:() -> Unit) {
+fun ViewReportes( onGoToReportes:() -> Unit, onPrintDetails: (TransCount, Commerce) -> Unit) {
     Scaffold() {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally) {
             HeaderInit(icon = R.drawable.ic_recurso_4)
-            ReportesBody(onClickListRe = { onGoToReportes() })
+            ReportesBody(onClickListRe = { onGoToReportes() }, onPrintDetails = onPrintDetails )
         }
 
     }
@@ -34,9 +37,13 @@ fun ViewReportes( onGoToReportes:() -> Unit) {
 }
 
 @Composable
-fun ReportesBody(onClickListRe:()-> Unit, viewModel: VueltoViewModel= hiltViewModel()) {
-    val totalTransCount by viewModel.TotalTrans.observeAsState(TransCount(0.0,1))
-    val allTransaction by viewModel.allTransaction.observeAsState(arrayListOf())
+fun ReportesBody(
+    onClickListRe:()-> Unit,
+    viewModel: VueltoViewModel= hiltViewModel(),
+    viewModelCommerce: CommerceViewModel= hiltViewModel(),
+    onPrintDetails: (TransCount, Commerce) -> Unit) {
+    val totalTransCount by viewModel.TotalTrans.observeAsState(TransCount(0.1,1))
+    val commerce by viewModelCommerce.commerce.observeAsState(Commerce("","","", ""))
 
     Box(modifier = Modifier
         .fillMaxSize(),
@@ -47,7 +54,7 @@ fun ReportesBody(onClickListRe:()-> Unit, viewModel: VueltoViewModel= hiltViewMo
                 .padding(top = 22.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center){
-            cardsAlert()
+            cardsAlert(detailsData = totalTransCount)
 
          }
 
@@ -59,7 +66,9 @@ fun ReportesBody(onClickListRe:()-> Unit, viewModel: VueltoViewModel= hiltViewMo
 
             BtnNext(
                 text = "Imprimir",
-                onClick = { },
+                onClick = {
+                          onPrintDetails(totalTransCount, commerce)
+                },
                 ico = painterResource(id = R.drawable.ic_next),
                 modifier = Modifier
                     .padding(4.dp)
@@ -80,6 +89,4 @@ fun ReportesBody(onClickListRe:()-> Unit, viewModel: VueltoViewModel= hiltViewMo
         }
     }
 
-    println("_______________________${totalTransCount}______________________________")
-    println("_______________________${allTransaction}______________________________")
 }
