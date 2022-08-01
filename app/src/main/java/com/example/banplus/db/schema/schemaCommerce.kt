@@ -22,4 +22,6 @@ interface CommerceDao {
     fun getOneById(id: Int):LiveData<Commerce>
     @Delete
     fun delete(empresa:Commerce)
+    @Query("UPDATE commerce SET razonSocial=:razonSocial,rif=:rif, tipo=:tipo WHERE id =:id")
+    fun update(razonSocial: String, rif: String, tipo: String, id:Int)
 }

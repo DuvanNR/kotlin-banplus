@@ -17,6 +17,7 @@ import com.example.banplus._interface.iReportes
 import com.example.banplus.api.reportes.response.ReportesResponse
 import com.example.banplus.db.schema.Transaction
 import com.example.banplus.ui.theme.*
+import com.example.banplus.utils.ConverString
 import java.text.DecimalFormat
 
 @Composable
@@ -41,13 +42,13 @@ fun listReport(item: Transaction = Transaction("","","","",0.00,"","","","","",)
             modifier = Modifier
         ) {
             Text(text = "Teléfono:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-            Text(text = "${item.telefono}", color = color_fontbtn)
+            Text(text = ConverString("${item.telefono}", init=4,fin=3), color = color_fontbtn)
         }
         Row(
             modifier = Modifier
         ) {
             Text(text = "Cédula:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-            Text(text = "${item.tipo.capitalize()}-${item.cedula}", color = color_fontbtn)
+            Text(text = "${item.tipo.capitalize()}-${ConverString("${item.cedula}")}", color = color_fontbtn)
         }
         Row(
             modifier = Modifier

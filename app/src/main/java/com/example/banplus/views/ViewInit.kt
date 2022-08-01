@@ -17,13 +17,13 @@ import com.example.banplus.component.header.HeaderInit
 import com.example.banplus.navigation.PathRouter
 
 @Composable
-fun ViewInit(navController: NavController) {
+fun ViewInit(navController: NavController, IrEditTerminal: ()-> Unit = {}) {
     Scaffold {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally) {
-            HeaderInit()
+            HeaderInit(IrEditTerminal = IrEditTerminal, menu = true)
             Text(
                 modifier = Modifier.padding(bottom = 117.dp),
                 fontSize = 24.sp,
@@ -35,7 +35,7 @@ fun ViewInit(navController: NavController) {
 }
 
 @Composable
-fun ViewInitBody(navController: NavController) {
+private fun ViewInitBody(navController: NavController) {
     Box() {
         Row(
             verticalAlignment = Alignment.CenterVertically

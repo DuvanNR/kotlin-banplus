@@ -45,6 +45,7 @@ class MainActivity : ComponentActivity() {
 
         val cardtransaction = Intent(this,RespTransactionActivity::class.java )
         val detailReportes = Intent(this,ListReportesActivity::class.java )
+        val postActiviry = Intent(this,EditPostActivity::class.java )
         setContent {
             deviceEngine = (application as HiltInjectApp).deviceEngine
             printer = deviceEngine!!.printer
@@ -61,6 +62,9 @@ class MainActivity : ComponentActivity() {
                         onGoToReportes = {
                             startActivity(detailReportes)
                         },
+                        IrEditTerminal = {
+                            onNavigateConfigPost(postActiviry)
+                        },
                         onPrintDetails = {a,b ->
                             onClickimprimir(this,a,b)}
 
@@ -72,6 +76,10 @@ class MainActivity : ComponentActivity() {
         }
 
 
+    }
+    fun onNavigateConfigPost(PostActivity: Intent) {
+        PostActivity.putExtra("status", true )
+        startActivity(PostActivity)
     }
 
     fun onEventTransation(it: iTransaction, intent: Intent, status: String) {
@@ -168,11 +176,21 @@ class MainActivity : ComponentActivity() {
         printer!!.startPrint(true) { retCode ->
 
             runOnUiThread {
-                Toast.makeText(
-                    athis,
-                    retCode.toString() + "",
-                    Toast.LENGTH_SHORT
-                ).show()
+                if(retCode == -1005) {
+                    Toast.makeText(
+                        athis,
+                        "No tiene papel para imprimir!!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                if(retCode == 0) {
+                    Toast.makeText(
+                        athis,
+                        "Imprimiendo",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
             }
         }
 

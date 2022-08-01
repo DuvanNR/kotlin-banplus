@@ -19,6 +19,7 @@ import com.example.banplus._interface.iTransaction
 import com.example.banplus.db.schema.Commerce
 import com.example.banplus.inject_dependency.HiltInjectApp
 import com.example.banplus.ui.theme.BanplusTheme
+import com.example.banplus.utils.ConverString
 import com.example.banplus.viewmodel.CommerceViewModel
 import com.example.banplus.views.RespTransaction
 import com.nexgo.oaf.apiv3.DeviceEngine
@@ -107,13 +108,13 @@ class RespTransactionActivity : ComponentActivity() {
         )
         printer!!.appendPrnStr(
             "Cedula:",
-            "${resp.tipo.capitalize()}-${resp.cedula}",
+            "${resp.tipo.capitalize()}-${ConverString("${resp.cedula}")}",
             FONT_SIZE_NORMAL,
             false
         )
         printer!!.appendPrnStr(
             "Telefono:",
-            "${resp.telefono}",
+            ConverString("${resp.telefono}", init = 4, fin = 3),
             FONT_SIZE_NORMAL,
             false
         )
@@ -170,7 +171,7 @@ class RespTransactionActivity : ComponentActivity() {
                 false
             )
             printer!!.appendPrnStr(
-                "Cedula: __________________________",
+                "Cedula: _________________________",
                 FONT_SIZE_NORMAL,
                 AlignEnum.LEFT,
                 false
@@ -183,13 +184,22 @@ class RespTransactionActivity : ComponentActivity() {
             false
         )
         printer!!.startPrint(true) { retCode ->
-
             runOnUiThread {
-                Toast.makeText(
-                    athis,
-                    retCode.toString() + "",
-                    Toast.LENGTH_SHORT
-                ).show()
+                if(retCode == -1005) {
+                    Toast.makeText(
+                        athis,
+                        "No tiene papel para imprimir!!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                if(retCode == 0) {
+                    Toast.makeText(
+                        athis,
+                        "Imprimiendo",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
             }
         }
 

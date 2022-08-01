@@ -25,6 +25,7 @@ import com.example.banplus._interface.iTransaction
 import com.example.banplus.db.schema.Commerce
 import com.example.banplus.db.schema.TransCount
 import com.example.banplus.ui.theme.*
+import com.example.banplus.utils.ConverString
 import com.example.banplus.utils.getDatetime
 import com.example.banplus.viewmodel.CommerceViewModel
 import java.text.DecimalFormat
@@ -98,7 +99,7 @@ fun CardC(iData: iTransaction) {
                 .fillMaxWidth()
         ) {
             Text(text = "Teléfono:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-            Text(text = "${iData.telefono}", color = color_fontbtn)
+            Text(text = iData.telefono, color = color_fontbtn)
         }
         Row(
             modifier = Modifier
@@ -221,7 +222,7 @@ fun CardB(status: Boolean, dataTransfer: iTransaction) {
         ) {
             Text(text = "Cedula:  ", color = color_fontbtn, fontSize = 14.sp,fontWeight = FontWeight.Bold)
             Text(
-                text = "${dataTransfer.tipo.capitalize()}-${dataTransfer.cedula}",
+                text = "${dataTransfer.tipo.capitalize()}-${ConverString("${dataTransfer.cedula}")}",
                 fontSize = 14.sp,
                 color = color_fontbtn
             )
@@ -231,7 +232,7 @@ fun CardB(status: Boolean, dataTransfer: iTransaction) {
                 .fillMaxWidth()
         ) {
             Text(text = "Teléfono:  ", color = color_fontbtn,fontSize = 14.sp, fontWeight = FontWeight.Bold)
-            Text(text = "${dataTransfer.telefono}", fontSize = 14.sp,color = color_fontbtn)
+            Text(text = ConverString("${dataTransfer.telefono}", init = 4, fin = 3), fontSize = 14.sp,color = color_fontbtn)
         }
         Row(
             modifier = Modifier

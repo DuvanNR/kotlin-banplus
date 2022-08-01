@@ -56,8 +56,8 @@ fun ViewVuelto(navController: NavController) {
 @Composable
 private fun BodyContent(onClick: (tipo: String, celular: String, cell: String) -> Unit) {
     var tipo by remember { mutableStateOf<idropdown>(idropdown(key="V", title = "V")) }
-    var cedula by remember { mutableStateOf("17142863") }
-    var cell by remember { mutableStateOf("584241340112") }
+    var cedula by remember { mutableStateOf("") }
+    var cell by remember { mutableStateOf("") }
     Box(
         modifier = Modifier
             .fillMaxSize()

@@ -99,15 +99,12 @@ val ResListA: List<iReportes> = listOf(
 val ListTypeDocument: List<idropdown> = listOf(
     idropdown("v", "V"),
     idropdown("p", "P"),
-    idropdown("m", "M"),
-    idropdown("e", "E"),
-    idropdown("f", "F"),
-    idropdown("c", "C"),
+    idropdown("E", "E"),
 )
 
 val ListTypeRif: List<idropdown> = listOf(
+    idropdown("g", "G"),
     idropdown("j", "J"),
-    idropdown("v", "V"),
 )
 
 

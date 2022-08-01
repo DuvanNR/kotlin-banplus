@@ -20,11 +20,12 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ConfigPostActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        val ObjectIntent: Intent = intent
         val mainActiviry = Intent(this,MainActivity::class.java )
         super.onCreate(savedInstanceState)
         setContent {
+            ObjectIntent.getStringExtra("status")
             BanplusTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background

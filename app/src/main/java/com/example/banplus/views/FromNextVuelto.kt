@@ -80,7 +80,7 @@ fun nextVueltoBody(onClick: (iTransaction) -> Unit) {
             )
         )
     }
-    var monto by remember { mutableStateOf("11") }
+    var monto by remember { mutableStateOf("") }
 
 //    val formatter = DecimalFormat("#,###.00")
     Box(

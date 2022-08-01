@@ -11,6 +11,7 @@ interface CommerceRespository {
     fun getCommerceById(id: Int):LiveData<Commerce>
     fun getAll(): LiveData<List<Commerce>>
     abstract fun addCommerce(data: Commerce): Unit
+    abstract fun updateCommerce(data: Commerce): Unit
 }
 
 class CommerceRespositoryImp @Inject constructor(
@@ -27,5 +28,9 @@ class CommerceRespositoryImp @Inject constructor(
 
     override fun addCommerce(data: Commerce) {
         commerceDao.insert(data)
+    }
+
+    override fun updateCommerce(data: Commerce) {
+        commerceDao.update(razonSocial = data.razonSocial,rif = data.rif,tipo =data.tipo,id=data.id)
     }
 }

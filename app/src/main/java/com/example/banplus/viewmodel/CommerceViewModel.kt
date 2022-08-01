@@ -35,7 +35,16 @@ class CommerceViewModel @Inject constructor(
         }
 
     }
+    fun updateCommerce(data: Commerce) {
+        if(_isLoading.value == false ) {
+            viewModelScope.launch(Dispatchers.IO) {
+                _isLoading.postValue(true)
+                commerceDao.updateCommerce(data)
+                _isLoading.postValue(false)
+            }
+        }
 
+    }
     fun GetAllCommerce(data: Commerce) {
         if(_isLoading.value == false ) {
             viewModelScope.launch(Dispatchers.IO) {

@@ -3,12 +3,13 @@ package com.example.banplus.component.header
 import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,7 +23,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 @Composable
-fun HeaderInit(icon: Int = R.drawable.ic_banplus_vector) {
+fun HeaderInit(icon: Int = R.drawable.ic_banplus_vector, IrEditTerminal:()->Unit = {}, menu: Boolean = false) {
     Column {
         Row(
             modifier = Modifier
@@ -42,10 +43,8 @@ fun HeaderInit(icon: Int = R.drawable.ic_banplus_vector) {
             Logo(icon = icon)
         }
 
-        Row(
+        Box(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.Top
         ) {
             var DateNow: String = ""
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -58,7 +57,26 @@ fun HeaderInit(icon: Int = R.drawable.ic_banplus_vector) {
                 val formatter = SimpleDateFormat("EEEE dd LLLL yyyy HH:mm:ss a")
                 DateNow = formatter.format(date)
             }
-            Text(text = DateNow.toString(), fontStyle = FontStyle.Italic, fontWeight = FontWeight.Bold)
+            Text(
+                text = DateNow.toString(),
+                modifier = Modifier.align(Alignment.Center),
+                fontStyle = FontStyle.Italic,
+                fontWeight = FontWeight.Bold)
+
+            if(menu) {
+                TextButton(
+                    modifier = Modifier.align(Alignment.CenterEnd),
+                    onClick = IrEditTerminal
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Menu,
+                        contentDescription = "Localized description",
+                        Modifier.padding(end = 8.dp)
+                    )
+                }
+            }
+
+
         }
 
     }

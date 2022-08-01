@@ -17,6 +17,7 @@ fun Router(
     onEventTransction: (iData: iTransaction, String) -> Unit,
     onGoToReportes: () -> Unit,
     onPrintDetails: (TransCount, Commerce) -> Unit,
+    IrEditTerminal:() -> Unit = {}
 
     ) {
     val navController = rememberNavController()
@@ -40,7 +41,7 @@ fun Router(
             ViewVuelto(navController)
         }
         composable(route = PathRouter.HomeRoute.route) {
-            ViewInit(navController)
+            ViewInit(navController, IrEditTerminal = IrEditTerminal)
         }
 
 

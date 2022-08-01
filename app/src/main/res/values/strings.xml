@@ -18,4 +18,5 @@
     <string name="print_shoudan">print shoudan</string>
     <string name="title_activity_config_post">ConfigPostActivity</string>
     <string name="config_post">Banplus</string>
+    <string name="title_activity_edit_post">EditPostActivity</string>
 </resources>

@@ -23,15 +23,20 @@
         android:theme="@style/Theme.Banplus"
         tools:targetApi="31">
         <activity
+            android:name=".EditPostActivity"
+            android:exported="false"
+            android:label="@string/title_activity_edit_post"
+            android:theme="@style/Theme.Banplus" />
+        <activity
             android:name=".ConfigPostActivity"
             android:exported="true"
             android:label="@string/config_post"
-            android:theme="@style/Theme.Banplus" >
+            android:theme="@style/Theme.Banplus">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".ListReportesActivity"
@@ -46,10 +51,8 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.Banplus"
-            />
-
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>
