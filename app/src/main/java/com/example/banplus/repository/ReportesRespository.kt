@@ -6,6 +6,7 @@ import com.example.banplus.api.makeNetworkCall
 import com.example.banplus.api.reportes.ReporteMapper
 
 import com.example.banplus.api.reportes.response.ReportesResponse
+import com.example.banplus.utils.getDay
 import javax.inject.Inject
 
 
@@ -14,6 +15,7 @@ interface ReportesRespository {
 }
 class ReportesRespositoryImp @Inject constructor(
     private val dataSource: ApiServer
+
 ): ReportesRespository {
     override suspend fun GetReportes(): ApiResponseStatus<List<ReportesResponse.Movimiento>> =  makeNetworkCall {
         val mapperBody = ReporteMapper()
@@ -21,4 +23,5 @@ class ReportesRespositoryImp @Inject constructor(
         val resp = dataSource.ListTransation(body)
         resp.msRsB.movimientos.movimiento
     }
+
 }

@@ -76,6 +76,13 @@ class RespTransactionActivity : ComponentActivity() {
             }
         }
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val mainactivityintent = Intent(this, MainActivity::class.java)
+        startActivity(mainactivityintent)
+        finish()
+    }
     fun onClickimprimir(athis: Context, resp: iTransaction, commerce: Commerce, status: Boolean) {
         val forma = DecimalFormat("#,##0.00")
         printer!!.initPrinter() //init printer
@@ -89,57 +96,57 @@ class RespTransactionActivity : ComponentActivity() {
             false
         )
         printer!!.appendPrnStr(
-            "RIF: ${commerce.tipo.capitalize()}-${commerce.rif}",
+            "${getString(R.string.rif)}: ${commerce.tipo.capitalize()}-${commerce.rif}",
             FONT_SIZE_NORMAL,
             AlignEnum.CENTER,
             false
         )
         printer!!.appendPrnStr(
-            "Fecha:",
+            "${getString(R.string.fecha)}:",
             resp.fecha,
             FONT_SIZE_NORMAL,
             false
         )
         printer!!.appendPrnStr(
-            "Hora:",
+            "${getString(R.string.hora)}:",
             resp.hora,
             FONT_SIZE_NORMAL,
             false
         )
         printer!!.appendPrnStr(
-            "Cedula:",
+            "${getString(R.string.cedula)}:",
             "${resp.tipo.capitalize()}-${ConverString("${resp.cedula}")}",
             FONT_SIZE_NORMAL,
             false
         )
         printer!!.appendPrnStr(
-            "Telefono:",
+            "${getString(R.string.telefono)}:",
             ConverString("${resp.telefono}", init = 4, fin = 3),
             FONT_SIZE_NORMAL,
             false
         )
         printer!!.appendPrnStr(
-            "Banco:",
-            "${resp.nameBanco}",
+            "${getString(R.string.banco)}:",
+            "${getBanconporCodigo(resp.banco)}",
             FONT_SIZE_NORMAL,
             false
         )
         printer!!.appendPrnStr(
-            "Estado:",
-            if(status) "Aprobado" else "NEGADA",
+            "${getString(R.string.estado)}:",
+            if(status) getString(R.string.aprobado) else getString(R.string.negada),
             FONT_SIZE_NORMAL,
             false
         )
       if(status) {
           printer!!.appendPrnStr(
-              "Ref:",
+              "${getString(R.string.ref)}:",
               "${resp.ref}",
               FONT_SIZE_NORMAL,
               false
           )
       }
         printer!!.appendPrnStr(
-            "Monto: Bs. ${forma.format("${resp.monto}".toFloat())}",
+            "${getString(R.string.monto).capitalize()}: Bs. ${forma.format("${resp.monto}".toDouble())}",
             FONT_SIZE_BIG,
             AlignEnum.CENTER,
             false
@@ -157,26 +164,26 @@ class RespTransactionActivity : ComponentActivity() {
             false
         )
 
-        if(status) {
-            printer!!.appendPrnStr(
-                "Firma: __________________________",
-                FONT_SIZE_NORMAL,
-                AlignEnum.LEFT,
-                false
-            )
-            printer!!.appendPrnStr(
-                "",
-                "",
-                FONT_SIZE_BIG,
-                false
-            )
-            printer!!.appendPrnStr(
-                "Cedula: _________________________",
-                FONT_SIZE_NORMAL,
-                AlignEnum.LEFT,
-                false
-            )
-        }
+//        if(status) {
+//            printer!!.appendPrnStr(
+//                "${getString(R.string.firma)}: __________________________",
+//                FONT_SIZE_NORMAL,
+//                AlignEnum.LEFT,
+//                false
+//            )
+//            printer!!.appendPrnStr(
+//                "",
+//                "",
+//                FONT_SIZE_BIG,
+//                false
+//            )
+//            printer!!.appendPrnStr(
+//                "${getString(R.string.cedula)}: _________________________",
+//                FONT_SIZE_NORMAL,
+//                AlignEnum.LEFT,
+//                false
+//            )
+//        }
         printer!!.appendPrnStr(
             "",
             "",
@@ -188,14 +195,14 @@ class RespTransactionActivity : ComponentActivity() {
                 if(retCode == -1005) {
                     Toast.makeText(
                         athis,
-                        "No tiene papel para imprimir!!",
+                        "${getString(R.string.no_papel_imprimir)}!!",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
                 if(retCode == 0) {
                     Toast.makeText(
                         athis,
-                        "Imprimiendo",
+                        "${getString(R.string.imprimir)}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }

@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -23,6 +24,7 @@ import com.example.banplus.component.DropdownDemo
 import com.example.banplus.component.PostField
 import com.example.banplus.component.header.HeaderInit
 import com.example.banplus.navigation.PathRouter
+import com.example.banplus.utils.mobileNumberFilter
 
 @Composable
 fun ViewVuelto(navController: NavController) {
@@ -37,12 +39,21 @@ fun ViewVuelto(navController: NavController) {
             HeaderInit(icon = R.drawable.ic_recurso_4 )
             BodyContent { tipo, cedula, cell ->
                 if (tipo != "" && cedula != "" && cell != "") {
-                    navController.navigate(PathRouter.VueltoNextRoute.withArgs(tipo,cedula, cell))
+
+                    if(cell.length == 11) {
+                        navController.navigate(PathRouter.VueltoNextRoute.withArgs(tipo,cedula, cell))
+                    }else {
+                        Toast.makeText(
+                            context,
+                            R.string.validTelefono,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
 
                 }else {
                     Toast.makeText(
                         context,
-                        "Debes llenar todos los campos",
+                        R.string.campos_llenos,
                         Toast.LENGTH_SHORT
                     ).show()
 
@@ -71,34 +82,39 @@ private fun BodyContent(onClick: (tipo: String, celular: String, cell: String) -
                         .size(height = 65.dp, width = 120.dp)
                         .padding(end = 3.dp),
                     selectedOptionText = tipo, onValueChange = { tipo = it },
-                    label = "Tipo",
+                    label = stringResource(id = R.string.tipo),
                     options = ListTypeDocument
 
                 )
                 PostField(
                     text = cedula,
-                    onValueChange = {cedula = if (it.length > 12 || it.any { !it.isDigit() }) cedula else it},
-                    label = "Cedula",
+                    onValueChange = {cedula = if (it.length > 9 || it.any { !it.isDigit() }) cedula else it},
+                    label = stringResource(id = R.string.cedula),
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
+                        keyboardType = KeyboardType.NumberPassword,
                         imeAction = ImeAction.Next)
                 )
             }
             PostField(
                 text = cell,
-                onValueChange = {cell = if (it.length > 12 || it.any { !it.isDigit() }) cell else it},
-                label = "Telefono",
-                modifier = Modifier.fillMaxWidth().padding(top=10.dp),
+                onValueChange = {cell = if (it.length > 11 || it.any { !it.isDigit() }) cell else it},
+                label = stringResource(id = R.string.telefono),
+                visualTransformation = {
+                    mobileNumberFilter(it)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp),
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
+                    keyboardType = KeyboardType.NumberPassword,
                     imeAction = ImeAction.Next
                 ),
             )
         }
 
         BtnNext(
-            text = "Siguiente",
+            text = stringResource(id = R.string.siguiente),
             onClick = { onClick("${tipo.key}", cedula, cell) },
             ico = painterResource(id = R.drawable.ic_next),
             modifier = Modifier

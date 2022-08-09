@@ -8,17 +8,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.VerticalAlignmentLine
-import androidx.compose.ui.text.capitalize
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.banplus._interface.iReportes
-import com.example.banplus.api.reportes.response.ReportesResponse
 import com.example.banplus.db.schema.Transaction
 import com.example.banplus.ui.theme.*
-import com.example.banplus.utils.ConverString
 import java.text.DecimalFormat
+import com.example.banplus.R
 
 @Composable
 fun listReport(item: Transaction = Transaction("","","","",0.00,"","","","","",)) {
@@ -35,20 +32,20 @@ fun listReport(item: Transaction = Transaction("","","","",0.00,"","","","","",)
         Row(
             modifier = Modifier
         ) {
-            Text(text = "Ref:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
+            Text(text = "${stringResource(id = R.string.ref)}:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
             Text(text = "${item.ref}", color = color_fontbtn)
         }
         Row(
             modifier = Modifier
         ) {
-            Text(text = "Teléfono:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-            Text(text = ConverString("${item.telefono}", init=4,fin=3), color = color_fontbtn)
+            Text(text = "${stringResource(id = R.string.telefono)}:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
+            Text(text = item.telefono, color = color_fontbtn)
         }
         Row(
             modifier = Modifier
         ) {
-            Text(text = "Cédula:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
-            Text(text = "${item.tipo.capitalize()}-${ConverString("${item.cedula}")}", color = color_fontbtn)
+            Text(text = "${stringResource(id= R.string.cedula)}:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
+            Text(text = "${item.tipo.capitalize()}-${item.cedula}", color = color_fontbtn)
         }
         Row(
             modifier = Modifier
@@ -58,12 +55,12 @@ fun listReport(item: Transaction = Transaction("","","","",0.00,"","","","","",)
         Row(
             modifier = Modifier
         ) {
-            Text(text = "Fecha:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
+            Text(text = "${stringResource(id = R.string.fecha)}:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
             Text(text = "${item.fecha}", color = color_fontbtn)
 
         }
         Row() {
-            Text(text = "Hora:  ",
+            Text(text = "${stringResource(id = R.string.hora)}:  ",
                 color = color_fontbtn,
                 modifier = Modifier,
                 fontWeight = FontWeight.Bold)

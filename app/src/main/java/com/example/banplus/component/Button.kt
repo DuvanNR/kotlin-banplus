@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.banplus.R
@@ -34,13 +35,19 @@ fun BtnIni(ico: Painter, text: String, background: Color = color_black, colorTex
             onClick = { onClick()},
         ) {
             Box(
-                modifier = Modifier.fillMaxSize().padding(0.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(0.dp),
             ) {
-                Icon(modifier= Modifier.fillMaxSize(5F).padding(0.dp), painter = ico, contentDescription = "Localized description")
+                Icon(modifier= Modifier
+                    .fillMaxSize(5F)
+                    .padding(0.dp), painter = ico, contentDescription = stringResource(id = R.string.defualt_message_img))
             }
         }
 
-        Text(text = text, modifier = Modifier.align(Alignment.BottomCenter).padding(top = 104.dp), color = background)
+        Text(text = text, modifier = Modifier
+            .align(Alignment.BottomCenter)
+            .padding(top = 104.dp), color = background)
     }
 
 }
@@ -49,5 +56,5 @@ fun BtnIni(ico: Painter, text: String, background: Color = color_black, colorTex
 @Composable
 fun previewBtn() {
     val ico = painterResource(id = R.drawable.ic_time)
-    BtnIni(text="hola Mundo",onClick = {/*  TODO: */}, ico = ico)
+    BtnIni(text= stringResource(id = R.string.app_name),onClick = {/*  TODO: */}, ico = ico)
 }

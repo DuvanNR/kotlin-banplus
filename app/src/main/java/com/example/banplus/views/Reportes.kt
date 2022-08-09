@@ -8,6 +8,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.banplus.R
@@ -65,7 +66,7 @@ fun ReportesBody(
             ) {
 
             BtnNext(
-                text = "Imprimir",
+                text = stringResource(id = R.string.imprimir),
                 onClick = {
                           onPrintDetails(totalTransCount, commerce)
                 },
@@ -76,7 +77,7 @@ fun ReportesBody(
                     .width(240.dp)
             )
             BtnNext(
-                text = "Ver Detalles",
+                text = stringResource(id = R.string.ver_detalles),
                 onClick =  onClickListRe,
                 ico = painterResource(id = R.drawable.ic_next),
                 background= color_fontbtn,

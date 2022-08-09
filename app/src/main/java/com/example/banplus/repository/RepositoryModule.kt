@@ -13,9 +13,15 @@ abstract  class RepositoryModule {
     @Singleton
     @Binds
     abstract fun vueltoRepository(repo: VueltoRespositoryImp): VueltoRespository
+
+    @Singleton
+    @Binds
+    abstract fun backendRepository(repo: BAckendRespositoryImp):BackendRespository
+
     @Singleton
     @Binds
     abstract fun reporteRepository(repo: ReportesRespositoryImp): ReportesRespository
+
     @Singleton
     @Binds
     abstract fun commerceRespository(repo: CommerceRespositoryImp):CommerceRespository

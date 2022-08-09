@@ -131,7 +131,7 @@ private fun body(
             .fillMaxSize(),
         contentAlignment = Alignment.TopCenter
     ) {
-        cardsAlert(rif = false, title = "Confirmar Operación", iData = resp)
+        cardsAlert(rif = false, title = stringResource(id = R.string.confirmar_operacion), iData = resp)
         Column(
             modifier = Modifier.align(Alignment.BottomCenter),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -139,7 +139,7 @@ private fun body(
         ) {
 
             BtnNext(
-                text = "Continuar",
+                text = stringResource(id = R.string.continuar),
                 enabled = enabled,
                 onClick = {
                     enabled = !enabled
@@ -152,7 +152,7 @@ private fun body(
                     .width(240.dp)
             )
             BtnNext(
-                text = "Cancelar",
+                text = stringResource(id = R.string.cancelar),
                 onClick = { onClickCancelar() },
                 enabled = enabled,
                 ico = painterResource(id = R.drawable.ic_circle_error),

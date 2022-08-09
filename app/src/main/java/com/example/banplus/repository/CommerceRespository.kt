@@ -3,6 +3,7 @@ package com.example.banplus.repository
 import androidx.lifecycle.LiveData
 import com.example.banplus.db.schema.Commerce
 import com.example.banplus.db.schema.CommerceDao
+import com.example.banplus.utils.getDay
 
 import javax.inject.Inject
 
@@ -30,7 +31,8 @@ class CommerceRespositoryImp @Inject constructor(
         commerceDao.insert(data)
     }
 
+
     override fun updateCommerce(data: Commerce) {
-        commerceDao.update(razonSocial = data.razonSocial,rif = data.rif,tipo =data.tipo,id=data.id)
+        commerceDao.update(razonSocial = data.razonSocial,telefono = data.telefono, rif = data.rif,tipo =data.tipo,id=data.id)
     }
 }

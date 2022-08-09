@@ -3,6 +3,9 @@ package com.example.banplus
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -13,12 +16,14 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.capitalize
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.banplus._interface.iTransaction
 import com.example.banplus.api.vuelto.response.Tranferp2pResponse
 import com.example.banplus.db.schema.Commerce
 import com.example.banplus.db.schema.TransCount
 import com.example.banplus.inject_dependency.HiltInjectApp
+import com.example.banplus.navigation.PathRouter
 import com.example.banplus.ui.theme.BanplusTheme
 import com.example.banplus.viewmodel.ReportesViewModel
 import com.example.banplus.viewmodel.VueltoViewModel
@@ -66,7 +71,24 @@ class MainActivity : ComponentActivity() {
                             onNavigateConfigPost(postActiviry)
                         },
                         onPrintDetails = {a,b ->
-                            onClickimprimir(this,a,b)}
+                            onClickimprimir(this,a,b)},
+                        checkForInternet = { navNa, type->
+                            val aa = checkForInternet(this)
+                                if(type == getString(R.string.vuelto)) {
+
+                                    if (aa) {
+                                    navNa.navigate(PathRouter.VueltoRoute.route)
+                                } else {
+                                        Toast.makeText(this, R.string.no_conexion_internet, Toast.LENGTH_SHORT).show()
+                                    }
+
+
+
+                           }
+                            if(type == getString(R.string.reporte)){
+                                navNa.navigate(PathRouter.ReporteRoute.route)
+                            }
+                        }
 
                     )
                 }
@@ -122,19 +144,19 @@ class MainActivity : ComponentActivity() {
             false
         )
         printer!!.appendPrnStr(
-            "RIF: ${commerce.tipo.capitalize()}-${commerce.rif}",
+            "${getString(R.string.rif)}: ${commerce.tipo.capitalize()}-${commerce.rif}",
             FONT_SIZE_NORMAL,
             AlignEnum.CENTER,
             false
         )
         printer!!.appendPrnStr(
-            "Fecha:",
+            "${getString(R.string.fecha)}:",
             data.fecha,
             FONT_SIZE_NORMAL,
             false
         )
         printer!!.appendPrnStr(
-            "Hora:",
+            "${getString(R.string.hora)}:",
             data.hora,
             FONT_SIZE_NORMAL,
             false
@@ -147,19 +169,19 @@ class MainActivity : ComponentActivity() {
         )
 
         printer!!.appendPrnStr(
-            "Pago Plus",
+            getString(R.string.pago_plus),
             "",
             FONT_SIZE_NORMAL,
             false
         )
         printer!!.appendPrnStr(
-            "Cantidad:",
+            getString(R.string.cantidad),
             "${resp.total}",
             FONT_SIZE_NORMAL,
             false
         )
         printer!!.appendPrnStr(
-            "Monto:",
+            getString(R.string.monto).capitalize(),
             "Bs. ${forma.format(resp.amount)}",
             FONT_SIZE_NORMAL,
             false
@@ -179,7 +201,7 @@ class MainActivity : ComponentActivity() {
                 if(retCode == -1005) {
                     Toast.makeText(
                         athis,
-                        "No tiene papel para imprimir!!",
+                        getString(R.string.no_papel_imprimir),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -194,6 +216,44 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+    }
+    private fun checkForInternet(context: Context): Boolean {
+
+        // register activity with the connectivity manager service
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        // if the android version is equal to M
+        // or greater we need to use the
+        // NetworkCapabilities to check what type of
+        // network has the internet connection
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            // Returns a Network object corresponding to
+            // the currently active default data network.
+            val network = connectivityManager.activeNetwork ?: return false
+
+            // Representation of the capabilities of an active network.
+            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+            return when {
+                // Indicates this network uses a Wi-Fi transport,
+                // or WiFi has network connectivity
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+
+                // Indicates this network uses a Cellular transport. or
+                // Cellular has network connectivity
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+
+                // else return false
+                else -> false
+            }
+        } else {
+            // if the android version is below M
+            @Suppress("DEPRECATION") val networkInfo =
+                connectivityManager.activeNetworkInfo ?: return false
+            @Suppress("DEPRECATION")
+            return networkInfo.isConnected
+        }
     }
 }
 

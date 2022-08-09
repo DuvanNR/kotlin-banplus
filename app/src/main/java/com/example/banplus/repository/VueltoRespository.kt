@@ -13,6 +13,7 @@ import com.example.banplus.api.vuelto.dto.MapperBodyVuelto
 import com.example.banplus.api.vuelto.response.Tranferp2pResponse
 import com.example.banplus.db.schema.*
 import com.example.banplus.utils.getDatetime
+import com.example.banplus.utils.getDay
 import javax.inject.Inject
 
 interface VueltoRespository {
@@ -23,6 +24,7 @@ interface VueltoRespository {
 
     fun getTotalTransfer(): LiveData<TransCount>
     fun getAllTransaccion(): LiveData<List<Transaction>>
+    abstract fun deleteYesterdayInvoice(): Unit
 }
 
 class VueltoRespositoryImp @Inject constructor(
@@ -38,7 +40,6 @@ class VueltoRespositoryImp @Inject constructor(
         val resp = dataSource.emitTransaction(body)
         val vueltoMapper = VueltoDtoMapper()
         val data = getDatetime()
-        "fin_____estamos llegando asta aqui_______________________________data "
         if (resp.msRsH?.codigo == "1") {
             transactionDao.insert(
                 Transaction(
@@ -54,7 +55,6 @@ class VueltoRespositoryImp @Inject constructor(
                     telefono = e.telefono,
                 )
             )
-            "fin____________________________________data "
         }
         vueltoMapper.converterPagoDTOaPago(resp)
     }
@@ -65,6 +65,12 @@ class VueltoRespositoryImp @Inject constructor(
 
     override fun getAllTransaccion(): LiveData<List<Transaction>> {
         return transactionDao.getAll()
+    }
+
+    override fun deleteYesterdayInvoice() {
+        val today = getDatetime()
+        return transactionDao.deleteInvoiceNotToday(today.fecha)
+        println("ultima capa de la logica ${today}")
     }
 
 

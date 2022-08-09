@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.banplus.R
 import com.example.banplus.ui.theme.color_black
@@ -35,7 +36,7 @@ fun BtnNext(ico: Painter, text: String, background: Color = color_black, colorTe
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(text = text)
-            Icon(painter = ico, contentDescription = "Localized description")
+            Icon(painter = ico, contentDescription = stringResource(id = R.string.defualt_message_img))
         }
 
 

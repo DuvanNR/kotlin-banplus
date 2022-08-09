@@ -1,19 +1,19 @@
 package com.example.banplus.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.banplus._interface.iTransaction
 import com.example.banplus.api.ApiResponseStatus
-import com.example.banplus.api.vuelto.dto.MapperBodyVuelto
 import com.example.banplus.api.vuelto.response.Tranferp2pResponse
 import com.example.banplus.db.schema.Commerce
 import com.example.banplus.db.schema.TransCount
 import com.example.banplus.db.schema.Transaction
 import com.example.banplus.repository.VueltoRespository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,7 +21,10 @@ import javax.inject.Inject
 class VueltoViewModel @Inject constructor(
    private val VueltoRepo: VueltoRespository,
 ): ViewModel() {
-
+    private val _isLoading: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>(false)
+    }
+    val isLoading: LiveData<Boolean> get() = _isLoading
     val allTransaction: LiveData<List<Transaction>> by lazy {
         VueltoRepo.getAllTransaccion()
     }
@@ -40,6 +43,19 @@ class VueltoViewModel @Inject constructor(
                 VueltoRepo.emitTransaction(e,commerce)
             )
         }
+    }
+    fun deleteYesterdayInvoice() {
+        if(_isLoading.value == false ) {
+            viewModelScope.launch(Dispatchers.IO) {
+                _isLoading.postValue(true)
+
+                VueltoRepo.deleteYesterdayInvoice()
+
+
+                _isLoading.postValue(false)
+            }
+        }
+
     }
     fun onResetApiResponse() {
         vueltoR.value = null

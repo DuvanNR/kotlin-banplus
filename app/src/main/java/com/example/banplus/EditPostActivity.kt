@@ -15,71 +15,106 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import com.example.banplus._interface.idropdown
-import com.example.banplus.component.BtnNext
-import com.example.banplus.component.DropdownDemo
-import com.example.banplus.component.LoadingWheel
-import com.example.banplus.component.PostField
+import com.example.banplus.api.ApiResponseStatus
+import com.example.banplus.api.backend.dto.LoginDTO
+import com.example.banplus.component.*
 import com.example.banplus.component.header.HeaderInit
 import com.example.banplus.db.schema.Commerce
+import com.example.banplus.inject_dependency.HiltInjectApp
 import com.example.banplus.ui.theme.BanplusTheme
+import com.example.banplus.utils.mobileNumberFilter
+import com.example.banplus.viewmodel.BackendViewModel
 import com.example.banplus.viewmodel.CommerceViewModel
+import com.nexgo.oaf.apiv3.DeviceEngine
+import com.nexgo.oaf.apiv3.DeviceInfo
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
+import kotlin.concurrent.timerTask
 
 @AndroidEntryPoint
 class EditPostActivity : ComponentActivity() {
+    private var deviceEngine: DeviceEngine? = null
+    private var deviceInfo: DeviceInfo? = null
     override fun onCreate(savedInstanceState: Bundle?) {
-        val InitActivity = Intent(this,MainActivity::class.java )
+        val InitActivity = Intent(this, MainActivity::class.java)
         super.onCreate(savedInstanceState)
         setContent {
+            deviceEngine = (application as HiltInjectApp).deviceEngine
+            deviceInfo = deviceEngine!!.deviceInfo
             BanplusTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                        Column(
-                            modifier = Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.Top,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            HeaderInit()
-                            ViewInitBody(intent = {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Top,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        HeaderInit()
+                        BodyComponent(intent = {
                                 startActivity(InitActivity)
                                 finish()
+                        },
+                        serial = "${deviceInfo!!.sn}"
+                            )
 
-                            })
-                        }
+                    }
                 }
             }
         }
     }
 }
 
+@Composable
+private fun  BodyComponent(
+    intent:() -> Unit ,viewModel: CommerceViewModel = hiltViewModel(),
+    backendViewModel: BackendViewModel = hiltViewModel(),
+    serial: String
+    ) {
+    val commerces by viewModel.commerce.observeAsState(Commerce("", "", "", ""))
+    val loadding by viewModel.isLoading.observeAsState(true)
+    val status = backendViewModel.status.value
+    if (status is ApiResponseStatus.Loading) {
+        LoadingWheel()
+    }else if(status is ApiResponseStatus.Error){
+        errorDialog(description = "$status", onDialogDismiss = {})
+    }
+    if(commerces.tipo == "") {
+        LoadingWheel()
+        backendViewModel.login(LoginDTO(username = "banplus01", password = "ADMadm1234"))
+    } else {
+        println("bbbbbbbbbb6ˆˆˆˆ666666666${loadding}")
+        ViewInitBody(intent = intent , viewModel = viewModel , backendViewModel = backendViewModel, serial = serial, commerces = commerces)
+    }
+   }
+
 
 @Composable
-private fun ViewInitBody(viewModel: CommerceViewModel = hiltViewModel(), intent: ()-> Unit) {
-    val commerces by viewModel.commerce.observeAsState(Commerce("", "","",""))
-    val isLoadding by viewModel.isLoading.observeAsState(false)
+private fun ViewInitBody(viewModel: CommerceViewModel, backendViewModel: BackendViewModel,  commerces: Commerce,intent: () -> Unit,serial: String ) {
+    val login = backendViewModel.InfoTerminal.value
+    var serial by remember { mutableStateOf(serial) }
+    var razonSocial by remember { mutableStateOf(commerces.razonSocial) }
+    var telefono by remember { mutableStateOf(commerces.telefono) }
+    var rif by remember { mutableStateOf(commerces.rif) }
+    var tipo by remember { mutableStateOf(idropdown(commerces.tipo, commerces.tipo)) }
+    var btnStatus by remember { mutableStateOf(true) }
+    val context = LocalContext.current
 
-    println("vallidate =====================${commerces.razonSocial == ""}")
-    if(commerces.razonSocial == "") {
-        LoadingWheel()
-    }else {
-        var razonSocial by remember { mutableStateOf(commerces.razonSocial) }
-        var telefono by remember { mutableStateOf(commerces.telefono) }
-        var rif by remember { mutableStateOf(commerces.rif) }
-        var tipo by remember { mutableStateOf(idropdown(commerces.tipo, commerces.tipo)) }
-        var btnStatus by remember { mutableStateOf(true) }
-        val context = LocalContext.current
-        Box(
-            modifier = Modifier
+    if(login.rif !== null) {
+        razonSocial = "${login.nameCommerce}"
+        telefono = "${login.telefono}"
+        rif = "${login.cedula}"
+        tipo = idropdown("${login.typeCedula}","${login.typeCedula}" )
+    }
+    Box(
+        modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 44.dp),
             contentAlignment = Alignment.TopCenter
@@ -87,33 +122,42 @@ private fun ViewInitBody(viewModel: CommerceViewModel = hiltViewModel(), intent:
 
             Column(modifier = Modifier.padding(top = 8.dp)) {
                 PostField(
+                    text = serial,
+                    onValueChange = {},
+                    readOnly = false,
+                    label = stringResource(id = R.string.serial),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+
+                PostField(
                     text = razonSocial,
                     onValueChange = {
                         razonSocial = it
                     },
-                    label = "Razón Social",
+                    label = stringResource(id = R.string.razon_social),
                     modifier = Modifier.fillMaxWidth(),
+                    readOnly = false,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
                     ),
-
-
                     )
                 PostField(
                     text = telefono,
                     onValueChange = {
-                        telefono = if (it.length > 12 || it.any { !it.isDigit() }) telefono else it
+                        telefono = if (it.length > 11 || it.any { !it.isDigit() }) telefono else it
                     },
-                    label = "Telefono",
+                    label = stringResource(id = R.string.telefono),
                     modifier = Modifier.fillMaxWidth(),
+                    readOnly = false,
                     keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
+                        keyboardType = KeyboardType.NumberPassword,
                         imeAction = ImeAction.Next
                     ),
-
-
-                    )
+                    visualTransformation = {
+                        mobileNumberFilter(it)
+                    },
+                )
 
                 Row(modifier = Modifier.fillMaxWidth()) {
                     DropdownDemo(
@@ -121,62 +165,92 @@ private fun ViewInitBody(viewModel: CommerceViewModel = hiltViewModel(), intent:
                             .size(height = 65.dp, width = 89.dp)
                             .padding(end = 2.3.dp),
                         selectedOptionText = tipo, onValueChange = { tipo = it },
-                        label = "Tipo",
+                        label = stringResource(id = R.string.tipo),
+                        readOnly = false,
                         options = ListTypeRif
 
                     )
                     PostField(
                         text = rif,
                         onValueChange = {
-                            rif = if (it.length > 111 || it.any { !it.isDigit() }) rif else it
+                            rif = if (it.length > 12 || it.any { !it.isDigit() }) rif else it
                         },
-                        label = "Rif",
+                        label = stringResource(id = R.string.rif),
                         modifier = Modifier.fillMaxWidth(),
+                        readOnly = false,
                         keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number,
-                            imeAction = ImeAction.Next
+                            keyboardType = KeyboardType.NumberPassword,
                         ),
-                    )
+
+                        )
                 }
 
             }
 
-
-            BtnNext(
-                text = "Guardar",
-                onClick = {
-                    if(razonSocial != "" && telefono != "" && rif != "" ) {
+            if (btnStatus) {
+                BtnNext(
+                    text = stringResource(id = R.string.sincronizar),
+                    onClick = {
                         btnStatus = !btnStatus
-                        viewModel.updateCommerce(
-                            Commerce(
-                                razonSocial = razonSocial,
-                                rif = rif,
-                                telefono = telefono,
-                                tipo = "${tipo.key}",
-                                id = commerces.id
-                            )
-                        )
-                        Toast.makeText(context, "Terminal Actualizado Exitosamente",
+                        backendViewModel.getSerial(serial)
+                        Toast.makeText(
+                            context, "Sincronizando los datos",
                             Toast.LENGTH_SHORT
                         ).show()
-                        intent()
-                    }else {
+                    },
+                    ico = painterResource(id = R.drawable.ic_next),
+                    enabled = btnStatus,
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(4.dp)
+                        .height(49.dp)
+                        .width(240.dp)
+                )
+            } else {
+                BtnNext(
+                    text = stringResource(id = R.string.guardar),
+                    enabled = !btnStatus,
+                    onClick = {
+                        if (razonSocial != "" && telefono != "" && rif != "") {
+                            if (telefono.length == 11) {
+                                viewModel.updateCommerce(
+                                    Commerce(
+                                        razonSocial = razonSocial,
+                                        rif = rif,
+                                        telefono = telefono,
+                                        tipo = "${tipo.key}",
+                                        id = commerces.id
+                                    )
+                                )
+                                Toast.makeText(
+                                    context, "Terminal Actualizado Exitosamente",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                intent()
+                            } else {
+                                Toast.makeText(
+                                    context, R.string.validTelefono,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        } else {
 
-                        Toast.makeText(context, "Debes llenar todos los campos",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                },
-                enabled = btnStatus,
-                ico = painterResource(id = R.drawable.ic_next),
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(4.dp)
-                    .height(49.dp)
-                    .width(240.dp)
-            )
+                            Toast.makeText(
+                                context, "Debes llenar todos los campos",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    },
+                    ico = painterResource(id = R.drawable.ic_next),
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(4.dp)
+                        .height(49.dp)
+                        .width(240.dp)
+                )
+
+            }
         }
-    }
 
 }
 

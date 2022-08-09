@@ -12,6 +12,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -34,7 +35,7 @@ import java.util.*
 @Composable
 fun cardsAlert(
     rif: Boolean = true,
-    title: String = "Consolidado Diario",
+    title: String = stringResource(id = R.string.Consolidado_Diario),
     status: Boolean = true,
     iData: iTransaction = iTransaction(),
     viewModel: CommerceViewModel = hiltViewModel(),
@@ -70,8 +71,8 @@ fun cardsAlert(
 
             }
             when (title) {
-                "Consolidado Diario" -> CardA(detailsData)
-                "Confirmar Operación" -> CardC(iData)
+                stringResource(id = R.string.Consolidado_Diario) -> CardA(detailsData)
+                stringResource(id = R.string.Confirmar_Operacion) -> CardC(iData)
                 else -> CardB(status = status, dataTransfer = iData)
             }
         }
@@ -91,21 +92,21 @@ fun CardC(iData: iTransaction) {
                 .fillMaxWidth()
                 .padding(top = 88.dp)
         ) {
-            Text(text = "Cédula:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
+            Text(text = "${stringResource(id = R.string.cedula)}: ", color = color_fontbtn, fontWeight = FontWeight.Bold)
             Text(text = "${iData.tipo.capitalize()}-${iData.cedula}", color = color_fontbtn)
         }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text(text = "Teléfono:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
+            Text(text = "${stringResource(id = R.string.telefono)}: ", color = color_fontbtn, fontWeight = FontWeight.Bold)
             Text(text = iData.telefono, color = color_fontbtn)
         }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text(text = "Banco:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
+            Text(text = "${stringResource(id = R.string.banco)}:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
             Text(text = "${iData.nameBanco}", color = color_fontbtn)
         }
 
@@ -117,14 +118,14 @@ fun CardC(iData: iTransaction) {
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "MONTO",
+                text = stringResource(id = R.string.monto),
                 fontSize = 20.sp,
                 color = color_black,
                 fontWeight = FontWeight.Bold
             )
-            val forma = DecimalFormat("#,##0.00")
+            val amountConverte  = iData.monto.toDouble()
             Text(
-                text = "Bs. ${forma.format("${iData.monto}".toFloat())}",
+                text = "Bs. ${"%,.2f".format(Locale.GERMAN, amountConverte)}",
                 fontWeight = FontWeight.Bold,
                 fontSize = 28.sp,
                 color = color_black
@@ -147,14 +148,14 @@ fun CardA(CountTransa: TransCount) {
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text(text = "Fecha:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
+            Text(text = "${stringResource(id = R.string.fecha)}:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
             Text(text = "${date.hora}", color = color_fontbtn)
 
         }
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = "Hora:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
+            Text(text = "${stringResource(id = R.string.hora)}:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
             Text(text = "${date.fecha}", color = color_fontbtn)
         }
         Row(
@@ -162,13 +163,13 @@ fun CardA(CountTransa: TransCount) {
                 .padding(top = 13.dp)
                 .fillMaxWidth()
         ) {
-            Text(text = "Pago Plus ", fontWeight = FontWeight.Bold)
+            Text(text = "${stringResource(id = R.string.pago_plus)} ", fontWeight = FontWeight.Bold)
         }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text(text = "Cantidad:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
+            Text(text = "${stringResource(id = R.string.cantidad)}:  ", color = color_fontbtn, fontWeight = FontWeight.Bold)
             Text(text = "${CountTransa.total}", color = color_fontbtn)
         }
         Row(
@@ -177,10 +178,11 @@ fun CardA(CountTransa: TransCount) {
             horizontalArrangement = Arrangement.Start
         ) {
             Text(
-                text = "MONTO: ",
+                text = "${stringResource(id = R.string.monto)}: ",
                 color = color_fontbtn,
                 fontWeight = FontWeight.Bold
             )
+
             val forma = DecimalFormat("#,##0.00")
             Text(
 
@@ -196,14 +198,14 @@ fun CardB(status: Boolean, dataTransfer: iTransaction) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 87.dp, bottom = 8.dp,start = 25.dp, end = 25.dp)
+            .padding(top = 87.dp, bottom = 8.dp, start = 25.dp, end = 25.dp)
 
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text(text = "Fecha:  ", color = color_fontbtn,fontSize = 14.sp, fontWeight = FontWeight.Bold)
+            Text(text = "${stringResource(id = R.string.fecha)}:  ", color = color_fontbtn,fontSize = 14.sp, fontWeight = FontWeight.Bold)
             Text(text = dataTransfer.fecha, fontSize = 14.sp,color = color_fontbtn)
 
         }
@@ -212,7 +214,7 @@ fun CardB(status: Boolean, dataTransfer: iTransaction) {
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text(text = "Hora:  ", color = color_fontbtn, fontSize = 14.sp,fontWeight = FontWeight.Bold)
+            Text(text = "${stringResource(id = R.string.hora)}:  ", color = color_fontbtn, fontSize = 14.sp,fontWeight = FontWeight.Bold)
             Text(text = dataTransfer.hora, fontSize = 14.sp,color = color_fontbtn)
         }
 
@@ -220,7 +222,7 @@ fun CardB(status: Boolean, dataTransfer: iTransaction) {
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text(text = "Cedula:  ", color = color_fontbtn, fontSize = 14.sp,fontWeight = FontWeight.Bold)
+            Text(text = "${stringResource(id = R.string.cedula)}:  ", color = color_fontbtn, fontSize = 14.sp,fontWeight = FontWeight.Bold)
             Text(
                 text = "${dataTransfer.tipo.capitalize()}-${ConverString("${dataTransfer.cedula}")}",
                 fontSize = 14.sp,
@@ -231,14 +233,14 @@ fun CardB(status: Boolean, dataTransfer: iTransaction) {
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text(text = "Teléfono:  ", color = color_fontbtn,fontSize = 14.sp, fontWeight = FontWeight.Bold)
+            Text(text = "${stringResource(id = R.string.telefono)}:  ", color = color_fontbtn,fontSize = 14.sp, fontWeight = FontWeight.Bold)
             Text(text = ConverString("${dataTransfer.telefono}", init = 4, fin = 3), fontSize = 14.sp,color = color_fontbtn)
         }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text(text = "Banco:  ", color = color_fontbtn, fontSize = 14.sp,fontWeight = FontWeight.Bold)
+            Text(text = "${stringResource(id = R.string.banco)}:  ", color = color_fontbtn, fontSize = 14.sp,fontWeight = FontWeight.Bold)
             Text(text = "${dataTransfer.nameBanco}", fontSize = 14.sp,color = color_fontbtn)
         }
         if (status) {
@@ -246,7 +248,7 @@ fun CardB(status: Boolean, dataTransfer: iTransaction) {
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                Text(text = "Ref:  ", color = color_fontbtn, fontSize = 14.sp,fontWeight = FontWeight.Bold)
+                Text(text = "${stringResource(id = R.string.ref)}:  ", color = color_fontbtn, fontSize = 14.sp,fontWeight = FontWeight.Bold)
 
                 Text(text = "${dataTransfer.ref}", fontSize = 14.sp,color = color_fontbtn)
             }
@@ -262,13 +264,13 @@ fun CardB(status: Boolean, dataTransfer: iTransaction) {
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "MONTO: ",
+                text = "${stringResource(id = R.string.monto)}: ",
                 color = color_black,
                 fontWeight = FontWeight.Bold
             )
             val forma = DecimalFormat("#,##0.00")
             Text(
-                text = "Bs. ${forma.format("${dataTransfer.monto}".toFloat())}",
+                text = "Bs. ${forma.format("${dataTransfer.monto}".toDouble())}",
                 fontWeight = FontWeight.Bold,
                 color = color_black
             )
@@ -285,7 +287,7 @@ fun CardB(status: Boolean, dataTransfer: iTransaction) {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Aprobado",
+                    text = stringResource(id = R.string.aprobado),
                     fontSize = 18.sp,
                     color = color_success,
                     fontWeight = FontWeight.Bold
@@ -301,7 +303,7 @@ fun CardB(status: Boolean, dataTransfer: iTransaction) {
                     modifier = Modifier.fillMaxSize(0.18F),
                     tint = color_success,
                     painter = painterResource(id = R.drawable.ic_chech_ok),
-                    contentDescription = "Localized description"
+                    contentDescription = stringResource(id = R.string.defualt_message_img)
                 )
 
             }
@@ -312,8 +314,10 @@ fun CardB(status: Boolean, dataTransfer: iTransaction) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
+                val message = if(dataTransfer.message == "null") "Conexión Fallida" else dataTransfer.message
+                println("validar si este campo es null o que  $}")
                 Text(
-                    text = "NEGADA, ${dataTransfer.message}",
+                    text = "${stringResource(id = R.string.negada)}, $message",
                     fontSize = 13.sp,
                     color = color_danger,
                     fontWeight = FontWeight.Bold
@@ -329,7 +333,7 @@ fun CardB(status: Boolean, dataTransfer: iTransaction) {
                     modifier = Modifier.fillMaxSize(0.18F),
                     tint = color_danger,
                     painter = painterResource(id = R.drawable.ic_circle_error),
-                    contentDescription = "Localized description"
+                    contentDescription = stringResource(id = R.string.default_icon)
                 )
 
             }

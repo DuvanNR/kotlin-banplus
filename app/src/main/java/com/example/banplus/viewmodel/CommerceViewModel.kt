@@ -25,6 +25,7 @@ class CommerceViewModel @Inject constructor(
     val commerces: LiveData<List<Commerce>> by lazy {
         commerceDao.getAll()
     }
+
     fun addCommerce(data: Commerce) {
         if(_isLoading.value == false ) {
             viewModelScope.launch(Dispatchers.IO) {

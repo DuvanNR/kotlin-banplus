@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.banplus.R
@@ -43,14 +44,14 @@ private fun BodyContentA(onClick: () -> Unit, iData: iTransaction, onclickimprim
             .padding(top = 9.dp),
         contentAlignment = Alignment.TopCenter
     ) {
-        cardsAlert(rif = true, title = "Recibo Operación", status = status, iData = iData )
+        cardsAlert(rif = true, title = stringResource(id = R.string.recibo_operacion), status = status, iData = iData )
         Column(
             modifier = Modifier.align(Alignment.BottomCenter),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             BtnNext(
-                text = "Imprimir",
+                text = stringResource(id = R.string.imprimir),
                 onClick = { onclickimprimir(commerce.value) },
                 ico = painterResource(id = R.drawable.ic_next),
                 modifier = Modifier
@@ -59,7 +60,7 @@ private fun BodyContentA(onClick: () -> Unit, iData: iTransaction, onclickimprim
                     .width(240.dp)
             )
             BtnNext(
-                text = "Finalizar",
+                text = stringResource(id = R.string.finalizar),
                 onClick =  {onClick()},
                 ico = painterResource(id = R.drawable.ic_next),
                 background= color_fontbtn,

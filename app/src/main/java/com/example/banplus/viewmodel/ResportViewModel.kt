@@ -30,13 +30,13 @@ class ReportesViewModel @Inject constructor(
         }
     }
 
+
     fun onResetApiResponse() {
         status.value = null
     }
     @Suppress("UNCHE")
     private fun handleResponseStatus(apiResponseStatus: ApiResponseStatus<List<ReportesResponse.Movimiento>>) {
         if (apiResponseStatus is ApiResponseStatus.Success) {
-            println("______${apiResponseStatus.data[0]}_______")
             resp.value = apiResponseStatus.data
         }
         status.value = apiResponseStatus as ApiResponseStatus<Any>

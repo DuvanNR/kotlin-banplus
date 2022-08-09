@@ -9,7 +9,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.OffsetMapping
@@ -30,7 +32,7 @@ import java.text.DecimalFormat
 
 @Composable
 fun vueltoNextForm(
-    navigate: NavController,
+navigate: NavController,
     resp: iTransaction
 ) {
     Scaffold() {
@@ -57,7 +59,7 @@ fun vueltoNextForm(
                 } else {
                     Toast.makeText(
                         context,
-                        "El monto tiene que se mayor a 0.01",
+                        R.string.error_monto_min,
                         Toast.LENGTH_SHORT
                     ).show()
 
@@ -76,7 +78,7 @@ fun nextVueltoBody(onClick: (iTransaction) -> Unit) {
         mutableStateOf<idropdown>(
             idropdown(
                 key = "0174",
-                title = "Banplus, C.A."
+                title = "Banplus, C.A. Banco Universal"
             )
         )
     }
@@ -99,7 +101,7 @@ fun nextVueltoBody(onClick: (iTransaction) -> Unit) {
             DropdownDemo(
                 modifier = Modifier.fillMaxWidth(),
                 selectedOptionText = banco, onValueChange = { banco = it },
-                label = "Banco",
+                label = stringResource(id = R.string.banco).capitalize(),
                 options = BancosList
 
             )
@@ -107,17 +109,17 @@ fun nextVueltoBody(onClick: (iTransaction) -> Unit) {
                 if (it.startsWith("0")) {
                   monto =  ""
                 } else {
-                   monto = if (it.length > 11) monto else it
+                   monto = if (it.length > 10) monto else it
                 }
             })
         }
         BtnNext(
-            text = "Siguiente",
+            text = stringResource(id = R.string.siguiente),
             onClick = {
                 onClick(
                     iTransaction(
                         banco = "${banco.key}",
-                        monto = "${monto}",
+                        monto = monto,
                         nameBanco = "${banco.title}",
                     )
                 )

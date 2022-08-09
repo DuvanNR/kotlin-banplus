@@ -40,5 +40,6 @@ interface TransactionDao {
 
     @Query("SELECT (select sum(tr.monto) from `transaction` as tr) as amount, (1) as id,(select count(*) from `transaction` ) as total")
     fun countResult(): LiveData<TransCount>
-
+    @Query("delete from `transaction` where fecha != :fecha")
+    fun deleteInvoiceNotToday(fecha: String)
 }

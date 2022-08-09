@@ -8,45 +8,65 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import java.text.DecimalFormat
 import java.lang.Integer.max
-const val mask = "xx xxx xx xx"
-fun mobileNumberFilter(text: AnnotatedString): TransformedText {
+
+const val mask = "(xxxx) xxx-xxxx"
+fun mobileNumberFilter(text: AnnotatedString):
+        TransformedText {
+//    if (formType != FormType.SHIPPING_PHONE) {
+//        return VisualTransformation.None.filter(text)
+//    }
+
     // change the length
     val trimmed =
-        if (text.text.length >= 9) text.text.substring(0..8) else text.text
+        if (text.text.length >= 15) text.text.substring(0..13) else text.text
 
     val annotatedString = AnnotatedString.Builder().run {
         for (i in trimmed.indices) {
-            append(trimmed[i])
-            if (i == 1 || i == 4 || i == 6) {
-                append(" ")
+            val trimmedPortion = trimmed[i]
+            if (i == 0) {
+                append("($trimmedPortion")
+            } else {
+                append(trimmedPortion)
+            }
+            if (i == 3) {
+                append(") ")
+            }
+            if (i == 6) {
+                append("-")
             }
         }
-        pushStyle(SpanStyle(color = Color.Gray))
-        append(mask.takeLast(mask.length - length))
+        pushStyle(
+            SpanStyle(color = Color.LightGray)
+        )
+        try {
+            append(mask.takeLast(mask.length - length))
+        } catch (e: IllegalArgumentException) {
+//            Timber.d(e.localizedMessage?.plus(" reached end of phone number"))
+        }
+
         toAnnotatedString()
     }
 
-    val phoneNumberOffsetTranslator = object : OffsetMapping {
+    val translator = object : OffsetMapping {
         override fun originalToTransformed(offset: Int): Int {
-            if (offset <= 1) return offset
             if (offset <= 4) return offset + 1
-            if (offset <= 6) return offset + 2
-            if (offset <= 9) return offset + 3
-            return 12
+            if (offset <= 7) return offset + 3
+            if (offset <= 11) return offset + 4
+            return 15
+
         }
 
         override fun transformedToOriginal(offset: Int): Int {
-            if (offset <= 1) return offset
-            if (offset <= 4) return offset - 1
-            if (offset <= 6) return offset - 2
-            if (offset <= 9) return offset - 3
-            return 9
+            if (offset <= 4) return offset + 1
+            if (offset <= 7) return offset + 3
+            if (offset <= 11) return offset + 4
+            return 15
+
         }
     }
 
-    return TransformedText(annotatedString, phoneNumberOffsetTranslator)
+    return TransformedText(annotatedString, translator)
 }
-
 //
 //class MaskTransformation() : VisualTransformation {
 //    override fun filter(text: AnnotatedString): TransformedText {

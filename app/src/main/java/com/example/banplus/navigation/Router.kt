@@ -1,6 +1,7 @@
 package com.example.banplus.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,6 +18,7 @@ fun Router(
     onEventTransction: (iData: iTransaction, String) -> Unit,
     onGoToReportes: () -> Unit,
     onPrintDetails: (TransCount, Commerce) -> Unit,
+    checkForInternet:(aa: NavController, bb: String) -> Unit,
     IrEditTerminal:() -> Unit = {}
 
     ) {
@@ -41,7 +43,9 @@ fun Router(
             ViewVuelto(navController)
         }
         composable(route = PathRouter.HomeRoute.route) {
-            ViewInit(navController, IrEditTerminal = IrEditTerminal)
+            ViewInit( IrEditTerminal = IrEditTerminal, checkForInternet={
+                checkForInternet(navController, it)
+            })
         }
 
 
@@ -68,6 +72,7 @@ fun Router(
     }
 
 }
+
 
 fun getPath(): String {
     return PathRouter.ConfirTrancation.route + "/{tipo}/{cedula}/{cell}/{banco}/{monto}/{nameBanco}"

@@ -9,7 +9,7 @@ import com.example.banplus._interface.idropdown
 @Composable
 fun DropdownDemo(
     modifier: Modifier = Modifier,
-    selectedOptionText: idropdown, onValueChange: (idropdown) -> Unit, label:String, options:List<idropdown>) {
+    selectedOptionText: idropdown, onValueChange: (idropdown) -> Unit, label:String, options:List<idropdown>, readOnly:Boolean = true) {
     var expanded by remember { mutableStateOf(false) }
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -19,8 +19,8 @@ fun DropdownDemo(
         }
     ) {
         OutlinedTextField (
-            readOnly = true,
             modifier = modifier,
+            enabled = readOnly,
             value = "${selectedOptionText.title}",
             onValueChange = { onValueChange(idropdown(key="$it", title="${selectedOptionText.title}"))},
             label = { Text(label) },

@@ -16,3 +16,7 @@ fun getDatetime(): iFechahora {
         fecha = formatterfecha.format(Date())
     )
 }
+fun getDay(): String {
+    val formatter = SimpleDateFormat("dd")
+    return  formatter.format(Date())
+}

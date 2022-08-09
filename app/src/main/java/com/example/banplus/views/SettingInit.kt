@@ -10,23 +10,30 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.banplus.ListTypeDocument
 import com.example.banplus.ListTypeRif
 import com.example.banplus.R
 import com.example.banplus._interface.idropdown
-import com.example.banplus.api.ApiResponseStatus
+import com.example.banplus.api.backend.dto.LoginDTO
 import com.example.banplus.component.*
 import com.example.banplus.component.header.HeaderInit
+import com.example.banplus.utils.mobileNumberFilter
+import androidx.compose.material.Text
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+import com.example.banplus.api.ApiResponseStatus
 import com.example.banplus.db.schema.Commerce
+import com.example.banplus.viewmodel.BackendViewModel
 import com.example.banplus.viewmodel.CommerceViewModel
+import java.util.*
+import kotlin.concurrent.timerTask
 
 @Composable
-fun SettingInitView(viewModel: CommerceViewModel = hiltViewModel(),onRedirection:()->Unit) {
+fun SettingInitView(viewModel: CommerceViewModel = hiltViewModel(),  backendViewModel:  BackendViewModel = hiltViewModel(), onRedirection:()->Unit, serial: String) {
     val commerces by viewModel.commerces.observeAsState(arrayListOf())
     val isLoaddig by viewModel.isLoading.observeAsState(false)
     if(commerces.isNotEmpty()) {
@@ -39,61 +46,71 @@ fun SettingInitView(viewModel: CommerceViewModel = hiltViewModel(),onRedirection
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 HeaderInit()
-                ViewInitBody(viewModel)
+                ViewInitBody(viewModel, serial = serial, backendViewModel = backendViewModel)
             }
         }
 
     }
 
-    if (isLoaddig) {
+    val status = backendViewModel.status.value
+    if (status is ApiResponseStatus.Loading) {
         LoadingWheel()
+    }else if(status is ApiResponseStatus.Error){
+        errorDialog(description = "$status", onDialogDismiss = {})
     }
 
 }
 
 
 @Composable
-private fun ViewInitBody(viewModel: CommerceViewModel) {
-    var razonSocial by remember { mutableStateOf("") }
-    var telefono by remember { mutableStateOf("") }
-    var rif by remember { mutableStateOf("") }
-    var tipo by remember { mutableStateOf(idropdown("V", "V")) }
+private fun ViewInitBody(viewModel: CommerceViewModel, serial: String,  backendViewModel:  BackendViewModel) {
+
     var btnStatus by remember { mutableStateOf(true) }
     val context = LocalContext.current
+    var token = backendViewModel.resp.value
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 44.dp),
         contentAlignment = Alignment.TopCenter
     ) {
-
+        if(backendViewModel.InfoTerminal.value.rif !== null){
+            val aa = backendViewModel.InfoTerminal.value
+            var razonSocial by remember { mutableStateOf(aa.nameCommerce) }
+            var telefono by remember { mutableStateOf(aa.telefono) }
+            var rif by remember { mutableStateOf(aa.cedula) }
+            var tipo by remember { mutableStateOf(idropdown(aa.typeCedula, aa.typeCedula)) }
             Column(modifier = Modifier.padding(top = 8.dp)) {
                 PostField(
-                    text = razonSocial,
+                    text = "$razonSocial",
                     onValueChange = {
                         razonSocial =
-                            if (it.length > 30 || it.any { !it.isLowerCase() }) razonSocial else it
+                            if (it.length > 30 ) razonSocial else it
                     },
-                    label = "Razón Social",
+                    label = stringResource(id = R.string.razon_social),
+                    readOnly = false,
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
                     ),
-
-
                     )
                 PostField(
-                    text = telefono,
+                    text = "$telefono",
                     onValueChange = {
-                        telefono = if (it.length > 12 || it.any { !it.isDigit() }) telefono else it
+                        telefono = if (it.length > 11 || it.any { !it.isDigit() }) telefono else it
                     },
-                    label = "Telefono",
+                    readOnly = false,
+                    label = stringResource(id = R.string.telefono),
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
+                        keyboardType = KeyboardType.NumberPassword,
                         imeAction = ImeAction.Next
                     ),
+                    visualTransformation = {
+                        mobileNumberFilter(it)
+                    },
 
 
                     )
@@ -103,55 +120,74 @@ private fun ViewInitBody(viewModel: CommerceViewModel) {
                         Modifier
                             .size(height = 65.dp, width = 89.dp)
                             .padding(end = 2.3.dp),
+                        readOnly = false,
                         selectedOptionText = tipo, onValueChange = { tipo = it },
-                        label = "Tipo",
+                        label = stringResource(id = R.string.tipo),
                         options = ListTypeRif
 
                     )
                     PostField(
-                        text = rif,
+                        text = "$rif",
+                        readOnly = false,
                         onValueChange = {
-                            rif = if (it.length > 111 || it.any { !it.isDigit() }) rif else it
+                            rif = if (it.length > 12 || it.any { !it.isDigit() }) rif else it
                         },
-                        label = "Rif",
+                        label = stringResource(id = R.string.rif),
                         modifier = Modifier.fillMaxWidth(),
                         keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number,
+                            keyboardType = KeyboardType.NumberPassword,
                             imeAction = ImeAction.Next
                         ),
                     )
                 }
 
             }
-
-
-        BtnNext(
-            text = "Guardar",
-            onClick = {
-                if(razonSocial != "" && telefono != "" && rif != "" ) {
-                    btnStatus = !btnStatus
-                    viewModel.addCommerce(
-                        Commerce(
-                            razonSocial = razonSocial,
-                            rif = rif,
-                            telefono = telefono,
+            BtnNext(
+                text = stringResource(id = R.string.guardar),
+                onClick = {
+                        btnStatus = true
+                        viewModel.addCommerce(
+                            Commerce(
+                            razonSocial = "$razonSocial",
+                            rif = "$rif",
+                            telefono = "$telefono",
                             tipo = "${tipo.key}"
                         )
                     )
-                }else {
+                },
+                enabled = !btnStatus,
+                ico = painterResource(id = R.drawable.ic_next),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(4.dp)
+                    .height(49.dp)
+                    .width(240.dp)
+            )
+        }else {
+            Text(text = stringResource(id = R.string.config_terminal), modifier = Modifier.align(Alignment.TopCenter).padding(top = 20.dp), fontWeight = FontWeight.Bold,fontSize = 20.sp)
+            Text(text = "Serial: $serial", modifier = Modifier.align(Alignment.TopCenter).padding(top = 70.dp), fontWeight = FontWeight.Bold, fontSize = 20.sp)
+            BtnNext(
+                text = stringResource(id = R.string.sincronizar),
+                onClick = {
+                    btnStatus = false
+                    backendViewModel.login(LoginDTO(username = "banplus01", password = "ADMadm1234"))
+                    Timer().schedule(timerTask {
+                        backendViewModel.getSerial(serial)
+                    }, 2000)
+                },
+                enabled = btnStatus,
+                ico = painterResource(id = R.drawable.ic_next),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(4.dp)
+                    .height(49.dp)
+                    .width(240.dp)
+            )
 
-                    Toast.makeText(context, "Debes llenar todos los campos",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            },
-            enabled = btnStatus,
-            ico = painterResource(id = R.drawable.ic_next),
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(4.dp)
-                .height(49.dp)
-                .width(240.dp)
-        )
+        }
+
+
+
     }
+
 }

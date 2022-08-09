@@ -15,10 +15,10 @@ fun PostField(
     modifier: Modifier = Modifier,
     keyboardOptions: KeyboardOptions = KeyboardOptions(),
     visualTransformation: VisualTransformation = VisualTransformation.None,
-
-
+    readOnly: Boolean = true
     ) {
     OutlinedTextField(
+        enabled = readOnly,
         value = text,
         onValueChange = { onValueChange(it) },
         visualTransformation = visualTransformation ,
