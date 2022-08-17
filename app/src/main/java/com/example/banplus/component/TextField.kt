@@ -18,6 +18,7 @@ fun PostField(
     readOnly: Boolean = true
     ) {
     OutlinedTextField(
+
         enabled = readOnly,
         value = text,
         onValueChange = { onValueChange(it) },

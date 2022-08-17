@@ -1,6 +1,6 @@
 package com.example.banplus
 
-const val URL_BASE = "http://45.179.13.55:8090"
+const val URL_BASE = "http://201.222.3.12:8091"
 const val ADD_TRANSACTIONS = "/proxy/pago/p2p/ext/rest/pagoP2pExt"
 const val LIST_TRANSACTIONS = "/proxy/listar/movimientos/ext/rest/listarMovimientosExt"
 const val  TIME_OUT: Long = 120

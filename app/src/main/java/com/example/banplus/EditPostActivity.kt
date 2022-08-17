@@ -28,14 +28,13 @@ import com.example.banplus.component.header.HeaderInit
 import com.example.banplus.db.schema.Commerce
 import com.example.banplus.inject_dependency.HiltInjectApp
 import com.example.banplus.ui.theme.BanplusTheme
+import com.example.banplus.utils.ConverString
 import com.example.banplus.utils.mobileNumberFilter
 import com.example.banplus.viewmodel.BackendViewModel
 import com.example.banplus.viewmodel.CommerceViewModel
 import com.nexgo.oaf.apiv3.DeviceEngine
 import com.nexgo.oaf.apiv3.DeviceInfo
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
-import kotlin.concurrent.timerTask
 
 @AndroidEntryPoint
 class EditPostActivity : ComponentActivity() {
@@ -58,12 +57,13 @@ class EditPostActivity : ComponentActivity() {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         HeaderInit()
-                        BodyComponent(intent = {
+                        BodyComponent(
+                            intent = {
                                 startActivity(InitActivity)
                                 finish()
-                        },
-                        serial = "${deviceInfo!!.sn}"
-                            )
+                            },
+                            serial = "${deviceInfo!!.sn}"
+                        )
 
                     }
                 }
@@ -73,31 +73,46 @@ class EditPostActivity : ComponentActivity() {
 }
 
 @Composable
-private fun  BodyComponent(
-    intent:() -> Unit ,viewModel: CommerceViewModel = hiltViewModel(),
+private fun BodyComponent(
+    intent: () -> Unit, viewModel: CommerceViewModel = hiltViewModel(),
     backendViewModel: BackendViewModel = hiltViewModel(),
     serial: String
-    ) {
+) {
     val commerces by viewModel.commerce.observeAsState(Commerce("", "", "", ""))
     val loadding by viewModel.isLoading.observeAsState(true)
     val status = backendViewModel.status.value
     if (status is ApiResponseStatus.Loading) {
         LoadingWheel()
-    }else if(status is ApiResponseStatus.Error){
-        errorDialog(description = "$status", onDialogDismiss = {})
+    } else if (status is ApiResponseStatus.Error) {
+        errorDialog(description = status.messageId, onDialogDismiss = {
+            backendViewModel.status.value = null
+        })
     }
-    if(commerces.tipo == "") {
+    if (commerces.tipo == "") {
         LoadingWheel()
-        backendViewModel.login(LoginDTO(username = "banplus01", password = "ADMadm1234"))
+        backendViewModel.login(LoginDTO(username = stringResource(id = R.string.USER_BACKEND), password = stringResource(
+            id = R.string.PASS_BACKEND
+        )))
     } else {
-        println("bbbbbbbbbb6ˆˆˆˆ666666666${loadding}")
-        ViewInitBody(intent = intent , viewModel = viewModel , backendViewModel = backendViewModel, serial = serial, commerces = commerces)
+        ViewInitBody(
+            intent = intent,
+            viewModel = viewModel,
+            backendViewModel = backendViewModel,
+            serial = serial,
+            commerces = commerces
+        )
     }
-   }
+}
 
 
 @Composable
-private fun ViewInitBody(viewModel: CommerceViewModel, backendViewModel: BackendViewModel,  commerces: Commerce,intent: () -> Unit,serial: String ) {
+private fun ViewInitBody(
+    viewModel: CommerceViewModel,
+    backendViewModel: BackendViewModel,
+    commerces: Commerce,
+    intent: () -> Unit,
+    serial: String
+) {
     val login = backendViewModel.InfoTerminal.value
     var serial by remember { mutableStateOf(serial) }
     var razonSocial by remember { mutableStateOf(commerces.razonSocial) }
@@ -107,150 +122,145 @@ private fun ViewInitBody(viewModel: CommerceViewModel, backendViewModel: Backend
     var btnStatus by remember { mutableStateOf(true) }
     val context = LocalContext.current
 
-    if(login.rif !== null) {
+    if (login.rif !== null) {
         razonSocial = "${login.nameCommerce}"
         telefono = "${login.telefono}"
         rif = "${login.cedula}"
-        tipo = idropdown("${login.typeCedula}","${login.typeCedula}" )
+        tipo = idropdown("${login.typeCedula}", "${login.typeCedula}")
     }
     Box(
         modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 44.dp),
-            contentAlignment = Alignment.TopCenter
-        ) {
+            .fillMaxSize()
+            .padding(horizontal = 44.dp),
+        contentAlignment = Alignment.TopCenter
+    ) {
 
-            Column(modifier = Modifier.padding(top = 8.dp)) {
-                PostField(
-                    text = serial,
-                    onValueChange = {},
-                    readOnly = false,
-                    label = stringResource(id = R.string.serial),
-                    modifier = Modifier.fillMaxWidth(),
-                )
+        Column(modifier = Modifier.padding(top = 8.dp)) {
+            PostField(
+                text = serial,
+                onValueChange = {},
+                readOnly = false,
+                label = stringResource(id = R.string.serial),
+                modifier = Modifier.fillMaxWidth(),
+            )
 
+            PostField(
+                text = razonSocial,
+                onValueChange = {},
+                label = stringResource(id = R.string.razon_social),
+                modifier = Modifier.fillMaxWidth(),
+                readOnly = false,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next
+                ),
+            )
+            PostField(
+                text = ConverString("${telefono}",4,3),
+                onValueChange = {},
+                label = stringResource(id = R.string.telefono),
+                modifier = Modifier.fillMaxWidth(),
+                readOnly = false,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.NumberPassword,
+                    imeAction = ImeAction.Next
+                ),
+                visualTransformation = {
+                    mobileNumberFilter(it)
+                },
+            )
+
+            Row(modifier = Modifier.fillMaxWidth()) {
                 PostField(
-                    text = razonSocial,
-                    onValueChange = {
-                        razonSocial = it
-                    },
-                    label = stringResource(id = R.string.razon_social),
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .size(height = 65.dp, width = 89.dp)
+                        .padding(end = 2.3.dp),
+                    text = "${tipo.key}",
+                    onValueChange = {  },
+                    label = stringResource(id = R.string.tipo),
                     readOnly = false,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next
-                    ),
+
                     )
                 PostField(
-                    text = telefono,
+                    text = rif,
                     onValueChange = {
-                        telefono = if (it.length > 11 || it.any { !it.isDigit() }) telefono else it
                     },
-                    label = stringResource(id = R.string.telefono),
+                    label = stringResource(id = R.string.rif),
                     modifier = Modifier.fillMaxWidth(),
                     readOnly = false,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.NumberPassword,
-                        imeAction = ImeAction.Next
                     ),
-                    visualTransformation = {
-                        mobileNumberFilter(it)
-                    },
-                )
-
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    DropdownDemo(
-                        Modifier
-                            .size(height = 65.dp, width = 89.dp)
-                            .padding(end = 2.3.dp),
-                        selectedOptionText = tipo, onValueChange = { tipo = it },
-                        label = stringResource(id = R.string.tipo),
-                        readOnly = false,
-                        options = ListTypeRif
 
                     )
-                    PostField(
-                        text = rif,
-                        onValueChange = {
-                            rif = if (it.length > 12 || it.any { !it.isDigit() }) rif else it
-                        },
-                        label = stringResource(id = R.string.rif),
-                        modifier = Modifier.fillMaxWidth(),
-                        readOnly = false,
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.NumberPassword,
-                        ),
-
-                        )
-                }
-
             }
 
-            if (btnStatus) {
-                BtnNext(
-                    text = stringResource(id = R.string.sincronizar),
-                    onClick = {
-                        btnStatus = !btnStatus
-                        backendViewModel.getSerial(serial)
-                        Toast.makeText(
-                            context, "Sincronizando los datos",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    },
-                    ico = painterResource(id = R.drawable.ic_next),
-                    enabled = btnStatus,
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(4.dp)
-                        .height(49.dp)
-                        .width(240.dp)
-                )
-            } else {
-                BtnNext(
-                    text = stringResource(id = R.string.guardar),
-                    enabled = !btnStatus,
-                    onClick = {
-                        if (razonSocial != "" && telefono != "" && rif != "") {
-                            if (telefono.length == 11) {
-                                viewModel.updateCommerce(
-                                    Commerce(
-                                        razonSocial = razonSocial,
-                                        rif = rif,
-                                        telefono = telefono,
-                                        tipo = "${tipo.key}",
-                                        id = commerces.id
-                                    )
-                                )
-                                Toast.makeText(
-                                    context, "Terminal Actualizado Exitosamente",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                intent()
-                            } else {
-                                Toast.makeText(
-                                    context, R.string.validTelefono,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        } else {
+        }
 
+        if (btnStatus) {
+            BtnNext(
+                text = stringResource(id = R.string.sincronizar),
+                onClick = {
+                    btnStatus = !btnStatus
+                    backendViewModel.getSerial(serial)
+                    Toast.makeText(
+                        context, "Sincronizando los datos",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                },
+                ico = painterResource(id = R.drawable.ic_next),
+                enabled = btnStatus,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(4.dp)
+                    .height(49.dp)
+                    .width(240.dp)
+            )
+        } else {
+            BtnNext(
+                text = stringResource(id = R.string.guardar),
+                enabled = !btnStatus,
+                onClick = {
+                    if (razonSocial != "" && telefono != "" && rif != "") {
+                        if (telefono.length == 11) {
+                            viewModel.updateCommerce(
+                                Commerce(
+                                    razonSocial = razonSocial,
+                                    rif = rif,
+                                    telefono = telefono,
+                                    tipo = "${tipo.key}",
+                                    id = commerces.id
+                                )
+                            )
                             Toast.makeText(
-                                context, "Debes llenar todos los campos",
+                                context, "Terminal Actualizado Exitosamente",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            intent()
+                        } else {
+                            Toast.makeText(
+                                context, R.string.validTelefono,
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
-                    },
-                    ico = painterResource(id = R.drawable.ic_next),
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(4.dp)
-                        .height(49.dp)
-                        .width(240.dp)
-                )
+                    } else {
 
-            }
+                        Toast.makeText(
+                            context, "Debes llenar todos los campos",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                },
+                ico = painterResource(id = R.drawable.ic_next),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(4.dp)
+                    .height(49.dp)
+                    .width(240.dp)
+            )
+
         }
+    }
 
 }
 

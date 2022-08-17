@@ -64,6 +64,7 @@ class BackendViewModel @Inject constructor(
         if (apiResponseStatus is ApiResponseStatus.Success) {
             InfoTerminal.value = apiResponseStatus.data
         }
+
         status.value = apiResponseStatus as ApiResponseStatus<Any>
 
     }

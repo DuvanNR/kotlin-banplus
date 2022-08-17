@@ -8,6 +8,8 @@ object ApiServiceInterceptor: Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val requestBuilder = request.newBuilder()
+        requestBuilder.addHeader("accept", "application/json" )
+        requestBuilder.addHeader("X-CSRFToken", " MYj8fGpZHaW2fl5XHzITtmr8TsO1nj0fAYsklpCnkeoB1RrxeGlLtIPyAflbjHce" )
         if(request.header(NEEDS_AUTH_HEADER_KEY) != null) {
             var token = "Bearer $sessionToken"
             println("token reset $token")

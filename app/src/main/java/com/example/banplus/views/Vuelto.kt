@@ -1,6 +1,8 @@
 package com.example.banplus.views
 
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -9,6 +11,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -81,7 +84,9 @@ private fun BodyContent(onClick: (tipo: String, celular: String, cell: String) -
                     Modifier
                         .size(height = 65.dp, width = 120.dp)
                         .padding(end = 3.dp),
+                    textColor = Color.Black,
                     selectedOptionText = tipo, onValueChange = { tipo = it },
+                    modifierDropdownItem = Modifier.border(BorderStroke(0.5.dp, Color.Gray)),
                     label = stringResource(id = R.string.tipo),
                     options = ListTypeDocument
 

@@ -62,4 +62,9 @@
     <string name="sincronizar">Sincronizar</string>
     <string name="config_terminal">Configuración de terminal</string>
     <string name="serial">Serial</string>
+    <string name="error_404">No tienes asociado este terminal</string>
+    <string name="error_403">Este terminal no esta asignado</string>
+    <string name="SINCONEXION">No tienes conexion a internet</string>
+    <string name="USER_BACKEND">banplus01</string>
+    <string name="PASS_BACKEND">ADMadm1234</string>
 </resources>

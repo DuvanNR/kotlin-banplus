@@ -3,6 +3,7 @@ package com.example.banplus.viewmodel
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.banplus.R
 import com.example.banplus.api.ApiResponseStatus
 import com.example.banplus.api.reportes.response.ReportesResponse
 import com.example.banplus.repository.ReportesRespository

@@ -21,7 +21,6 @@ class BAckendRespositoryImp @Inject constructor(
         dataSource.login(loginDTO)
     }
     override suspend fun getInfoTerminal(serial: String): ApiResponseStatus<InfoTerminalResponse> =  makeNetworkCall {
-        println("serial________________________---------${serial}")
         dataSource.getInfSerial(serial)
     }
 

@@ -1,5 +1,6 @@
 package com.example.banplus
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,7 +14,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ListReportesActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        val mainActivity = Intent(this,MainActivity::class.java )
         super.onCreate(savedInstanceState)
         setContent {
             BanplusTheme {
@@ -21,8 +24,13 @@ class ListReportesActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
+
                 ) {
-                    listReportView()
+                    listReportView(onEventActiviryMain = {
+                        startActivity(mainActivity)
+                        finish()
+
+                    })
                 }
             }
         }

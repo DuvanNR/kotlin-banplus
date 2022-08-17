@@ -1,9 +1,9 @@
 package com.example.banplus.views
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -11,32 +11,38 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.banplus.ListTypeRif
 import com.example.banplus.R
 import com.example.banplus._interface.idropdown
+import com.example.banplus.api.ApiResponseStatus
 import com.example.banplus.api.backend.dto.LoginDTO
 import com.example.banplus.component.*
 import com.example.banplus.component.header.HeaderInit
-import com.example.banplus.utils.mobileNumberFilter
-import androidx.compose.material.Text
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
-import com.example.banplus.api.ApiResponseStatus
 import com.example.banplus.db.schema.Commerce
+import com.example.banplus.utils.ConverString
+import com.example.banplus.utils.checkForInternet
+import com.example.banplus.utils.mobileNumberFilter
 import com.example.banplus.viewmodel.BackendViewModel
 import com.example.banplus.viewmodel.CommerceViewModel
 import java.util.*
 import kotlin.concurrent.timerTask
 
 @Composable
-fun SettingInitView(viewModel: CommerceViewModel = hiltViewModel(),  backendViewModel:  BackendViewModel = hiltViewModel(), onRedirection:()->Unit, serial: String) {
+fun SettingInitView(
+    viewModel: CommerceViewModel = hiltViewModel(),
+    backendViewModel: BackendViewModel = hiltViewModel(),
+    onRedirection: () -> Unit,
+    serial: String
+) {
     val commerces by viewModel.commerces.observeAsState(arrayListOf())
     val isLoaddig by viewModel.isLoading.observeAsState(false)
-    if(commerces.isNotEmpty()) {
+    if (commerces.isNotEmpty()) {
         onRedirection()
     } else {
         Scaffold {
@@ -55,17 +61,30 @@ fun SettingInitView(viewModel: CommerceViewModel = hiltViewModel(),  backendView
     val status = backendViewModel.status.value
     if (status is ApiResponseStatus.Loading) {
         LoadingWheel()
-    }else if(status is ApiResponseStatus.Error){
-        errorDialog(description = "$status", onDialogDismiss = {})
+    } else if (status is ApiResponseStatus.Error) {
+        println("Error__________${status.messageId}")
+        errorDialog(description = status.messageId, onDialogDismiss = {
+            backendViewModel.status.value = null
+        })
     }
 
 }
 
 
 @Composable
-private fun ViewInitBody(viewModel: CommerceViewModel, serial: String,  backendViewModel:  BackendViewModel) {
+private fun ViewInitBody(
+    viewModel: CommerceViewModel,
+    serial: String,
+    backendViewModel: BackendViewModel
+) {
 
     var btnStatus by remember { mutableStateOf(true) }
+    var getAlarte by remember { mutableStateOf(false) }
+    if (getAlarte) {
+        errorDialog(description = R.string.SINCONEXION, onDialogDismiss = {
+            getAlarte = false
+        })
+    }
     val context = LocalContext.current
     var token = backendViewModel.resp.value
 
@@ -75,7 +94,7 @@ private fun ViewInitBody(viewModel: CommerceViewModel, serial: String,  backendV
             .padding(horizontal = 44.dp),
         contentAlignment = Alignment.TopCenter
     ) {
-        if(backendViewModel.InfoTerminal.value.rif !== null){
+        if (backendViewModel.InfoTerminal.value.rif !== null) {
             val aa = backendViewModel.InfoTerminal.value
             var razonSocial by remember { mutableStateOf(aa.nameCommerce) }
             var telefono by remember { mutableStateOf(aa.telefono) }
@@ -85,8 +104,6 @@ private fun ViewInitBody(viewModel: CommerceViewModel, serial: String,  backendV
                 PostField(
                     text = "$razonSocial",
                     onValueChange = {
-                        razonSocial =
-                            if (it.length > 30 ) razonSocial else it
                     },
                     label = stringResource(id = R.string.razon_social),
                     readOnly = false,
@@ -95,11 +112,10 @@ private fun ViewInitBody(viewModel: CommerceViewModel, serial: String,  backendV
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
                     ),
-                    )
+                )
                 PostField(
-                    text = "$telefono",
+                    text = ConverString("${telefono}",4,3),
                     onValueChange = {
-                        telefono = if (it.length > 11 || it.any { !it.isDigit() }) telefono else it
                     },
                     readOnly = false,
                     label = stringResource(id = R.string.telefono),
@@ -120,8 +136,7 @@ private fun ViewInitBody(viewModel: CommerceViewModel, serial: String,  backendV
                         Modifier
                             .size(height = 65.dp, width = 89.dp)
                             .padding(end = 2.3.dp),
-                        readOnly = false,
-                        selectedOptionText = tipo, onValueChange = { tipo = it },
+                        selectedOptionText = tipo, onValueChange = {  },
                         label = stringResource(id = R.string.tipo),
                         options = ListTypeRif
 
@@ -130,7 +145,6 @@ private fun ViewInitBody(viewModel: CommerceViewModel, serial: String,  backendV
                         text = "$rif",
                         readOnly = false,
                         onValueChange = {
-                            rif = if (it.length > 12 || it.any { !it.isDigit() }) rif else it
                         },
                         label = stringResource(id = R.string.rif),
                         modifier = Modifier.fillMaxWidth(),
@@ -145,15 +159,22 @@ private fun ViewInitBody(viewModel: CommerceViewModel, serial: String,  backendV
             BtnNext(
                 text = stringResource(id = R.string.guardar),
                 onClick = {
+                    val aa = checkForInternet(context)
+                    if (aa) {
                         btnStatus = true
                         viewModel.addCommerce(
                             Commerce(
-                            razonSocial = "$razonSocial",
-                            rif = "$rif",
-                            telefono = "$telefono",
-                            tipo = "${tipo.key}"
+                                razonSocial = "$razonSocial",
+                                rif = "$rif",
+                                telefono = "$telefono",
+                                tipo = "${tipo.key}"
+                            )
                         )
-                    )
+                    } else {
+                        getAlarte = true
+
+                    }
+
                 },
                 enabled = !btnStatus,
                 ico = painterResource(id = R.drawable.ic_next),
@@ -163,17 +184,44 @@ private fun ViewInitBody(viewModel: CommerceViewModel, serial: String,  backendV
                     .height(49.dp)
                     .width(240.dp)
             )
-        }else {
-            Text(text = stringResource(id = R.string.config_terminal), modifier = Modifier.align(Alignment.TopCenter).padding(top = 20.dp), fontWeight = FontWeight.Bold,fontSize = 20.sp)
-            Text(text = "Serial: $serial", modifier = Modifier.align(Alignment.TopCenter).padding(top = 70.dp), fontWeight = FontWeight.Bold, fontSize = 20.sp)
+        } else {
+            Text(
+                text = stringResource(id = R.string.config_terminal),
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(top = 20.dp),
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
+            Text(
+                text = "Serial: $serial",
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(top = 70.dp),
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
+
+            val vv = stringResource(id = R.string.USER_BACKEND )
+            val bb = stringResource(id = R.string.PASS_BACKEND )
             BtnNext(
                 text = stringResource(id = R.string.sincronizar),
                 onClick = {
-                    btnStatus = false
-                    backendViewModel.login(LoginDTO(username = "banplus01", password = "ADMadm1234"))
-                    Timer().schedule(timerTask {
-                        backendViewModel.getSerial(serial)
-                    }, 2000)
+                    val aa = checkForInternet(context)
+                    if (aa) {
+                        btnStatus = false
+                        backendViewModel.login(
+                            LoginDTO(
+                                vv,
+                                bb
+                            )
+                        )
+                        Timer().schedule(timerTask {
+                            backendViewModel.getSerial("${serial}")
+                        }, 2000)
+                    } else {
+                        getAlarte = true
+                    }
                 },
                 enabled = btnStatus,
                 ico = painterResource(id = R.drawable.ic_next),
@@ -185,7 +233,6 @@ private fun ViewInitBody(viewModel: CommerceViewModel, serial: String,  backendV
             )
 
         }
-
 
 
     }
