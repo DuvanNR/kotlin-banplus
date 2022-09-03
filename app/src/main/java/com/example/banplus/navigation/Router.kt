@@ -19,12 +19,14 @@ fun Router(
     onGoToReportes: () -> Unit,
     onPrintDetails: (TransCount, Commerce) -> Unit,
     checkForInternet:(aa: NavController, bb: String) -> Unit,
-    IrEditTerminal:() -> Unit = {}
-
+    IrEditTerminal:() -> Unit = {},
+    title_view:(status:String) -> Unit
     ) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = PathRouter.HomeRoute.route) {
         composable(route = PathRouter.ReporteRoute.route) {
+
+            title_view("vuelto")
             ViewReportes(onGoToReportes = { onGoToReportes() }, onPrintDetails = onPrintDetails)
         }
         composable(
@@ -34,12 +36,15 @@ fun Router(
             val cell = it.arguments?.getString("cell")
             val tipo = it.arguments?.getString("tipo")
             val cedula = it.arguments?.getString("cedula")
+
+            title_view("vuelto")
             vueltoNextForm(
                 navController,
                 iTransaction(tipo = "$tipo", cedula = "$cedula", "$cell")
             )
         }
         composable(route = PathRouter.VueltoRoute.route) {
+            title_view("vuelto")
             ViewVuelto(navController)
         }
         composable(route = PathRouter.HomeRoute.route) {
@@ -56,6 +61,8 @@ fun Router(
             val monto = it.arguments?.getString("monto")
             val banco = it.arguments?.getString("banco")
             val nameBanco = it.arguments?.getString("nameBanco")
+
+            title_view("")
             ConfirmarteTransaction(
                 navController = navController,
                 resp = iTransaction("$tipo", "$cedula", "$cell", "$banco", "$monto", "$nameBanco"),

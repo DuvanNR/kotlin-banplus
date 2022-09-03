@@ -3,10 +3,9 @@ package com.example.banplus
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.View
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,26 +15,23 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.capitalize
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.banplus._interface.iTransaction
-import com.example.banplus.api.vuelto.response.Tranferp2pResponse
 import com.example.banplus.db.schema.Commerce
 import com.example.banplus.db.schema.TransCount
 import com.example.banplus.inject_dependency.HiltInjectApp
 import com.example.banplus.navigation.PathRouter
-import com.example.banplus.ui.theme.BanplusTheme
-import com.example.banplus.viewmodel.ReportesViewModel
-import com.example.banplus.viewmodel.VueltoViewModel
-import com.nexgo.common.LogUtils
-import dagger.hilt.android.AndroidEntryPoint
 import com.example.banplus.navigation.Router
+import com.example.banplus.ui.theme.BanplusTheme
 import com.example.banplus.utils.checkForInternet
 import com.example.banplus.utils.getDatetime
+import com.example.banplus.viewmodel.ReportesViewModel
+import com.nexgo.common.LogUtils
 import com.nexgo.oaf.apiv3.DeviceEngine
 import com.nexgo.oaf.apiv3.device.printer.AlignEnum
 import com.nexgo.oaf.apiv3.device.printer.GrayLevelEnum
 import com.nexgo.oaf.apiv3.device.printer.Printer
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
 
 @AndroidEntryPoint
@@ -45,24 +41,30 @@ class MainActivity : ComponentActivity() {
     private val FONT_SIZE_SMALL = 16
     private val FONT_SIZE_NORMAL = 24
     private val FONT_SIZE_BIG = 30
+    public var title_view = ""
 
-    override fun onCreate(savedInstanceState: Bundle?, ) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val cardtransaction = Intent(this,RespTransactionActivity::class.java )
         val detailReportes = Intent(this,ListReportesActivity::class.java )
         val postActiviry = Intent(this,EditPostActivity::class.java )
+
         setContent {
             deviceEngine = (application as HiltInjectApp).deviceEngine
             printer = deviceEngine!!.printer
             printer?.setTypeface(Typeface.DEFAULT)
             LogUtils.setDebugEnable(true)
+
             BanplusTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
                     Router(
+                        title_view = {
+                            title_view = it
+                        },
                         onEventTransction ={it, status ->
                             onEventTransation(it,cardtransaction, status)},
                         onGoToReportes = {
@@ -82,9 +84,6 @@ class MainActivity : ComponentActivity() {
                                 } else {
                                         Toast.makeText(this, R.string.no_conexion_internet, Toast.LENGTH_SHORT).show()
                                     }
-
-
-
                            }
                             if(type == getString(R.string.reporte)){
                                 navNa.navigate(PathRouter.ReporteRoute.route)
@@ -103,6 +102,21 @@ class MainActivity : ComponentActivity() {
     fun onNavigateConfigPost(PostActivity: Intent) {
         PostActivity.putExtra("status", true )
         startActivity(PostActivity)
+    }
+    override fun onBackPressed() {
+
+        println("1111111111111111111${title_view}")
+        return
+    }
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        val mainActiviry = Intent(this,MainActivity::class.java )
+        if(title_view === "vuelto") {
+            startActivity(mainActiviry)
+        }
+        return if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            true
+        } else super.onKeyDown(keyCode, event)
     }
 
     fun onEventTransation(it: iTransaction, intent: Intent, status: String) {
@@ -130,6 +144,45 @@ class MainActivity : ComponentActivity() {
         finish()
     }
 
+    //código
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            hideSystemUI()
+        }
+
+    }
+
+    private fun hideSystemUI() {
+        val decorView = window.decorView
+        decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN)
+    }
+    override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
+        return when (keyCode) {
+            KeyEvent.KEYCODE_D -> {
+                hideSystemUI()
+                true
+            }
+            KeyEvent.KEYCODE_F -> {
+                hideSystemUI()
+                true
+            }
+            KeyEvent.KEYCODE_J -> {
+                hideSystemUI()
+                true
+            }
+            KeyEvent.KEYCODE_K -> {
+                hideSystemUI()
+                true
+            }
+            else -> {
+                hideSystemUI()
+                super.onKeyUp(keyCode, event)
+            }
+        }
+    }
 
     fun onClickimprimir(athis: Context, resp: TransCount, commerce: Commerce) {
         val forma = DecimalFormat("#,##0.00")
