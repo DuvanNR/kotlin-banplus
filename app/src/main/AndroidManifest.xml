@@ -2,16 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.banplus">
-    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
-        tools:ignore="ProtectedPermissions"/>
+
     <uses-sdk
         android:minSdkVersion="17"
         tools:overrideLibrary="com.example.widget, androidx.compose.ui.platform, androidx.compose.material.icons, androidx.activity.compose, androidx.compose.ui.tooling, androidx.compose.ui.tooling.data, androidx.compose.material.ripple, androidx.compose.foundation, androidx.compose.animation, androidx.compose.foundation.layout, androidx.compose.ui.text, androidx.compose.ui.graphics, androidx.compose.ui.unit, androidx.compose.ui.util, androidx.compose.ui.geometry, androidx.compose.runtime.saveable, androidx.compose.animation.core" />
 
+    <uses-permission
+        android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
+        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-
 
     <application
         android:name=".inject_dependency.HiltInjectApp"
@@ -26,15 +27,43 @@
         android:theme="@style/Theme.Banplus"
         tools:targetApi="31">
         <activity
-            android:name=".EditPostActivity"
+            android:name=".ListReportActivity"
             android:exported="false"
-            android:label="@string/title_activity_edit_post"
-            android:theme="@style/Theme.Banplus" />
-        <activity
-            android:name=".ConfigPostActivity"
-            android:exported="true"
-            android:label="@string/config_post"
+            android:label="@string/title_activity_list_report"
             android:theme="@style/Theme.Banplus">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".CardActivity"
+            android:exported="false"
+            android:label="@string/title_activity_card"
+            android:theme="@style/Theme.Banplus">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".SettingActivity"
+            android:exported="false"
+            android:label="@string/title_activity_setting"
+            android:theme="@style/Theme.Banplus"
+            android:windowSoftInputMode="adjustResize">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Banplus"
+            android:windowSoftInputMode="adjustResize">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,20 +71,25 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ListReportesActivity"
+            android:name=".VueltoActivity"
             android:exported="false"
-            android:label="@string/title_activity_list_reportes"
-            android:theme="@style/Theme.Banplus" />
-        <activity
-            android:name=".RespTransactionActivity"
-            android:exported="false"
-            android:label="@string/title_activity_resp_transaction"
-            android:theme="@style/Theme.Banplus" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="true"
+            android:label="@string/title_activity_vuelto"
             android:theme="@style/Theme.Banplus"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".ReportActivity"
+            android:exported="false"
+            android:label="@string/title_activity_report"
+            android:theme="@style/Theme.Banplus"
+            android:windowSoftInputMode="adjustResize">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
     </application>
 
 </manifest>

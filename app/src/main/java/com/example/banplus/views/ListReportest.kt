@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,21 +27,35 @@ import com.example.banplus.api.reportes.response.ReportesResponse
 import com.example.banplus.component.BtnNext
 import com.example.banplus.component.LoadingWheel
 import com.example.banplus.component.errorDialog
+import com.example.banplus.utils.GoToActivity
+import com.example.banplus.utils.iNameActivity
 import com.example.banplus.viewmodel.ReportesViewModel
 import com.example.banplus.viewmodel.VueltoViewModel
 
 @Composable
 fun listReportView(
     _ViewModel: VueltoViewModel = hiltViewModel(),
-    onEventActiviryMain:()->Unit
 ) {
+    val context = LocalContext.current
     Scaffold() {
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            HeaderInit(icon = R.drawable.ic_recurso_4)
+            HeaderInit(
+                iconBoolean = false,
+                menu = false,
+            )
             val aa by _ViewModel.allTransaction.observeAsState(arrayListOf())
-            LazyColumn(modifier = Modifier.padding(top = 120.dp, end = 44.dp, start=44.dp, bottom = 52.dp).align(Alignment.TopCenter)) {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(
+                        top = 120.dp,
+                        end = 44.dp,
+                        start = 44.dp,
+                        bottom = 52.dp
+                    )
+                    .align(Alignment.TopCenter)
+            ) {
 
                 items(aa) {
                     Box(
@@ -56,7 +71,9 @@ fun listReportView(
             }
             BtnNext(
                 text = stringResource(id = R.string.finalizar),
-                onClick = onEventActiviryMain,
+                onClick = {
+                    GoToActivity(iNameActivity.MAIN, context, true)
+                },
                 ico = painterResource(id = R.drawable.ic_next),
                 modifier = Modifier
                     .align(Alignment.BottomCenter)

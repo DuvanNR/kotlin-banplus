@@ -4,9 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,7 +17,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.banplus.ListTypeDocument
+import com.example.banplus.Activity.ListTypeDocument
 import com.example.banplus.R
 import com.example.banplus._interface.idropdown
 import com.example.banplus.component.BtnNext
@@ -39,13 +37,19 @@ fun ViewVuelto(navController: NavController) {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            HeaderInit(icon = R.drawable.ic_recurso_4 )
+            HeaderInit(iconBoolean = false, menu = false)
             BodyContent { tipo, cedula, cell ->
-                if (tipo != "" && cedula != "" && cell != "") {
+               if (tipo != "" && cedula != "" && cell != "") {
 
-                    if(cell.length == 11) {
-                        navController.navigate(PathRouter.VueltoNextRoute.withArgs(tipo,cedula, cell))
-                    }else {
+                    if (cell.length == 11) {
+                        navController.navigate(
+                            PathRouter.VueltoNextRoute.withArgs(
+                                tipo,
+                                cedula,
+                                cell
+                            )
+                        )
+                    } else {
                         Toast.makeText(
                             context,
                             R.string.validTelefono,
@@ -53,7 +57,7 @@ fun ViewVuelto(navController: NavController) {
                         ).show()
                     }
 
-                }else {
+                } else {
                     Toast.makeText(
                         context,
                         R.string.campos_llenos,
@@ -69,7 +73,7 @@ fun ViewVuelto(navController: NavController) {
 
 @Composable
 private fun BodyContent(onClick: (tipo: String, celular: String, cell: String) -> Unit) {
-    var tipo by remember { mutableStateOf<idropdown>(idropdown(key="V", title = "V")) }
+    var tipo by remember { mutableStateOf<idropdown>(idropdown(key = "V", title = "V")) }
     var cedula by remember { mutableStateOf("") }
     var cell by remember { mutableStateOf("") }
     Box(
@@ -78,7 +82,7 @@ private fun BodyContent(onClick: (tipo: String, celular: String, cell: String) -
             .padding(horizontal = 44.dp),
         contentAlignment = Alignment.TopCenter
     ) {
-        Column(modifier = Modifier.padding(top=33.dp)) {
+        Column(modifier = Modifier.padding(top = 33.dp)) {
             Row() {
                 DropdownDemo(
                     Modifier
@@ -93,17 +97,22 @@ private fun BodyContent(onClick: (tipo: String, celular: String, cell: String) -
                 )
                 PostField(
                     text = cedula,
-                    onValueChange = {cedula = if (it.length > 9 || it.any { !it.isDigit() }) cedula else it},
+                    onValueChange = {
+                        cedula = if (it.length > 9 || it.any { !it.isDigit() }) cedula else it
+                    },
                     label = stringResource(id = R.string.cedula),
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.NumberPassword,
-                        imeAction = ImeAction.Next)
+                        imeAction = ImeAction.Next
+                    )
                 )
             }
             PostField(
                 text = cell,
-                onValueChange = {cell = if (it.length > 11 || it.any { !it.isDigit() }) cell else it},
+                onValueChange = {
+                    cell = if (it.length > 11 || it.any { !it.isDigit() }) cell else it
+                },
                 label = stringResource(id = R.string.telefono),
                 visualTransformation = {
                     mobileNumberFilter(it)

@@ -1,5 +1,7 @@
 package com.example.banplus._interface
 
+import android.content.Context
+
 data class iTransaction(
     val tipo: String = "",
     val cedula: String = "",
@@ -11,4 +13,5 @@ data class iTransaction(
     val hora: String = "",
     val fecha: String = "",
     val message: String = "",
+    val state: Boolean = false,
 )

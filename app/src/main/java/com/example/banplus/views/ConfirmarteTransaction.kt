@@ -46,21 +46,21 @@ fun ConfirmarteTransaction(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            HeaderInit(icon = R.drawable.ic_recurso_4)
+            HeaderInit(iconBoolean = false, menu = false)
             body(resp, onClickCancelar = {
                 navController.navigate(PathRouter.HomeRoute.route)
             }, onClickEmitTransaction = {
-                viewModel.EmitPago(
-                    iTransaction(
-                        tipo = resp.tipo,
-                        cedula = resp.cedula,
-                        telefono = resp.telefono,
-                        banco = resp.banco,
-                        monto = resp.monto,
-                        nameBanco = resp.nameBanco
-                    ),
-                    commerce = commerce.value
-                )
+//                viewModel.EmitPago(
+//                    iTransaction(
+//                        tipo = resp.tipo,
+//                        cedula = resp.cedula,
+//                        telefono = resp.telefono,
+//                        banco = resp.banco,
+//                        monto = resp.monto,
+//                        nameBanco = resp.nameBanco
+//                    ),
+//                    commerce = commerce.value
+//                )
             })
         }
     }
@@ -131,7 +131,11 @@ private fun body(
             .fillMaxSize(),
         contentAlignment = Alignment.TopCenter
     ) {
-        cardsAlert(rif = false, title = stringResource(id = R.string.confirmar_operacion), iData = resp)
+        cardsAlert(
+            rif = false,
+            title = stringResource(id = R.string.confirmar_operacion),
+            iData = resp
+        )
         Column(
             modifier = Modifier.align(Alignment.BottomCenter),
             horizontalAlignment = Alignment.CenterHorizontally,

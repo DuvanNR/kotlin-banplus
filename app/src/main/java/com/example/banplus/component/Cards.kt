@@ -71,7 +71,7 @@ fun cardsAlert(
 
             }
             when (title) {
-                stringResource(id = R.string.Consolidado_Diario) -> CardA(detailsData)
+                stringResource(id = R.string.Consolidado_Diario) -> CardReport(detailsData)
                 stringResource(id = R.string.Confirmar_Operacion) -> CardC(iData)
                 else -> CardB(status = status, dataTransfer = iData)
             }
@@ -135,7 +135,7 @@ fun CardC(iData: iTransaction) {
 }
 
 @Composable
-fun CardA(CountTransa: TransCount) {
+fun CardReport(CountTransa: TransCount) {
     val date = getDatetime()
 
     Column(

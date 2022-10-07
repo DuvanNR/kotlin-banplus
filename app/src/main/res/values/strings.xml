@@ -66,5 +66,20 @@
     <string name="error_403">Este terminal no esta asignado</string>
     <string name="SINCONEXION">No tienes conexion a internet</string>
     <string name="USER_BACKEND">banplus01</string>
-    <string name="PASS_BACKEND">ADMadm1234</string>
+    <string name="PASS_BACKEND"></string>
+    <string name="title_activity_test">testActivity</string>
+    <string name="title_activity_report">ReportActivity</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_setting">SettingActivity</string>
+    <string name="home">Home</string>
+    <string name="Confirmar">Confirmar</string>
+    <string name="volver">Volver</string>
+    <string name="title_activity_card">CardActivity</string>
+    <string name="razonSocial">Razon Social</string>
+    <string name="next">Siguiente</string>
+    <string name="olvidar_contraseña">Olvidar Contraseña</string>
+    <string name="password">Password</string>
+    <string name="validar">ok</string>
+    <string name="last">Atras</string>
+    <string name="title_activity_list_report">ListReportActivity</string>
 </resources>

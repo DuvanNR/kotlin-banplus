@@ -1,6 +1,9 @@
 package com.example.banplus.api
 
-import com.example.banplus.*
+import com.example.banplus.Activity.ADD_TRANSACTIONS
+import com.example.banplus.Activity.BANPLUS_URL
+import com.example.banplus.Activity.LIST_TRANSACTIONS
+import com.example.banplus.Activity.LOGIN
 import com.example.banplus.api.ApiServiceInterceptor.NEEDS_AUTH_HEADER_KEY
 import com.example.banplus.api.backend.dto.LoginDTO
 import com.example.banplus.api.backend.response.InfoTerminalResponse
@@ -20,7 +23,7 @@ interface ApiServer {
 
 interface ApiServerBackend {
     @Headers("${NEEDS_AUTH_HEADER_KEY}: true")
-    @GET("${BANPLUS_URL}/{serial}")
+    @GET("$BANPLUS_URL/{serial}")
     suspend fun getInfSerial(@Path("serial") serial: String):InfoTerminalResponse
     @POST(LOGIN)
     suspend fun login(@Body data: LoginDTO): LoginResponse

@@ -1,5 +1,6 @@
 package com.example.banplus.viewmodel
 
+import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,10 +9,14 @@ import androidx.lifecycle.viewModelScope
 import com.example.banplus._interface.iTransaction
 import com.example.banplus.api.ApiResponseStatus
 import com.example.banplus.api.vuelto.response.Tranferp2pResponse
+import com.example.banplus.context.LoadingContext
+import com.example.banplus.context.TransactionContext
 import com.example.banplus.db.schema.Commerce
 import com.example.banplus.db.schema.TransCount
 import com.example.banplus.db.schema.Transaction
 import com.example.banplus.repository.VueltoRespository
+import com.example.banplus.utils.GoToActivity
+import com.example.banplus.utils.iNameActivity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,8 +24,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class VueltoViewModel @Inject constructor(
-   private val VueltoRepo: VueltoRespository,
-): ViewModel() {
+    private val VueltoRepo: VueltoRespository,
+) : ViewModel() {
     private val _isLoading: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>(false)
     }
@@ -36,16 +41,21 @@ class VueltoViewModel @Inject constructor(
         private set
     var status = mutableStateOf<ApiResponseStatus<Tranferp2pResponse>?>(null)
         private set
-    fun EmitPago(e:iTransaction,commerce: Commerce) {
+
+    fun EmitPago(e: iTransaction, commerce: Commerce, context: Context) {
         viewModelScope.launch {
+            LoadingContext.StartLoading()
             status.value = ApiResponseStatus.Loading()
-            handleResponseStatus(
-                VueltoRepo.emitTransaction(e,commerce)
-            )
+            val aa = VueltoRepo.emitTransaction(e, commerce)
+            TransactionContext.setTransaction(aa)
+            GoToActivity(iNameActivity.CARD, context, true)
+            LoadingContext.closeDialog()
+
         }
     }
+
     fun deleteYesterdayInvoice() {
-        if(_isLoading.value == false ) {
+        if (_isLoading.value == false) {
             viewModelScope.launch(Dispatchers.IO) {
                 _isLoading.postValue(true)
 
@@ -57,10 +67,12 @@ class VueltoViewModel @Inject constructor(
         }
 
     }
+
     fun onResetApiResponse() {
         vueltoR.value = null
         status.value = null
     }
+
     private fun handleResponseStatus(apiResponseStatus: ApiResponseStatus<Tranferp2pResponse>) {
         if (apiResponseStatus is ApiResponseStatus.Success) {
             vueltoR.value = apiResponseStatus.data

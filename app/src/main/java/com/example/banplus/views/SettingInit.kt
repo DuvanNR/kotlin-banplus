@@ -17,7 +17,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.banplus.ListTypeRif
+import com.example.banplus.Activity.ListTypeRif
 import com.example.banplus.R
 import com.example.banplus._interface.idropdown
 import com.example.banplus.api.ApiResponseStatus
@@ -51,7 +51,10 @@ fun SettingInitView(
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                HeaderInit()
+                HeaderInit(
+                    iconBoolean = true,
+                    menu = true,
+                )
                 ViewInitBody(viewModel, serial = serial, backendViewModel = backendViewModel)
             }
         }
@@ -77,7 +80,6 @@ private fun ViewInitBody(
     serial: String,
     backendViewModel: BackendViewModel
 ) {
-
     var btnStatus by remember { mutableStateOf(true) }
     var getAlarte by remember { mutableStateOf(false) }
     if (getAlarte) {
@@ -114,7 +116,7 @@ private fun ViewInitBody(
                     ),
                 )
                 PostField(
-                    text = ConverString("${telefono}",4,3),
+                    text = ConverString("${telefono}", 4, 3),
                     onValueChange = {
                     },
                     readOnly = false,
@@ -136,7 +138,7 @@ private fun ViewInitBody(
                         Modifier
                             .size(height = 65.dp, width = 89.dp)
                             .padding(end = 2.3.dp),
-                        selectedOptionText = tipo, onValueChange = {  },
+                        selectedOptionText = tipo, onValueChange = { },
                         label = stringResource(id = R.string.tipo),
                         options = ListTypeRif
 
@@ -202,8 +204,8 @@ private fun ViewInitBody(
                 fontSize = 20.sp
             )
 
-            val vv = stringResource(id = R.string.USER_BACKEND )
-            val bb = stringResource(id = R.string.PASS_BACKEND )
+            val vv = stringResource(id = R.string.USER_BACKEND)
+            val bb = stringResource(id = R.string.PASS_BACKEND)
             BtnNext(
                 text = stringResource(id = R.string.sincronizar),
                 onClick = {

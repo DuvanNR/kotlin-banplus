@@ -2,10 +2,8 @@ package com.example.banplus.views
 
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,16 +12,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.capitalize
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.unit.dp
-import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavController
-import com.example.banplus.BancosList
+import com.example.banplus.Activity.BancosList
 import com.example.banplus.R
 import com.example.banplus._interface.iTransaction
 import com.example.banplus._interface.idropdown
@@ -31,12 +22,10 @@ import com.example.banplus.component.*
 import com.example.banplus.component.header.HeaderInit
 import com.example.banplus.navigation.PathRouter
 import com.example.banplus.utils.addDecimals
-import com.example.banplus.utils.mobileNumberFilter
-import java.text.DecimalFormat
 
 @Composable
 fun vueltoNextForm(
-navigate: NavController,
+    navigate: NavController,
     resp: iTransaction
 ) {
     Scaffold() {
@@ -46,7 +35,10 @@ navigate: NavController,
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            HeaderInit(icon = R.drawable.ic_recurso_4)
+            HeaderInit(
+                iconBoolean = false,
+                menu = false,
+            )
             nextVueltoBody(onClick = {
                 println(it.monto)
                 if (it.monto != "" && it.banco != "" && it.monto != "0") {
@@ -89,54 +81,5 @@ fun nextVueltoBody(onClick: (iTransaction) -> Unit) {
     var monto by remember { mutableStateOf("") }
 
 //    val formatter = DecimalFormat("#,###.00")
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 44.dp),
-        contentAlignment = Alignment.TopCenter
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 33.dp),
 
-            ) {
-
-            DropdownDemo(
-                modifier = Modifier.fillMaxWidth(),
-                selectedOptionText = banco, onValueChange = { banco = it },
-                textColor= Color.Black,
-                modifierDropdownItem = Modifier.border(BorderStroke(0.5.dp, Color.Gray)),
-                label = stringResource(id = R.string.banco).capitalize(),
-                options = BancosList
-
-            )
-            inputNumber(value = monto, onNumberChange = {
-                if (it.startsWith("0")) {
-                  monto =  ""
-                } else {
-                   monto = if (it.length > 10) monto else it
-                }
-            })
-        }
-        BtnNext(
-            text = stringResource(id = R.string.siguiente),
-            onClick = {
-                onClick(
-                    iTransaction(
-                        banco = "${banco.key}",
-                        monto = monto,
-                        nameBanco = "${banco.title}",
-                    )
-                )
-            },
-            ico = painterResource(id = R.drawable.ic_next),
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(4.dp)
-                .height(49.dp)
-                .width(240.dp)
-        )
-
-    }
 }

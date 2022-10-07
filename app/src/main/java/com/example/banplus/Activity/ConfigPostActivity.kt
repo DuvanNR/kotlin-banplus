@@ -1,10 +1,7 @@
-package com.example.banplus
+package com.example.banplus.Activity
 
 import android.content.Intent
-import android.graphics.Typeface
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,7 +21,7 @@ class ConfigPostActivity : ComponentActivity() {
     private var deviceInfo: DeviceInfo? = null
     override fun onCreate(savedInstanceState: Bundle?) {
        val ObjectIntent: Intent = intent
-        val mainActiviry = Intent(this,MainActivity::class.java )
+        val mainActiviry = Intent(this, MainActivity::class.java )
 
         super.onCreate(savedInstanceState)
         setContent {

@@ -23,7 +23,7 @@ fun ViewInit( IrEditTerminal: ()-> Unit = {}, checkForInternet:(type:String)->Un
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally) {
-            HeaderInit(IrEditTerminal = IrEditTerminal, menu = true)
+            HeaderInit( menu = true, iconBoolean = true)
             Text(
                 modifier = Modifier.padding(bottom = 117.dp),
                 fontSize = 24.sp,

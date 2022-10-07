@@ -29,7 +29,9 @@ fun RespTransaction(iData: iTransaction, onclickimprimir:(Commerce) ->Unit, onCl
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            HeaderInit(icon = R.drawable.ic_recurso_4 )
+            HeaderInit(iconBoolean = false,
+                menu = false,
+                )
             BodyContentA(onClick = {onClickMainActivity()}, iData =iData, onclickimprimir = {onclickimprimir(it)}, status = status )
         }
     }

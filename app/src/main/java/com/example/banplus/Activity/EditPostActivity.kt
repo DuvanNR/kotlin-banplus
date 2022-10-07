@@ -1,4 +1,4 @@
-package com.example.banplus
+package com.example.banplus.Activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -20,6 +20,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.banplus.R
 import com.example.banplus._interface.idropdown
 import com.example.banplus.api.ApiResponseStatus
 import com.example.banplus.api.backend.dto.LoginDTO
@@ -56,7 +57,10 @@ class EditPostActivity : ComponentActivity() {
                         verticalArrangement = Arrangement.Top,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        HeaderInit()
+                        HeaderInit(
+                            iconBoolean = false,
+                            menu = false,
+                        )
                         BodyComponent(
                             intent = {
                                 startActivity(InitActivity)
@@ -90,9 +94,13 @@ private fun BodyComponent(
     }
     if (commerces.tipo == "") {
         LoadingWheel()
-        backendViewModel.login(LoginDTO(username = stringResource(id = R.string.USER_BACKEND), password = stringResource(
-            id = R.string.PASS_BACKEND
-        )))
+        backendViewModel.login(
+            LoginDTO(
+                username = stringResource(id = R.string.USER_BACKEND), password = stringResource(
+                    id = R.string.PASS_BACKEND
+                )
+            )
+        )
     } else {
         ViewInitBody(
             intent = intent,
@@ -156,7 +164,7 @@ private fun ViewInitBody(
                 ),
             )
             PostField(
-                text = ConverString("${telefono}",4,3),
+                text = ConverString("${telefono}", 4, 3),
                 onValueChange = {},
                 label = stringResource(id = R.string.telefono),
                 modifier = Modifier.fillMaxWidth(),
@@ -176,7 +184,7 @@ private fun ViewInitBody(
                         .size(height = 65.dp, width = 89.dp)
                         .padding(end = 2.3.dp),
                     text = "${tipo.key}",
-                    onValueChange = {  },
+                    onValueChange = { },
                     label = stringResource(id = R.string.tipo),
                     readOnly = false,
 

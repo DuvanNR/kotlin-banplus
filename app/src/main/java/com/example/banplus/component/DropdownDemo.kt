@@ -4,7 +4,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -21,11 +20,14 @@ import kotlin.concurrent.timerTask
 fun DropdownDemo(
     modifier: Modifier = Modifier,
     textColor: Color = Gray,
-    modifierDropdownItem:Modifier = Modifier,
-
-    selectedOptionText: idropdown, onValueChange: (idropdown) -> Unit, label:String, options:List<idropdown>) {
+    modifierDropdownItem: Modifier = Modifier,
+    selectedOptionText: idropdown,
+    onValueChange: (idropdown) -> Unit,
+    label: String,
+    options: List<idropdown>
+) {
     var expanded by remember { mutableStateOf(false) }
-    val focusRequester  = remember { FocusRequester() }
+    val focusRequester = remember { FocusRequester() }
     val trailingIconView = @Composable {
         IconButton(
             onClick = {
@@ -35,50 +37,45 @@ fun DropdownDemo(
             },
         ) {
             Icon(
-                Icons.Default.ArrowDropDown,
-                contentDescription = "",
-                tint = Color.Black
+                Icons.Default.ArrowDropDown, contentDescription = "", tint = Color.Black
             )
         }
     }
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        modifier= modifier
-        ,onExpandedChange = {
-            Timer().schedule(timerTask {
-                expanded = !expanded
-            }, 350)
-        }
-    ) {
-        OutlinedTextField (
+    ExposedDropdownMenuBox(expanded = expanded, modifier = modifier, onExpandedChange = {
+        Timer().schedule(timerTask {
+            expanded = !expanded
+        }, 350)
+    }) {
+        OutlinedTextField(
             modifier = modifier.focusRequester(focusRequester),
             readOnly = true,
             value = "${selectedOptionText.title}",
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                disabledPlaceholderColor = textColor,
-                disabledTextColor =textColor
+                disabledPlaceholderColor = textColor, disabledTextColor = textColor
             ),
 //            modifier = ,
-            onValueChange = { onValueChange(idropdown(key="$it", title="${selectedOptionText.title}"))},
+            onValueChange = {
+                onValueChange(
+                    idropdown(
+                        key = "$it", title = "${selectedOptionText.title}"
+                    )
+                )
+            },
             label = { Text(label) },
             singleLine = true,
             trailingIcon = trailingIconView
 
         )
-        ExposedDropdownMenu(
-            expanded = expanded,
+        ExposedDropdownMenu(expanded = expanded,
             modifier = modifierDropdownItem,
             onDismissRequest = {
                 expanded = false
-            }
-        ) {
+            }) {
             options.forEach {
-                DropdownMenuItem(
-                    onClick = {
-                        onValueChange(idropdown(key = it.key, title = it.title))
-                        expanded = false
-                    }
-                ) {
+                DropdownMenuItem(onClick = {
+                    onValueChange(idropdown(key = it.key, title = it.title))
+                    expanded = false
+                }) {
                     Text(text = "${it.title}")
                 }
             }

@@ -2,8 +2,8 @@ package com.example.banplus.api.datasource
 
 import android.content.Context
 import androidx.room.Room
-import com.example.banplus.URL_BASE
-import com.example.banplus.URL_BASE_BACKEND
+import com.example.banplus.Activity.URL_BASE
+import com.example.banplus.Activity.URL_BASE_BACKEND
 import com.example.banplus.api.ApiServer
 import com.example.banplus.api.ApiServerBackend
 import com.example.banplus.api.ApiServiceInterceptor

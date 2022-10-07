@@ -1,4 +1,4 @@
-package com.example.banplus
+package com.example.banplus.Activity
 
 import android.content.Context
 import android.content.Intent
@@ -10,17 +10,13 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.capitalize
-import androidx.compose.ui.text.toLowerCase
-import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.banplus.R
 import com.example.banplus._interface.iTransaction
 import com.example.banplus.db.schema.Commerce
 import com.example.banplus.inject_dependency.HiltInjectApp
 import com.example.banplus.ui.theme.BanplusTheme
 import com.example.banplus.utils.ConverString
-import com.example.banplus.viewmodel.CommerceViewModel
 import com.example.banplus.views.RespTransaction
 import com.nexgo.oaf.apiv3.DeviceEngine
 import com.nexgo.oaf.apiv3.device.printer.AlignEnum
@@ -64,13 +60,14 @@ class RespTransactionActivity : ComponentActivity() {
                         message = "${ObjectIntent.getStringExtra("message")}",
                     )
 
-                    RespTransaction(iData = transaction,
-                        onclickimprimir = { onClickimprimir(this, transaction, commerce = it, status = status.toBoolean()) },
-                        onClickMainActivity = {
-                            startActivity(mainactivityintent)
-                            finish()
-                        },
-                        status = status.toBoolean()
+                    RespTransaction(iData = transaction, onclickimprimir = {
+                        onClickimprimir(
+                            this, transaction, commerce = it, status = status.toBoolean()
+                        )
+                    }, onClickMainActivity = {
+                        startActivity(mainactivityintent)
+                        finish()
+                    }, status = status.toBoolean()
                     )
                 }
             }
@@ -83,6 +80,7 @@ class RespTransactionActivity : ComponentActivity() {
         startActivity(mainactivityintent)
         finish()
     }
+
     fun onClickimprimir(athis: Context, resp: iTransaction, commerce: Commerce, status: Boolean) {
         val forma = DecimalFormat("#,##0.00")
         printer!!.initPrinter() //init printer
@@ -90,10 +88,7 @@ class RespTransactionActivity : ComponentActivity() {
         printer!!.setLetterSpacing(3) //change the line space between each line
         printer!!.setGray(GrayLevelEnum.LEVEL_2) //change print gray
         printer!!.appendPrnStr(
-           "${commerce.razonSocial}",
-            FONT_SIZE_NORMAL,
-            AlignEnum.CENTER,
-            false
+            "${commerce.razonSocial}", FONT_SIZE_NORMAL, AlignEnum.CENTER, false
         )
         printer!!.appendPrnStr(
             "${getString(R.string.rif)}: ${commerce.tipo.capitalize()}-${commerce.rif}",
@@ -102,16 +97,10 @@ class RespTransactionActivity : ComponentActivity() {
             false
         )
         printer!!.appendPrnStr(
-            "${getString(R.string.fecha)}:",
-            resp.fecha,
-            FONT_SIZE_NORMAL,
-            false
+            "${getString(R.string.fecha)}:", resp.fecha, FONT_SIZE_NORMAL, false
         )
         printer!!.appendPrnStr(
-            "${getString(R.string.hora)}:",
-            resp.hora,
-            FONT_SIZE_NORMAL,
-            false
+            "${getString(R.string.hora)}:", resp.hora, FONT_SIZE_NORMAL, false
         )
         printer!!.appendPrnStr(
             "${getString(R.string.cedula)}:",
@@ -133,18 +122,15 @@ class RespTransactionActivity : ComponentActivity() {
         )
         printer!!.appendPrnStr(
             "${getString(R.string.estado)}:",
-            if(status) getString(R.string.aprobado) else getString(R.string.negada),
+            if (status) getString(R.string.aprobado) else getString(R.string.negada),
             FONT_SIZE_NORMAL,
             false
         )
-      if(status) {
-          printer!!.appendPrnStr(
-              "${getString(R.string.ref)}:",
-              "${resp.ref}",
-              FONT_SIZE_NORMAL,
-              false
-          )
-      }
+        if (status) {
+            printer!!.appendPrnStr(
+                "${getString(R.string.ref)}:", "${resp.ref}", FONT_SIZE_NORMAL, false
+            )
+        }
         printer!!.appendPrnStr(
             "${getString(R.string.monto).capitalize()}: Bs. ${forma.format("${resp.monto}".toDouble())}",
             FONT_SIZE_BIG,
@@ -152,16 +138,10 @@ class RespTransactionActivity : ComponentActivity() {
             false
         )
         printer!!.appendPrnStr(
-            "",
-            "",
-            FONT_SIZE_BIG,
-            false
+            "", "", FONT_SIZE_BIG, false
         )
         printer!!.appendPrnStr(
-            "",
-            "",
-            FONT_SIZE_BIG,
-            false
+            "", "", FONT_SIZE_BIG, false
         )
 
 //        if(status) {
@@ -185,25 +165,18 @@ class RespTransactionActivity : ComponentActivity() {
 //            )
 //        }
         printer!!.appendPrnStr(
-            "",
-            "",
-            FONT_SIZE_BIG,
-            false
+            "", "", FONT_SIZE_BIG, false
         )
         printer!!.startPrint(true) { retCode ->
             runOnUiThread {
-                if(retCode == -1005) {
+                if (retCode == -1005) {
                     Toast.makeText(
-                        athis,
-                        "${getString(R.string.no_papel_imprimir)}!!",
-                        Toast.LENGTH_SHORT
+                        athis, "${getString(R.string.no_papel_imprimir)}!!", Toast.LENGTH_SHORT
                     ).show()
                 }
-                if(retCode == 0) {
+                if (retCode == 0) {
                     Toast.makeText(
-                        athis,
-                        "${getString(R.string.imprimir)}",
-                        Toast.LENGTH_SHORT
+                        athis, "${getString(R.string.imprimir)}", Toast.LENGTH_SHORT
                     ).show()
                 }
 

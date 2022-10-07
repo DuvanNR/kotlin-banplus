@@ -8,9 +8,10 @@ import com.example.banplus.api.ApiServiceInterceptor
 import com.example.banplus.api.backend.dto.LoginDTO
 import com.example.banplus.api.backend.response.InfoTerminalResponse
 import com.example.banplus.api.backend.response.LoginResponse
-import com.example.banplus.api.reportes.response.ReportesResponse
+import com.example.banplus.config.PASS_BACKEND
+import com.example.banplus.config.USER_BACKEND
+import com.example.banplus.context.LoadingContext
 import com.example.banplus.repository.BackendRespository
-import com.example.banplus.repository.ReportesRespository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class BackendViewModel @Inject constructor(
     private val backendRespository: BackendRespository
-): ViewModel()  {
+) : ViewModel() {
     var resp = mutableStateOf<LoginResponse>(LoginResponse())
         private set
     var InfoTerminal = mutableStateOf<InfoTerminalResponse>(InfoTerminalResponse())
@@ -26,27 +27,39 @@ class BackendViewModel @Inject constructor(
 
     var status = mutableStateOf<ApiResponseStatus<Any>?>(null)
         private set
-//    init {
-//        GetReportes()
-//    }
+
+    init {
+        login(
+            LoginDTO(
+                USER_BACKEND, PASS_BACKEND
+            )
+        )
+    }
 
     fun getSerial(serial: String) {
         viewModelScope.launch {
+            LoadingContext.StartLoading()
             status.value = ApiResponseStatus.Loading()
             handleResponseTerminalStatus(
                 backendRespository.getInfoTerminal(serial)
             )
+            LoadingContext.closeDialog()
         }
+
     }
+
     fun login(data: LoginDTO) {
         viewModelScope.launch {
+            LoadingContext.StartLoading()
             status.value = ApiResponseStatus.Loading()
             handleResponseStatus(
                 backendRespository.login(data)
             )
+            LoadingContext.closeDialog()
         }
     }
-//
+
+    //
 //
 //    fun onResetApiResponse() {
 //        status.value = null
@@ -59,6 +72,7 @@ class BackendViewModel @Inject constructor(
         }
         status.value = apiResponseStatus as ApiResponseStatus<Any>
     }
+
     @Suppress("UNCHETerminal REsponse")
     private fun handleResponseTerminalStatus(apiResponseStatus: ApiResponseStatus<InfoTerminalResponse>) {
         if (apiResponseStatus is ApiResponseStatus.Success) {
